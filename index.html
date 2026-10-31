@@ -666,8 +666,20 @@
       botReply("Opening checkout. Review your items, delivery details and selected payment method, then confirm the demo order when you're happy.");
       return;
     }
+    if(/\b(show|view|check|what(?:'s| is) in)\b.*\b(bag|cart|order)\b|\b(my bag|my cart)\b/.test(t)){
+      const items=cartItems();
+      if(!items.length){botReply("Your bag is empty at the moment. Tell me what you’d like and I’ll start one.");return;}
+      const summary=items.map(x=>x.qty+" × "+x.item.name).join(", ");
+      botReply("Here’s your "+restaurant(items[0].item.restaurant).name+" bag: "+summary+". The food subtotal is "+euro(subtotal())+" and the estimated total with demo fees is "+euro(estimatedBagTotal())+". You can still add drinks, sauces or dessert before checkout.");
+      return;
+    }
     if(/\b(where is my order|track my order|order status|taking so long)\b/.test(t)){
       botReply(orderTimer?"Your demo order is "+["confirmed","being prepared","on the way","delivered"][orderStep]+". The animated tracking view shows the current simulated status.":"There isn't an active order yet. Build your bag and confirm checkout to start the simulated tracking journey.");
+      return;
+    }
+    if(/\b(clear|empty|start over)\b.*\b(bag|cart|order)\b|\b(empty|clear) my (?:bag|cart)\b/.test(t)){
+      cart={};lastAddedItems=[];upsellPromptedForOrder=false;renderCart();
+      botReply("All clear — I’ve emptied your bag. We can start fresh. Which restaurant are you in the mood for?");
       return;
     }
     const removeMatch=t.match(/\b(?:remove|delete|take off|drop)\s+(?:the\s+|my\s+)?(.+?)(?=\s+(?:and|then)\s+(?:add|include|put)|$)/i);
@@ -728,17 +740,17 @@
       return;
     }
     if(/\b(dessert|desserts|sweet tooth|something sweet|cake|mochi|ice cream|tiramisu)\b/.test(t)){
-      chatFoodMode="dessert";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
-      renderRestaurants();renderMenu();
-      botRestaurantRecommendations("A sweet finish? Here are restaurants with desserts on their menu. Open one to see cakes, mochi and other treats.",restaurantsForChat());
+      showChatCategory("dessert","Desserts",namedRestaurant?.id);
       return;
     }
     if(/\b(drink|drinks|beverage|beverages|something to drink|smoothie|milkshake|juice|iced tea)\b/.test(t)){
-      const directDrinks=foodMentions(t).filter(m=>m.food.tags.some(tag=>tag.toLowerCase()==="drink"));
-      if(directDrinks.length){botRecommendations("Here are the drinks you mentioned. Tap Add to put one in your bag.",directDrinks.map(m=>m.food));return;}
-      chatFoodMode="drink";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
-      renderRestaurants();renderMenu();
-      botRestaurantRecommendations("Fancy something to sip? These restaurants have drinks on the menu. Open one to see the options.",restaurantsForChat());
+      const directDrinks=foodMentions(t,namedRestaurant?.id).filter(m=>m.food.tags.some(tag=>tag.toLowerCase()==="drink"));
+      if(directDrinks.length){botRecommendations("Of course — here are those drinks. Add one and I’ll keep it with your current restaurant.",directDrinks.map(m=>m.food));return;}
+      showChatCategory("drink","Drinks",namedRestaurant?.id);
+      return;
+    }
+    if(/\b(sauce|sauces|dip|dips|condiment|condiments)\b/.test(t)){
+      showChatCategory("sauce","Sauces and dips",namedRestaurant?.id);
       return;
     }
     if(/\b(vegetarian|veggie|vegan)\b/.test(t)){
@@ -847,13 +859,17 @@
   $("openPromptAssistant").addEventListener("click",assistantOpen);
   $("promptStage").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;assistantOpen();addMessage(v,"user");assistantAction(v);});$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
   $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
+  $("chatContext").addEventListener("click",e=>{
+    const b=e.target.closest("[data-context-prompt]");if(!b)return;
+    const v=b.dataset.contextPrompt;addMessage(v,"user");assistantAction(v);
+  });
   $("chatContent").addEventListener("click",e=>{
     const restaurantButton=e.target.closest("[data-chat-restaurant]");
     if(restaurantButton){showChatRestaurant(restaurantButton.dataset.chatRestaurant);return;}
     const addButton=e.target.closest("[data-chat-add]");
     if(addButton){
-      const id=addButton.dataset.chatAdd;add(id,1);
-      botReply("Added "+food(id).name+" to your bag. Keep chatting to add sides or change quantities, or say “checkout” when you're ready.");
+      const id=addButton.dataset.chatAdd;add(id,1);lastAddedItems=[id];
+      botReply("Added "+food(id).name+". Your bag is up to date — want to keep browsing this restaurant’s menu or head to checkout?");
       botAddOnRecommendations();
       return;
     }
