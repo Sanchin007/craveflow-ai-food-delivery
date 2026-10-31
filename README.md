@@ -1,34 +1,51 @@
-# CraveFlow — AI food delivery demo
+# CraveFlow — prompt-led food delivery demo
 
 CraveFlow is a standalone, responsive food-delivery experience built as an interactive product demo. It lives in its own repository and does not modify the Chintan data & AI portfolio.
 
 ## What you can try
 
-- Browse sample restaurants and menus.
-- Filter for vegetarian meals, high-protein dishes, comfort food, and quick delivery.
-- Ask the food assistant for recommendations using natural-language prompts.
-- Add dishes, change quantities, switch between delivery and pickup, and review a cart.
+- Browse sample restaurants and menus, including burgers, sides, drinks, ramen, bowls, salads, and pasta.
+- Filter for vegetarian meals, high-protein dishes, spice level, and per-dish budget.
+- Type a full natural-language order such as “Order me a chicken burger, fries and a Coke.”
+- Add multiple items and quantities in one prompt.
+- Edit a bag by saying “Make that two chicken burgers and two fries” or “Remove the Coke and add onion rings.”
+- Change between delivery and pickup, set a requested time, choose a payment preference, and open checkout from chat.
+- Review the order summary and enter a name and delivery address before confirming.
 - Complete a simulated checkout with card, Apple Pay, PayPal, or cash-on-delivery selections.
 - Watch a simulated order-tracking journey with a moving courier marker, ETA, and status timeline.
 - Follow the workflow map: understand → discover → validate → build → confirm.
 
 ## Try these assistant prompts
 
+### Build an order
+- “Order me a chicken burger, fries and a Coke.”
+- “Add two chicken burgers and two Cokes.”
+- “I would like a chicken ramen and miso soup.”
+- “Order two chicken burrito bowls.”
+
+### Edit the bag
+- “Make that two chicken burgers and two fries.”
+- “Remove the Coke and add onion rings.”
+- “Remove the fries.”
+- “Make it vegetarian.”
+
+### Delivery and checkout
+- “Change this to pickup.”
+- “Deliver it to 12 Rue Paradis, Marseille.”
+- “Schedule it for 19:30.”
+- “I need the food before 19:00.”
+- “Pay by PayPal.”
+- “Checkout.”
+
+### Discover
 - “Find me a vegetarian dinner under €15.”
 - “I want something high in protein.”
 - “Something spicy, but not too spicy.”
 - “Find dinner for two under €40.”
 - “I'm allergic to peanuts. What can I order?”
 - “Surprise me.”
-- “Add chicken ramen and miso soup.”
-- “Remove the fries and add a salad.”
-- “Can you make that vegetarian?”
-- “I need the food before 19:00.”
-- “Change this to pickup.”
-- “Schedule it for 19:30.”
-- “Why is my order taking so long?”
 
-The assistant uses local intent-matching logic in the browser. It is not connected to a hosted LLM or restaurant inventory API.
+The browser-side assistant interprets supported natural-language patterns and performs local cart/filter/checkout actions. It is not connected to a hosted LLM or restaurant inventory API, so it is a deterministic prompt-driven demo rather than a live ChatGPT integration. It supports one restaurant per order and asks for clarification when a prompt combines dishes from different restaurants.
 
 ## Run locally
 
@@ -45,12 +62,13 @@ No build step or package installation is required. Open `index.html` in a browse
 
 ## Demo boundaries
 
-This is a front-end portfolio demo with sample restaurants, menu items, prices, fees, and delivery estimates.
+This is a front-end product demo with sample restaurants, menu items, prices, fees, and delivery estimates.
 
 - No real restaurant search, inventory, booking, courier dispatch, or map-routing API is connected.
 - Checkout is simulated. No real payment is processed and no card credentials are requested or stored.
 - Delivery and pickup status, courier movement, ETA, and scheduled times are simulated.
 - The assistant uses deterministic browser-side intent matching and local actions, not a production ChatGPT integration.
+- Delivery checkout requires a name and address to be entered; the demo does not contain a real saved address.
 - Allergen information is illustrative and must not be used to make food-safety decisions. Customers must confirm allergens and cross-contact directly with the restaurant.
 
 ## Suggested production architecture
