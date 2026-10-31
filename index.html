@@ -1084,6 +1084,11 @@ html{scroll-behavior:smooth}body{background:#faf9f6;color:#20251f;letter-spacing
   async function assistantAction(raw){
     if(await runCloudAssistant())return;
     const t=raw.toLowerCase().replace(/[’]/g,"'");
+    const previousBot=[...$("chatContent").querySelectorAll(".chat-message.bot")].pop()?.textContent?.toLowerCase()||"";
+    if(/^(?:no|no thanks|no thank you|not now|that's all|thats all|i'm good|im good|nothing else|all good|nope)[.! ]*$/.test(t.trim())&&/anything else|round it out|drinks, sauces|sweet finishes|add one and|want to add/.test(previousBot)){
+      botReply("No problem — I’ll leave your bag as it is. You can say “Checkout” whenever you’re ready.");
+      return;
+    }
     const sideEffects=[];
     if(t.includes("peanut")||t.includes("allerg")){
       vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
