@@ -29,6 +29,26 @@
     @media(max-width:760px){.shell{padding:0 16px}.topbar{height:68px}.nav{display:none}.location-pill{display:none}.hero{grid-template-columns:1fr;padding:30px 0 20px}.hero-art{height:230px;grid-row:1}.hero-copy{font-size:13px}.hero-meta{gap:14px}.layout{grid-template-columns:1fr;gap:16px}.cart-panel{position:static;grid-row:1}.cart-empty{padding:14px}.cart-panel .assist-promo{display:none}.cart-panel .cart-title{margin-bottom:2px}.restaurant-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.restaurant-img{height:105px}.restaurant-info{padding:10px}.restaurant-info h3{font-size:12px}.menu-grid{grid-template-columns:1fr}.section-head h2{font-size:23px}.process-steps{grid-template-columns:repeat(5,minmax(80px,1fr));overflow:auto;padding-bottom:4px}.process-strip{padding:16px}.checkout-body{grid-template-columns:1fr;padding:17px}.summary-box{grid-row:1}.modal-head{padding:17px}.modal-head h2{font-size:20px}.tracking-body{padding:17px}.map-card{height:210px}.assistant-fab{right:13px;bottom:13px;padding:12px 15px}.assistant-panel{right:10px;bottom:72px;height:min(590px,calc(100vh - 90px))}footer{flex-direction:column}.hero-search{max-width:none}}
     @media(max-width:390px){.restaurant-grid{grid-template-columns:1fr}.hero-meta{font-size:9px}.hero-meta strong{font-size:12px}.menu-card{grid-template-columns:95px minmax(0,1fr)}.menu-card>img{width:95px;height:104px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+      .prompt-stage{display:grid;grid-template-columns:1fr 1.05fr;gap:30px;align-items:center;margin:18px 0 36px;padding:30px 34px;border-radius:25px;background:linear-gradient(120deg,#202f25,#304637);color:#fff;box-shadow:0 20px 50px #26352a20;position:relative;overflow:hidden}
+    .prompt-stage:after{content:"✳";position:absolute;right:34%;top:-95px;font-size:260px;color:#ffffff08;pointer-events:none}
+    .prompt-stage-copy,.prompt-stage-right{position:relative;z-index:1}
+    .prompt-stage-kicker,.prompt-stage-label{font-size:9px;font-weight:900;letter-spacing:1.8px;color:#c8d8bd}
+    .prompt-stage h2{font-size:clamp(28px,3.3vw,42px);line-height:1.08;letter-spacing:-1.7px;margin:13px 0}
+    .prompt-stage h2 em{font-style:normal;color:#d9ef9a}
+    .prompt-stage-copy p{max-width:390px;color:#c7d1c4;font-size:12px;line-height:1.7;margin:0}
+    .prompt-stage-label{margin-bottom:9px}
+    .prompt-example{width:100%;display:flex;align-items:center;gap:11px;text-align:left;border:1px solid #ffffff24;background:#ffffff0d;color:#fff;border-radius:12px;padding:11px 13px;margin:7px 0;transition:.2s}
+    .prompt-example:hover{background:#ffffff19;border-color:#d9ef9a80;transform:translateX(3px)}
+    .prompt-example span{font-size:17px}
+    .prompt-example b{font-size:10px;font-weight:700;flex:1}
+    .prompt-example i{font-style:normal;color:#d9ef9a;font-size:15px}
+    .prompt-stage-cta{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:8px;padding:13px 15px;border:0;border-radius:11px;background:#d9ef9a;color:#26352a;font-size:11px;font-weight:900}
+    .prompt-stage-cta span{font-size:17px}
+    .assistant-panel{width:min(470px,calc(100vw - 28px));height:min(700px,calc(100vh - 120px));}
+    .assistant-content{padding:18px}
+    .chat-message{font-size:12px;line-height:1.65;padding:12px 14px}
+    .suggestions button{font-size:10px;padding:8px 11px}
+    @media(max-width:760px){.prompt-stage{grid-template-columns:1fr;gap:22px;padding:24px 19px;margin:12px 0 26px}.prompt-stage h2{font-size:32px}.prompt-stage:after{right:-20px;top:-55px;font-size:180px}.prompt-example b{font-size:9px}}
   </style>
 </head>
 <body>
@@ -44,13 +64,28 @@
         <div class="eyebrow">Good food. Less back and forth.</div>
         <h1>Your next great meal starts with a <em>conversation.</em></h1>
         <p class="hero-copy">Tell us what you're craving, what you're avoiding, or how much time you've got. We'll help you find the right bite — without the endless scrolling.</p>
-        <div class="hero-search"><span class="search-icon">⌕</span><input id="mainSearch" type="search" placeholder="Try “vegetarian dinner under €15”"><button class="primary-btn" id="searchBtn">Explore</button></div>
+        <div class="hero-search"><span class="search-icon">⌕</span><input id="mainSearch" type="search" placeholder="Try: order 2 chicken burgers, fries & 2 Cokes"><button class="primary-btn" id="searchBtn">Ask assistant</button></div>
         <div class="hero-meta"><div><strong>4.8 / 5</strong>local favourites</div><div><strong>25–35 min</strong>typical delivery</div><div><strong>One chat</strong>to your next meal</div></div>
       </div>
       <div class="hero-art">
         <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85" alt="Colourful fresh meal bowl">
         <div class="floating-note note-top"><div class="tiny-label">Your food mood</div><div class="note-value">Fresh & feel-good 🌿</div></div>
         <div class="floating-note note-bottom"><div class="note-row"><div class="avatar-stack"><i></i><i></i><i></i></div><div><div class="tiny-label"><span class="online-dot"></span>Good things nearby</div><div class="note-value">12 places to explore</div></div></div></div>
+      </div>
+    </section>
+
+    <section class="prompt-stage" id="promptStage">
+      <div class="prompt-stage-copy">
+        <div class="prompt-stage-kicker">THE CRAVEFLOW ORDER CONCIERGE</div>
+        <h2>Skip the scroll.<br><em>Just say the order.</em></h2>
+        <p>Ask for a meal, add sides, change quantities, switch to pickup or head to checkout — all in one conversation.</p>
+      </div>
+      <div class="prompt-stage-right">
+        <div class="prompt-stage-label">TRY A REAL ORDER PROMPT</div>
+        <button class="prompt-example" data-prompt="Order me a chicken burger, fries and a Coke."><span>🍔</span><b>“Order me a chicken burger, fries and a Coke.”</b><i>↗</i></button>
+        <button class="prompt-example" data-prompt="Make that two chicken burgers and two fries."><span>✌️</span><b>“Make that two chicken burgers and two fries.”</b><i>↗</i></button>
+        <button class="prompt-example" data-prompt="Remove the Coke and add onion rings."><span>✎</span><b>“Remove the Coke and add onion rings.”</b><i>↗</i></button>
+        <button class="prompt-stage-cta" id="openPromptAssistant">Start ordering by chat <span>→</span></button>
       </div>
     </section>
 
@@ -92,20 +127,23 @@
     <footer><div><span class="footer-brand">craveflow ✳</span> &nbsp; Food, figured out.</div><div>Interactive product demo · Sample restaurants, prices and delivery data</div></footer>
   </div>
 
-  <button class="assistant-fab" id="assistantFab"><span class="spark">✳</span> Ask your food assistant</button>
+  <button class="assistant-fab" id="assistantFab"><span class="spark">✳</span> Order with assistant</button>
   <section class="assistant-panel" id="assistantPanel" aria-label="Food assistant">
-    <div class="assistant-head"><div class="bot-avatar">✳</div><div><strong>Your CraveFlow assistant</strong><small><span class="online-dot"></span>Here to help you decide</small></div><button id="closeAssistant" aria-label="Close assistant">×</button></div>
+    <div class="assistant-head"><div class="bot-avatar">✳</div><div><strong>Your CraveFlow order assistant</strong><small><span class="online-dot"></span>Build · Edit · Checkout</small></div><button id="closeAssistant" aria-label="Close assistant">×</button></div>
     <div class="assistant-content" id="chatContent">
-      <div class="chat-message bot">Hey there! 👋 I'm your food sidekick. Tell me what sounds good, what your budget is, or what you'd like to avoid — I'll help you make a plan.</div>
+      <div class="chat-message bot">Hey! 👋 Tell me what you want in one message — for example, “Order me a chicken burger, fries and a Coke.” I can add items, change quantities, remove things, switch delivery or pickup, set a payment preference and open checkout. You stay in control and confirm the demo order yourself.</div>
       <div class="suggestions">
         <button data-prompt="Find me a vegetarian dinner under €15">🌱 Veg under €15</button>
+        <button data-prompt="Order me a chicken burger, fries and a Coke">🍔 Build a full order</button>
+        <button data-prompt="Make that two chicken burgers and two fries">✌️ Change quantities</button>
+        <button data-prompt="Checkout">🧾 Go to checkout</button>
         <button data-prompt="I want something high in protein">💪 High protein</button>
         <button data-prompt="Something spicy, but not too spicy">🌶 A little spicy</button>
         <button data-prompt="Surprise me">🎲 Surprise me</button>
       </div>
     </div>
     <form class="assistant-input" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask for a dish, change your cart…"><button type="submit" aria-label="Send message">➤</button></form>
-    <div class="assistant-disclaimer">Demo assistant · Actions are simulated locally · Always confirm allergen details with the restaurant.</div>
+    <div class="assistant-disclaimer">Natural-language ordering demo · Cart and order flow run locally · No live AI, payment or courier service is connected.</div>
   </section>
 
   <div class="overlay" id="checkoutOverlay">
@@ -113,8 +151,8 @@
       <div class="modal-head"><div><div class="eyebrow">Almost time to eat</div><h2>Checkout</h2></div><button class="close-btn" data-close="checkoutOverlay" aria-label="Close">×</button></div>
       <div class="checkout-body">
         <div>
-          <label class="field-label" for="customerName">Your name</label><input class="field" id="customerName" value="Alex Morgan" placeholder="Name">
-          <label class="field-label" for="addressField">Delivery address</label><input class="field" id="addressField" value="18 Rue Paradis, 13001 Marseille" placeholder="Street and city">
+          <label class="field-label" for="customerName">Your name</label><input class="field" id="customerName" value="" placeholder="Your name">
+          <label class="field-label" for="addressField">Delivery address</label><input class="field" id="addressField" value="" placeholder="Street and city">
           <label class="field-label">How would you like it?</label>
           <div class="fulfillment-options"><button class="option-card active" data-checkout-fulfillment="delivery"><strong>⌖ Delivery</strong><small>To your door · 25–35 min</small></button><button class="option-card" data-checkout-fulfillment="pickup"><strong>↗ Pickup</strong><small>Collect from the restaurant</small></button></div>
           <label class="field-label" for="scheduleField">Timing</label><select class="field" id="scheduleField"><option value="asap">As soon as possible</option><option value="18:45">Schedule · 18:45</option><option value="19:00">Schedule · 19:00</option><option value="19:30">Schedule · 19:30</option><option value="20:00">Schedule · 20:00</option></select>
@@ -164,7 +202,8 @@
     {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",time:"25–30 min",fee:1.49,category:["comfort","quick"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
     {id:"green",name:"The Green Fork",cuisine:"Healthy · Bowls",rating:"4.8",time:"20–25 min",fee:0.99,category:["healthy","vegetarian","quick"],tags:["Fresh picks","Plant-forward"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"},
     {id:"fire",name:"Firebird Kitchen",cuisine:"Grill · Street food",rating:"4.7",time:"30–35 min",fee:1.79,category:["comfort","protein"],tags:["Big flavours","High protein"],image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80"},
-    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",time:"25–35 min",fee:1.29,category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"}
+    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",time:"25–35 min",fee:1.29,category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"},
+    {id:"burger",name:"Burger Atelier",cuisine:"Burgers · Loaded sides",rating:"4.9",time:"20–30 min",fee:1.59,category:["comfort","quick"],tags:["Handcrafted","Crowd favourites"],image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"}
   ];
   const foods = [
     {id:"ramen",restaurant:"miso",name:"Chicken ramen",desc:"Slow-braised chicken, spring onion, rich miso broth.",price:14.5,cal:610,tags:["High protein","Comfort"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","gluten","sesame"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",popular:1},
@@ -176,9 +215,33 @@
     {id:"wings",restaurant:"fire",name:"Firecracker wings",desc:"Sticky chilli glaze, sesame crunch, cool yoghurt dip.",price:12.5,cal:520,tags:["Spicy","Popular"],protein:true,vegetarian:false,vegan:false,spice:3,allergens:["dairy","soy","sesame"],image:"https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=600&q=80",popular:2},
     {id:"fries",restaurant:"fire",name:"Rosemary fries",desc:"Crispy potatoes, rosemary salt and garlic dip.",price:4.5,cal:310,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy"],image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",popular:4},
     {id:"pasta",restaurant:"pasta",name:"Basil pesto pasta",desc:"Fresh basil pesto, parmesan, toasted pine nuts.",price:13.5,cal:570,tags:["Vegetarian","Comfort"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","dairy","nuts"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",popular:1},
-    {id:"tomato-pasta",restaurant:"pasta",name:"Slow tomato rigatoni",desc:"Rigatoni, slow-cooked tomato, basil and olive oil.",price:12.5,cal:490,tags:["Vegan","Comfort"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["gluten"],image:"https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",popular:2}
+    {id:"tomato-pasta",restaurant:"pasta",name:"Slow tomato rigatoni",desc:"Rigatoni, slow-cooked tomato, basil and olive oil.",price:12.5,cal:490,tags:["Vegan","Comfort"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["gluten"],image:"https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"chicken-burger",restaurant:"burger",name:"Crispy chicken burger",desc:"Buttermilk-crisp chicken, lettuce, pickles and house sauce.",price:12.9,cal:680,tags:["Best seller","High protein"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["gluten","dairy","egg"],image:"https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"classic-burger",restaurant:"burger",name:"Classic smash burger",desc:"Double smashed beef, cheddar, caramelised onion and burger sauce.",price:13.5,cal:720,tags:["Best seller","Comfort"],protein:true,vegetarian:false,vegan:false,spice:0,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"veggie-burger",restaurant:"burger",name:"Garden veggie burger",desc:"Grilled plant patty, tomato, lettuce and herb mayo.",price:11.9,cal:560,tags:["Vegetarian","Plant based"],protein:true,vegetarian:true,vegan:false,spice:0,allergens:["gluten","soy","egg"],image:"https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"burger-fries",restaurant:"burger",name:"Golden skin-on fries",desc:"Crispy skin-on potatoes with sea salt.",price:4.2,cal:320,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"coke",restaurant:"burger",name:"Coca-Cola",desc:"Chilled 330 ml can.",price:2.5,cal:139,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&q=80",popular:5},
+    {id:"onion-rings",restaurant:"burger",name:"Crispy onion rings",desc:"Golden battered onion rings with smoky dip.",price:4.9,cal:350,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg"],image:"https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80",popular:6}
   ];
-  let selectedRestaurant="miso",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0;
+  const foodAliases = {
+    "ramen":["chicken ramen","ramen","noodles"],
+    "miso-soup":["miso soup","soup"],
+    "tofu-bowl":["crispy tofu bowl","tofu bowl","tofu"],
+    "salad":["garden glow salad","garden salad","salad","greens"],
+    "salmon":["salmon power bowl","salmon bowl","salmon"],
+    "burrito":["chicken burrito bowl","burrito bowl","burrito"],
+    "wings":["firecracker wings","chicken wings","wings"],
+    "fries":["rosemary fries","fries","french fries","chips"],
+    "pasta":["basil pesto pasta","pesto pasta","pasta"],
+    "tomato-pasta":["slow tomato rigatoni","tomato rigatoni","rigatoni","tomato pasta"],
+    "chicken-burger":["crispy chicken burger","chicken burgers","chicken burger","burger"],
+    "classic-burger":["classic smash burger","classic burger","beef burger"],
+    "veggie-burger":["garden veggie burger","veggie burger","vegetarian burger","plant burger"],
+    "burger-fries":["golden skin-on fries","loaded fries","fries","french fries","chips"],
+    "coke":["coca-cola","coca cola","coke","cola","soft drink"],
+    "onion-rings":["crispy onion rings","onion rings","onion ring"]
+  };
+  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0;
   const $=id=>document.getElementById(id);
   const euro=n=>"€"+Number(n).toFixed(2);
   const restaurant=id=>restaurants.find(r=>r.id===id);
@@ -221,49 +284,209 @@
   function assistantOpen(){ $("assistantPanel").classList.add("open");$("chatInput").focus()}
   function addMessage(message,who){const el=document.createElement("div");el.className="chat-message "+who;el.textContent=message;$("chatContent").appendChild(el);$("chatContent").scrollTop=$("chatContent").scrollHeight}
   function botReply(message){addMessage(message,"bot")}
-  function assistantAction(raw){
-    const t=raw.toLowerCase();let reply="";
-    if(t.includes("two")&&(t.includes("40")||t.includes("€40"))){maxPrice=20;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";selectedRestaurant="fire";cart={"burrito":2};renderRestaurants();renderMenu();renderCart();reply="For two under €40 in food, two chicken burrito bowls from Firebird Kitchen come to €27.80 before fees. I have added two sample mains to your bag. Want a vegetarian alternative?";}else if(t.includes("peanut")||t.includes("allerg")){
-      vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
-      reply="Thanks for telling me. I can show menu information, but this demo cannot guarantee allergen safety or prevent cross-contact. I don't have a verified peanut-free certification for these kitchens. Please contact the restaurant directly and get confirmation before ordering. I can help you review the listed allergen notes, but never treat them as a safety guarantee.";
-    }else if(t.includes("vegetarian")||t.includes("vegan")){
-      vegetarianOnly=true;proteinOnly=false;selectedRestaurant="green";const vm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=vm?Number(vm[1]):null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
-      if(t.includes("make")&&count()){let removed=[];cartItems().forEach(x=>{if(!x.item.vegetarian){removed.push(x.item.name);delete cart[x.item.id]}});if(!count())cart["tofu-bowl"]=1;renderCart();reply="I've adjusted the demo bag toward vegetarian choices"+(removed.length?". Removed: "+removed.join(", ")+".":"")+". I added a crispy tofu bowl as a replacement. Please review the bag before checkout."}
-      else reply="On it 🌱 I've filtered the restaurants and menu toward vegetarian options. The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good places to start.";
-    }else if(t.includes("protein")){
-      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="fire";const pm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=pm?Number(pm[1]):null;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
-    }else if(t.includes("spicy")||t.includes("spice")){
-      spiceMax=2;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();reply="I've kept the spice level gentle — up to 2 out of 3. The chicken burrito bowl has a little warmth, while the chicken ramen is milder. I've filtered out the extra-hot wings.";
-    }else if(t.includes("under")||t.includes("budget")||t.includes("€")){
-      const m=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:\.\d+)?)/)||t.match(/€\s*(\d+(?:\.\d+)?)/);
-      if(m){maxPrice=Number(m[1]);}else{maxPrice=15}
-      vegetarianOnly=t.includes("vegetarian")||t.includes("veggie");proteinOnly=t.includes("protein");category=vegetarianOnly?"vegetarian":proteinOnly?"protein":"all";searchText="";renderRestaurants();renderMenu();
-      reply="I've set the dish budget to "+euro(maxPrice)+" and refreshed the menu. Prices shown are sample demo prices; delivery and service fees are separate. Want me to add a main and a side?";
-    }else if(t.includes("two")&&t.includes("40")){
-      maxPrice=20;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();
-      if(!count()){cart["ramen"]=1;cart["tofu-bowl"]=1;renderCart()}
-      reply="For two under €40 in food, a chicken ramen (€14.50) plus a crispy tofu bowl (€13.50) comes to €28.00 before fees. I've added those two sample mains to your bag — swap either one if you'd prefer.";
-    }else if(t.includes("add")&&(t.includes("ramen")||t.includes("miso"))){
-      if(t.includes("ramen"))cart["ramen"]=(cart["ramen"]||0)+1;
-      if(t.includes("miso"))cart["miso-soup"]=(cart["miso-soup"]||0)+1;
-      renderCart();reply="Done — I've added "+(t.includes("ramen")?"chicken ramen":"")+(t.includes("ramen")&&t.includes("miso")?" and ":"")+(t.includes("miso")?"miso soup":"")+" to your bag. Your updated total is "+euro(subtotal())+" before fees.";
-    }else if(t.includes("remove")&&t.includes("fries")&&t.includes("salad")){
-      cart={"salad":1};selectedRestaurant="green";renderRestaurants();renderMenu();renderCart();reply="Done. I removed the rosemary fries and added a garden glow salad (€11.50). Check your bag to review the change.";
-    }else if(t.includes("pickup")){
-      updateFulfillment("pickup");reply="Pickup selected. I'll keep the bag in pickup mode; the checkout summary will remove the delivery fee. Choose a collection time at checkout.";
-    }else if(t.includes("19:30")||t.includes("schedule")||t.includes("before 19")){
-      scheduled=t.includes("19:30")?"19:30":t.includes("before")?"18:45":"19:30";reply="Got it — I've noted "+(scheduled==="18:45"?"18:45":"19:30")+" as your requested time. I'll carry that into checkout. The schedule is a demo selection, not a live kitchen confirmation.";
-    }else if(t.includes("taking so long")||t.includes("where is")||t.includes("track")){
-      reply=orderTimer?"Your demo order is currently marked as "+["Confirmed","Preparing","On the way","Delivered"][orderStep]+". Estimated arrival: "+(orderStep>=3?"Arrived":Math.max(0,28-orderStep*8)+" min")+". Open the order tracking window to see the animated map.":"You don't have an active demo order yet. Once you confirm checkout, I'll show an animated tracking journey with status updates.";
-    }else if(t.includes("surprise")){
-      vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";selectedRestaurant="green";cart["tofu-bowl"]=(cart["tofu-bowl"]||0)+1;renderRestaurants();renderMenu();renderCart();reply="Surprise pick: crispy tofu bowl from The Green Fork 🌿 It has crunchy greens, rice and sesame dressing, and costs €13.50. I've added one to your bag — feel free to swap it.";
-    }else{
-      const words=t.replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(w=>w.length>3);
-      const match=foods.find(f=>words.some(w=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(w)));
-      if(match){selectedRestaurant=match.restaurant;searchText="";category="all";renderRestaurants();renderMenu();reply="I found "+match.name+" at "+restaurant(match.restaurant).name+" for "+euro(match.price)+". "+match.desc+" Tap the + button to add it, or tell me to add it for you."; }
-      else{reply="I can help with menu discovery, dietary preferences, budget, spice level, cart edits, pickup or delivery timing. Try “Find me a vegetarian dinner under €15”, “Add chicken ramen and miso soup”, or “Change this to pickup”.";}
+  let lastAddedItems=[];
+  const numberWords={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
+  function foodMentions(text,preferredRestaurant){
+    const matches=[];
+    foods.forEach(item=>{
+      const aliases=[item.name.toLowerCase(),...(foodAliases[item.id]||[])];
+      aliases.forEach(alias=>{
+        const safe=alias.replace(/[.*+?^$()|[\]\\]/g,"\\$&");
+        const re=new RegExp("(^|[^a-z0-9])"+safe+"(?=$|[^a-z0-9])","g");
+        let m;
+        while((m=re.exec(text))!==null){
+          const start=m.index+m[1].length;
+          matches.push({food:item,alias:alias,start:start,end:start+alias.length});
+        }
+      });
+    });
+    matches.sort((x,y)=>y.alias.length-x.alias.length||x.start-y.start);
+    const strong=matches.find(x=>x.alias.length>=7);
+    const current=cartItems()[0]?.item.restaurant||selectedRestaurant;
+    const context=preferredRestaurant||(strong?strong.food.restaurant:current);
+    const chosen=[];
+    matches.forEach(m=>{
+      if(chosen.some(x=>m.start<x.end&&m.end>x.start))return;
+      const candidates=foods.filter(f=>[f.name.toLowerCase(),...(foodAliases[f.id]||[])].includes(m.alias));
+      const item=candidates.find(f=>f.restaurant===context)||(candidates.length===1?candidates[0]:m.food);
+      const before=text.slice(Math.max(0,m.start-24),m.start);
+      const q=before.match(/(\d+|a|an|one|two|three|four|five|six)\s*(?:x|×)?\s*$/i);
+      const qty=q?(numberWords[q[1].toLowerCase()]||Number(q[1])||1):1;
+      chosen.push({food:item,qty:qty,start:m.start,end:m.end});
+    });
+    return chosen.sort((x,y)=>x.start-y.start);
+  }
+  function estimatedBagTotal(){
+    const items=cartItems();
+    if(!items.length)return 0;
+    const fee=fulfillment==="delivery"?(restaurant(items[0].item.restaurant)?.fee||1.49):0;
+    return subtotal()+fee+.79;
+  }
+  function applyAddMentions(mentions){
+    const grouped={};
+    mentions.forEach(m=>{if(!grouped[m.food.restaurant])grouped[m.food.restaurant]={};grouped[m.food.restaurant][m.food.id]=(grouped[m.food.restaurant][m.food.id]||0)+m.qty;});
+    const groups=Object.keys(grouped);
+    if(groups.length!==1){
+      const names=groups.map(id=>restaurant(id).name).join(" and ");
+      return {ok:false,reply:"Those dishes are listed by different restaurants ("+names+"). This demo supports one restaurant per order. Which restaurant should I use?"};
     }
-    botReply(reply);
+    const restaurantId=groups[0];
+    const current=cartItems()[0]?.item.restaurant;
+    const switched=!!current&&current!==restaurantId;
+    if(switched)cart={};
+    Object.keys(grouped[restaurantId]).forEach(id=>{cart[id]=(cart[id]||0)+grouped[restaurantId][id];});
+    selectedRestaurant=restaurantId;category="all";searchText="";proteinOnly=false;vegetarianOnly=false;maxPrice=null;spiceMax=4;
+    lastAddedItems=Object.keys(grouped[restaurantId]);
+    renderRestaurants();renderMenu();renderCart();
+    const summary=Object.keys(grouped[restaurantId]).map(id=>{
+      const f=food(id),q=grouped[restaurantId][id];
+      return (q>1?q+" × ":"")+f.name;
+    }).join(", ");
+    return {ok:true,reply:(switched?"I switched your bag to "+restaurant(restaurantId).name+". ":"Added to your bag: "+summary+". ")+ "Food subtotal "+euro(subtotal())+"; estimated total "+euro(estimatedBagTotal())+" including the demo delivery and service fees. Say “checkout” when you're ready."};
+  }
+  function applyRemoveMentions(mentions){
+    const removed=[];
+    mentions.forEach(m=>{
+      const existing=cart[m.food.id]||0;
+      if(existing>0){
+        const take=Math.min(existing,m.qty);
+        cart[m.food.id]=existing-take;
+        if(cart[m.food.id]<=0)delete cart[m.food.id];
+        removed.push((take>1?take+" × ":"")+m.food.name);
+      }
+    });
+    renderCart();
+    return removed;
+  }
+  function choosePayment(method){
+    payment=method;
+    document.querySelectorAll("[data-payment]").forEach(x=>x.classList.toggle("active",x.dataset.payment===method));
+  }
+  function chooseSchedule(value){
+    scheduled=value;
+    const field=$("scheduleField");
+    if(!Array.from(field.options).some(o=>o.value===value)){
+      const option=document.createElement("option");
+      option.value=value;option.textContent="Schedule · "+value;
+      field.appendChild(option);
+    }
+    field.value=value;
+  }
+  function assistantAction(raw){
+    const t=raw.toLowerCase().replace(/[’]/g,"'");
+    const sideEffects=[];
+    if(t.includes("peanut")||t.includes("allerg")){
+      vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
+      botReply("Thanks for telling me. I can show the sample allergen notes, but this demo cannot verify ingredients, kitchen handling or cross-contact. Do not rely on it to determine whether a dish is safe. Please contact the restaurant and get explicit confirmation before ordering.");
+      return;
+    }
+    if(/\b(pickup|pick up|collect|collection)\b/.test(t)){updateFulfillment("pickup");sideEffects.push("Pickup selected");}
+    else if(/\b(delivery|deliver it|deliver to my)\b/.test(t)){updateFulfillment("delivery");sideEffects.push("Delivery selected");}
+    if(/\b(paypal|pay pal)\b/.test(t)){choosePayment("paypal");sideEffects.push("PayPal selected");}
+    else if(/\bapple pay\b/.test(t)){choosePayment("apple");sideEffects.push("Apple Pay selected");}
+    else if(/\b(cash|pay on delivery)\b/.test(t)){choosePayment("cash");sideEffects.push("Cash on delivery selected");}
+    else if(/\b(card|credit card|debit card)\b/.test(t)){choosePayment("card");sideEffects.push("Card selected");}
+    const timeMatch=t.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
+    if(timeMatch){chooseSchedule((timeMatch[1].length===1?"0":"")+timeMatch[1]+":"+timeMatch[2]);sideEffects.push("Requested time set to "+scheduled);}
+    else if(/\b(before|by)\s+19\b/.test(t)){chooseSchedule("18:45");sideEffects.push("Requested time set to 18:45, ahead of 19:00");}
+    if(/\b(saved address|my saved address)\b/.test(t)){
+      sideEffects.push("I don't have a saved address in this demo. Add your address at checkout.");
+    }else{
+      const addressMatch=raw.match(/(?:deliver|send)\s+(?:it\s+)?to\s+(.+?)(?=$|\s+(?:and|,)\s+(?:pay|schedule|order))/i);
+      if(addressMatch&&addressMatch[1].trim().length>5){
+        $("addressField").value=addressMatch[1].trim();
+        sideEffects.push("Delivery address added to checkout");
+      }
+    }
+    if(/\b(checkout|check out|go to payment|pay now)\b/.test(t)){
+      if(!count()){botReply("Your bag is empty. Tell me what you'd like to order first, then I can open checkout.");return;}
+      checkoutOpen();
+      botReply("Opening checkout. Review your items, delivery details and selected payment method, then confirm the demo order when you're happy.");
+      return;
+    }
+    if(/\b(where is my order|track my order|order status|taking so long)\b/.test(t)){
+      botReply(orderTimer?"Your demo order is "+["confirmed","being prepared","on the way","delivered"][orderStep]+". The animated tracking view shows the current simulated status.":"There isn't an active order yet. Build your bag and confirm checkout to start the simulated tracking journey.");
+      return;
+    }
+    const removeMatch=t.match(/\b(?:remove|delete|take off|drop)\s+(?:the\s+|my\s+)?(.+?)(?=\s+(?:and|then)\s+(?:add|include|put)|$)/i);
+    const addMatch=t.match(/\b(?:add|include|put|also get)\s+(?:me\s+)?(?:the\s+)?(.+?)(?=$|\s+(?:to|into)\s+(?:my\s+)?(?:bag|cart))/i);
+    let didChange=false;
+    if(removeMatch){
+      const toRemove=foodMentions(removeMatch[1],cartItems()[0]?.item.restaurant);
+      if(toRemove.length){
+        const removed=applyRemoveMentions(toRemove);
+        didChange=true;
+        sideEffects.push(removed.length?"Removed "+removed.join(", "):"I couldn't find those items in your current bag");
+      }else{sideEffects.push("Tell me which item in your bag you'd like removed");}
+    }
+    let toAdd=[];
+    if(addMatch){toAdd=foodMentions(addMatch[1]);}
+    else if(!removeMatch&&(/\b(order|buy|get me|i want|i'd like|i would like|can i have|can i get|i'll have|let me have|make me)\b/.test(t))){
+      toAdd=foodMentions(t);
+    }
+    if(toAdd.length){
+      const result=applyAddMentions(toAdd);
+      if(result.ok){sideEffects.push(result.reply);didChange=true;}
+      else{botReply(result.reply);return;}
+    }
+    if(/\b(make it vegetarian|make that vegetarian|switch to vegetarian)\b/.test(t)&&count()){
+      cart={ "tofu-bowl":1 };selectedRestaurant="green";category="all";vegetarianOnly=false;proteinOnly=false;maxPrice=null;renderRestaurants();renderMenu();renderCart();
+      sideEffects.push("I replaced the current bag with one crispy tofu bowl. Please review it before checkout.");
+      didChange=true;
+    }
+    if(/\b(double that|make that two|make it two)\b/.test(t)&&lastAddedItems.length){
+      lastAddedItems.forEach(id=>{cart[id]=(cart[id]||0)+1;});
+      renderCart();sideEffects.push("I doubled the most recently added items.");didChange=true;
+    }
+    if(/\b(surprise me|surprise)\b/.test(t)){
+      const result=applyAddMentions([{food:food("tofu-bowl"),qty:1}]);
+      sideEffects.push(result.reply);didChange=true;
+    }
+    if(didChange){
+      botReply(sideEffects.join(". ").replace(/\.\./g,".")+" ");
+      return;
+    }
+    if(/\b(vegetarian|veggie|vegan)\b/.test(t)){
+      vegetarianOnly=true;proteinOnly=false;selectedRestaurant="green";category="vegetarian";searchText="";
+      const budget=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/);
+      maxPrice=budget?Number(budget[1].replace(",",".")):null;
+      renderRestaurants();renderMenu();
+      botReply("I've filtered the menu to vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". The Garden veggie burger, crispy tofu bowl and garden glow salad are good starting points. Say “add the tofu bowl” or name any dish to put it in your bag.");
+      return;
+    }
+    if(/\b(high protein|protein-rich|more protein)\b/.test(t)){
+      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="fire";category="protein";searchText="";
+      const budget=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:[.,]\d+)?)/);maxPrice=budget?Number(budget[1].replace(",",".")):null;
+      renderRestaurants();renderMenu();
+      botReply("I've highlighted protein-forward dishes. Try the chicken burrito bowl (€13.90), crispy chicken burger (€12.90) or chicken ramen (€14.50). Tell me which one to add.");
+      return;
+    }
+    if(/\b(spicy|spice)\b/.test(t)){
+      spiceMax=/not too spicy|mild|a little spicy|slightly spicy/.test(t)?2:3;
+      vegetarianOnly=false;proteinOnly=false;category="all";searchText="";selectedRestaurant="fire";
+      renderRestaurants();renderMenu();
+      botReply("I've filtered for a spice level up to "+spiceMax+" out of 3. The chicken burrito bowl has a gentle kick; the firecracker wings are hotter. Tell me what you'd like added.");
+      return;
+    }
+    const budgetMatch=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/)||t.match(/€\s*(\d+(?:[.,]\d+)?)/);
+    if(budgetMatch){
+      maxPrice=Number(budgetMatch[1].replace(",","."));category="all";searchText="";renderRestaurants();renderMenu();
+      botReply("I've set the menu filter to "+euro(maxPrice)+" per dish. Delivery and service fees are separate. If you want me to order something, just say “add [dish]” or “order [dish and sides]”.");
+      return;
+    }
+    if(/\b(for two|two people|dinner for two)\b/.test(t)&&/\b40\b/.test(t)){
+      selectedRestaurant="fire";category="all";searchText="";maxPrice=null;renderRestaurants();renderMenu();
+      botReply("For two under €40 in food, two chicken burrito bowls come to €27.80 before fees. Say “order two chicken burrito bowls” and I'll add them to your bag.");
+      return;
+    }
+    const found=foodMentions(t);
+    if(found.length){
+      const f=found[0].food;selectedRestaurant=f.restaurant;category="all";searchText="";renderRestaurants();renderMenu();
+      botReply("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". "+f.desc+" Say “add "+f.name+"” and I'll put it in your bag.");
+      return;
+    }
+    if(sideEffects.length){botReply(sideEffects.join(". ")+".");return;}
+    botReply("I can understand full order prompts and cart edits. Try “Order me a chicken burger, fries and a Coke”, “Make that two burgers”, “Remove the Coke and add onion rings”, “Change this to pickup”, “Pay by PayPal”, or “Checkout”.");
   }
   function checkoutOpen(){
     if(!count()){toast("Add a dish before checkout");return}
@@ -278,6 +501,8 @@
     $("checkoutSubtotal").textContent=euro(subtotal());$("checkoutDelivery").textContent=euro(fee);$("checkoutService").textContent=euro(service);$("checkoutTip").textContent=euro(tip);$("checkoutTotal").textContent=euro(total);$("payNow").textContent="Confirm demo order · "+euro(total);
   }
   function placeOrder(){
+    if(fulfillment==="delivery"&&!$("addressField").value.trim()){toast("Add a delivery address before confirming");$("addressField").focus();return;}
+    if(!$("customerName").value.trim()){toast("Add your name before confirming");$("customerName").focus();return;}
     const btn=$("payNow");btn.disabled=true;btn.textContent="Confirming demo order…";
     setTimeout(()=>{
       btn.disabled=false;btn.textContent="Confirm demo order";
@@ -303,7 +528,9 @@
   $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
   document.querySelectorAll("[data-fulfillment]").forEach(b=>b.addEventListener("click",()=>updateFulfillment(b.dataset.fulfillment)));
   $("headerCart").addEventListener("click",()=>$("cartPanel").scrollIntoView({behavior:"smooth",block:"center"}));
-  $("openAssistantFromCart").addEventListener("click",assistantOpen);$("assistantFab").addEventListener("click",assistantOpen);$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
+  $("openAssistantFromCart").addEventListener("click",assistantOpen);$("assistantFab").addEventListener("click",assistantOpen);
+  $("openPromptAssistant").addEventListener("click",assistantOpen);
+  $("promptStage").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;assistantOpen();addMessage(v,"user");assistantAction(v);});$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
   $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
   $("chatContent").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v)});
   $("searchBtn").addEventListener("click",()=>{const q=$("mainSearch").value.trim();if(!q)return;assistantOpen();addMessage(q,"user");assistantAction(q)});
