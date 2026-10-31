@@ -61,6 +61,32 @@
     .chat-food-card button:hover{background:var(--orange);color:#fff}
     .assistant-panel{width:min(500px,calc(100vw - 28px));}
     @media(max-width:390px){.chat-food-card{grid-template-columns:48px minmax(0,1fr) auto;gap:6px}.chat-food-card img{width:48px;height:48px}.chat-food-card button{padding:7px 6px;font-size:8px}}
+    .chat-restaurant-card{display:grid;grid-template-columns:64px minmax(0,1fr);gap:9px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:13px;padding:8px;box-shadow:0 3px 12px #20241f08}
+    .chat-restaurant-card>img{width:64px;height:64px;object-fit:cover;border-radius:9px;background:#eee}
+    .chat-restaurant-info{min-width:0}
+    .chat-restaurant-info strong{display:block;font-size:11px;line-height:1.3;color:var(--ink)}
+    .chat-restaurant-info small{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+    .chat-restaurant-rating{font-size:9px;font-weight:900;color:#b57b22;margin-top:5px}
+    .chat-restaurant-rating span{font-weight:500;color:var(--muted)}
+    .chat-restaurant-meta{display:flex;gap:9px;flex-wrap:wrap;font-size:8px;color:#656b60;margin-top:4px}
+    .chat-restaurant-offer{font-size:8px;color:var(--green);font-weight:800;margin-top:4px}
+    .chat-restaurant-card>button{grid-column:1/-1;border:0;border-radius:8px;padding:9px;background:#26352a;color:white;font-size:9px;font-weight:900}
+    .chat-restaurant-card>button:hover{background:var(--orange)}
+    .feedback-panel{margin-top:17px;padding:18px;background:#fbfaf6;border:1px solid var(--line);border-radius:16px}
+    .feedback-panel h3{font-size:19px;letter-spacing:-.7px;margin:7px 0 5px}
+    .feedback-intro{font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:15px}
+    .feedback-question{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+    .feedback-question b{font-size:10px}
+    .feedback-stars{display:flex;gap:3px}
+    .feedback-stars button{border:0;background:transparent;color:#d6d2c8;font-size:21px;padding:0 2px}
+    .feedback-stars button.active{color:#e5a52b}
+    .feedback-tags{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+    .feedback-tags button{border:1px solid var(--line);border-radius:99px;background:white;padding:7px 9px;font-size:9px;color:#656b60}
+    .feedback-tags button.active{border-color:var(--green);background:#edf3e8;color:var(--green);font-weight:800}
+    .feedback-panel textarea{width:100%;resize:vertical;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;font-size:10px;margin:5px 0 10px;outline:none}
+    .feedback-panel textarea:focus{border-color:var(--orange)}
+    .feedback-panel .primary-btn{width:100%}
+    .feedback-thanks{font-size:10px;color:var(--green);font-weight:800;text-align:center;margin:12px 0 0}
   </style>
 </head>
 <body>
@@ -152,6 +178,9 @@
         <button data-prompt="I want something high in protein">💪 High protein</button>
         <button data-prompt="Something spicy, but not too spicy">🌶 A little spicy</button>
         <button data-prompt="Surprise me">🎲 Surprise me</button>
+        <button data-prompt="Show me restaurants">🍽 Compare restaurants</button>
+        <button data-prompt="Show me drinks">🥤 Drinks</button>
+        <button data-prompt="Show me desserts">🍰 Desserts</button>
       </div>
     </div>
     <form class="assistant-input" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask for a dish, change your cart…"><button type="submit" aria-label="Send message">➤</button></form>
@@ -203,6 +232,15 @@
         <div class="tracking-meta"><div><small>Estimated arrival</small><strong id="etaText">28 min</strong></div><div><small>Order status</small><strong id="statusText">Confirmed</strong></div><div><small>Fulfilment</small><strong id="fulfillmentText">Delivery</strong></div></div>
         <div class="timeline" id="trackingTimeline"><div class="timeline-step done"><b>Confirmed</b><small>Just now</small></div><div class="timeline-step"><b>Preparing</b><small>Kitchen</small></div><div class="timeline-step"><b>On the way</b><small>Courier</small></div><div class="timeline-step"><b>Delivered</b><small>Enjoy!</small></div></div>
         <div class="demo-banner">Live map, courier movement, ETA and status changes are animated demo data. No courier has been dispatched.</div>
+        <section class="feedback-panel" id="feedbackSection" style="display:none">
+          <div class="eyebrow">One last thing</div><h3>How was your CraveFlow experience?</h3>
+          <p class="feedback-intro">Your feedback helps us improve the food and delivery experience.</p>
+          <div class="feedback-question"><b>Food & restaurant</b><div class="feedback-stars"><button type="button" data-feedback-type="food" data-feedback-rating="1" aria-label="1 star">★</button><button type="button" data-feedback-type="food" data-feedback-rating="2" aria-label="2 stars">★</button><button type="button" data-feedback-type="food" data-feedback-rating="3" aria-label="3 stars">★</button><button type="button" data-feedback-type="food" data-feedback-rating="4" aria-label="4 stars">★</button><button type="button" data-feedback-type="food" data-feedback-rating="5" aria-label="5 stars">★</button></div></div>
+          <div class="feedback-question"><b>Delivery experience</b><div class="feedback-stars"><button type="button" data-feedback-type="delivery" data-feedback-rating="1" aria-label="1 star">★</button><button type="button" data-feedback-type="delivery" data-feedback-rating="2" aria-label="2 stars">★</button><button type="button" data-feedback-type="delivery" data-feedback-rating="3" aria-label="3 stars">★</button><button type="button" data-feedback-type="delivery" data-feedback-rating="4" aria-label="4 stars">★</button><button type="button" data-feedback-type="delivery" data-feedback-rating="5" aria-label="5 stars">★</button></div></div>
+          <div class="feedback-tags"><button type="button" data-feedback-tag="Delicious food">😋 Delicious food</button><button type="button" data-feedback-tag="Arrived on time">⚡ Arrived on time</button><button type="button" data-feedback-tag="Great packaging">📦 Great packaging</button><button type="button" data-feedback-tag="Missing item">Missing item</button><button type="button" data-feedback-tag="Arrived cold">Arrived cold</button></div>
+          <textarea id="feedbackText" rows="3" placeholder="Anything else you'd like us to know? (optional)"></textarea>
+          <button class="primary-btn" id="submitFeedback">Send feedback</button><p class="feedback-thanks" id="feedbackThanks" style="display:none">Thank you — your feedback has been recorded in this demo session.</p>
+        </section>
       </div>
     </div>
   </div>
@@ -211,11 +249,11 @@
 <script>
 (function(){
   const restaurants = [
-    {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",time:"25–30 min",fee:1.49,category:["comfort","quick"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
-    {id:"green",name:"The Green Fork",cuisine:"Healthy · Bowls",rating:"4.8",time:"20–25 min",fee:0.99,category:["healthy","vegetarian","quick"],tags:["Fresh picks","Plant-forward"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"},
-    {id:"fire",name:"Firebird Kitchen",cuisine:"Grill · Street food",rating:"4.7",time:"30–35 min",fee:1.79,category:["comfort","protein"],tags:["Big flavours","High protein"],image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80"},
-    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",time:"25–35 min",fee:1.29,category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"},
-    {id:"burger",name:"Burger Atelier",cuisine:"Burgers · Loaded sides",rating:"4.9",time:"20–30 min",fee:1.59,category:["comfort","quick"],tags:["Handcrafted","Crowd favourites"],image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"}
+    {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",reviews:"1.2k",time:"25–30 min",fee:1.49,distance:"1.4 km",offer:"10% off selected dishes",category:["comfort","quick"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
+    {id:"green",name:"The Green Fork",cuisine:"Healthy · Bowls",rating:"4.8",reviews:"860",time:"20–25 min",fee:0.99,distance:"0.9 km",offer:"Free delivery over €20",category:["healthy","vegetarian","quick"],tags:["Fresh picks","Plant-forward"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"},
+    {id:"fire",name:"Firebird Kitchen",cuisine:"Grill · Street food",rating:"4.7",reviews:"2.1k",time:"30–35 min",fee:1.79,distance:"2.2 km",offer:"15% off orders over €25",category:["comfort","protein"],tags:["Big flavours","High protein"],image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80"},
+    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",reviews:"740",time:"25–35 min",fee:1.29,distance:"1.8 km",offer:"Free dessert over €30",category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"},
+    {id:"burger",name:"Burger Atelier",cuisine:"Burgers · Loaded sides",rating:"4.9",reviews:"3.4k",time:"20–30 min",fee:1.59,distance:"1.1 km",offer:"Combo deal on selected meals",category:["comfort","quick"],tags:["Handcrafted","Crowd favourites"],image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"}
   ];
   const foods = [
     {id:"ramen",restaurant:"miso",name:"Chicken ramen",desc:"Slow-braised chicken, spring onion, rich miso broth.",price:14.5,cal:610,tags:["High protein","Comfort"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","gluten","sesame"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",popular:1},
@@ -233,7 +271,17 @@
     {id:"veggie-burger",restaurant:"burger",name:"Garden veggie burger",desc:"Grilled plant patty, tomato, lettuce and herb mayo.",price:11.9,cal:560,tags:["Vegetarian","Plant based"],protein:true,vegetarian:true,vegan:false,spice:0,allergens:["gluten","soy","egg"],image:"https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=600&q=80",popular:3},
     {id:"burger-fries",restaurant:"burger",name:"Golden skin-on fries",desc:"Crispy skin-on potatoes with sea salt.",price:4.2,cal:320,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",popular:4},
     {id:"coke",restaurant:"burger",name:"Coca-Cola",desc:"Chilled 330 ml can.",price:2.5,cal:139,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&q=80",popular:5},
-    {id:"onion-rings",restaurant:"burger",name:"Crispy onion rings",desc:"Golden battered onion rings with smoky dip.",price:4.9,cal:350,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg"],image:"https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80",popular:6}
+    {id:"onion-rings",restaurant:"burger",name:"Crispy onion rings",desc:"Golden battered onion rings with smoky dip.",price:4.9,cal:350,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg"],image:"https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80",popular:6},
+    {id:"yuzu-tea",restaurant:"miso",name:"Yuzu iced tea",desc:"Citrus green tea, lightly sweetened and served chilled.",price:3.5,cal:75,tags:["Drink","Cold"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"mochi-trio",restaurant:"miso",name:"Mochi dessert trio",desc:"Three soft rice cakes with sweet seasonal fillings.",price:5.5,cal:230,tags:["Dessert","Sweet"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy"],image:"https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"mango-smoothie",restaurant:"green",name:"Mango sunshine smoothie",desc:"Mango, banana and oat drink blended until creamy.",price:4.5,cal:190,tags:["Drink","Vegan"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["oats"],image:"https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"lemon-cake",restaurant:"green",name:"Lemon chia cake",desc:"Bright lemon sponge with chia and a light citrus glaze.",price:5.2,cal:280,tags:["Dessert","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg","dairy"],image:"https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=600&q=80",popular:5},
+    {id:"mango-lassi",restaurant:"fire",name:"Mango lassi",desc:"Cool mango yoghurt drink with a hint of cardamom.",price:3.9,cal:210,tags:["Drink","Cold"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy"],image:"https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80",popular:5},
+    {id:"fire-brownie",restaurant:"fire",name:"Warm chocolate brownie",desc:"Rich chocolate brownie with a soft centre.",price:5.2,cal:390,tags:["Dessert","Sweet"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg","dairy"],image:"https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",popular:6},
+    {id:"tiramisu",restaurant:"pasta",name:"Classic tiramisu",desc:"Espresso-soaked sponge, mascarpone cream and cocoa.",price:6.5,cal:410,tags:["Dessert","Italian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg","dairy"],image:"https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"sparkling-lemonade",restaurant:"pasta",name:"Sparkling lemon soda",desc:"Italian-style sparkling lemonade served over ice.",price:3.5,cal:105,tags:["Drink","Cold"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1513558161293-cadl74c081f2?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"vanilla-shake",restaurant:"burger",name:"Vanilla bean milkshake",desc:"Thick vanilla shake topped with a little whipped cream.",price:4.9,cal:360,tags:["Drink","Cold"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy"],image:"https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",popular:7},
+    {id:"burger-brownie",restaurant:"burger",name:"Chocolate fudge brownie",desc:"A gooey chocolate square to finish your burger night.",price:5.2,cal:390,tags:["Dessert","Sweet"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","egg","dairy"],image:"https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",popular:8}
   ];
   const foodAliases = {
     "ramen":["chicken ramen","ramen","noodles"],
@@ -251,9 +299,19 @@
     "veggie-burger":["garden veggie burger","veggie burger","vegetarian burger","plant burger"],
     "burger-fries":["golden skin-on fries","loaded fries","fries","french fries","chips"],
     "coke":["coca-cola","coca cola","cokes","coke","cola","soft drink"],
-    "onion-rings":["crispy onion rings","onion rings","onion ring"]
+    "onion-rings":["crispy onion rings","onion rings","onion ring"],
+    "yuzu-tea":["yuzu iced tea","yuzu tea","iced tea"],
+    "mochi-trio":["mochi dessert trio","mochi trio","mochi"],
+    "mango-smoothie":["mango sunshine smoothie","mango smoothie","smoothie"],
+    "lemon-cake":["lemon chia cake","lemon cake"],
+    "mango-lassi":["mango lassi","lassi"],
+    "fire-brownie":["warm chocolate brownie","chocolate brownie","brownie"],
+    "tiramisu":["classic tiramisu","tiramisu"],
+    "sparkling-lemonade":["sparkling lemon soda","sparkling lemonade","lemon soda"],
+    "vanilla-shake":["vanilla bean milkshake","vanilla milkshake","milkshake","shake"],
+    "burger-brownie":["chocolate fudge brownie","fudge brownie"]
   };
-  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0;
+  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null;
   const $=id=>document.getElementById(id);
   const euro=n=>"€"+Number(n).toFixed(2);
   const restaurant=id=>restaurants.find(r=>r.id===id);
@@ -271,12 +329,16 @@
       if(searchText&&!((r.name+" "+r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes(searchText)))return false;
       if(vegetarianOnly&&!r.category.includes("vegetarian")&& !foods.some(f=>f.restaurant===r.id&&f.vegetarian))return false;
       if(proteinOnly&&!r.category.includes("protein")&&!foods.some(f=>f.restaurant===r.id&&f.protein))return false;
+      if(chatFoodMode==="drink"&&!foods.some(f=>f.restaurant===r.id&&f.tags.some(t=>t.toLowerCase()==="drink")))return false;
+      if(chatFoodMode==="dessert"&&!foods.some(f=>f.restaurant===r.id&&f.tags.some(t=>t.toLowerCase()==="dessert")))return false;
       return true;
     });
     $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+'</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
   }
   function visibleFoods(){
     let list=foods.filter(f=>f.restaurant===selectedRestaurant);
+    if(chatFoodMode==="drink")list=list.filter(f=>f.tags.some(t=>t.toLowerCase()==="drink"));
+    if(chatFoodMode==="dessert")list=list.filter(f=>f.tags.some(t=>t.toLowerCase()==="dessert"));
     if(searchText)list=list.filter(f=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(searchText)||!restaurant(selectedRestaurant));
     if(vegetarianOnly)list=list.filter(f=>f.vegetarian);
     if(proteinOnly)list=list.filter(f=>f.protein);
@@ -308,6 +370,42 @@
     const label=document.createElement("div");label.className="chat-results-label";label.textContent="Tap add to put it straight in your bag";wrap.appendChild(label);
     wrap.insertAdjacentHTML("beforeend",picks.map(f=>'<article class="chat-food-card"><img loading="lazy" src="'+esc(f.image)+'" alt="'+esc(f.name)+'"><div class="chat-food-info"><strong>'+esc(f.name)+'</strong><small>'+esc(restaurant(f.restaurant).name)+' · '+esc(f.desc)+'</small><b>'+euro(f.price)+'</b></div><button type="button" data-chat-add="'+f.id+'">+ Add</button></article>').join(""));
     $("chatContent").appendChild(wrap);$("chatContent").scrollTop=$("chatContent").scrollHeight;
+  }
+  function chatFoodsForRestaurant(id){
+    let list=foods.filter(f=>f.restaurant===id);
+    if(chatFoodMode==="drink")list=list.filter(f=>f.tags.some(t=>t.toLowerCase()==="drink"));
+    else if(chatFoodMode==="dessert")list=list.filter(f=>f.tags.some(t=>t.toLowerCase()==="dessert"));
+    else{
+      if(vegetarianOnly)list=list.filter(f=>f.vegetarian);
+      if(proteinOnly)list=list.filter(f=>f.protein);
+    }
+    if(maxPrice!==null)list=list.filter(f=>f.price<=maxPrice);
+    if(spiceMax<4)list=list.filter(f=>f.spice<=spiceMax);
+    return list.sort((a,b)=>a.popular-b.popular);
+  }
+  function restaurantsForChat(){return restaurants.filter(r=>chatFoodsForRestaurant(r.id).length).sort((a,b)=>Number(b.rating)-Number(a.rating));}
+  function botRestaurantRecommendations(message,items){
+    botReply(message);
+    const picks=(items||[]).slice(0,5);
+    if(!picks.length){botReply("I couldn't find a matching restaurant in the sample listings. Try a different cuisine or preference.");return;}
+    const wrap=document.createElement("div");wrap.className="chat-results";
+    const label=document.createElement("div");label.className="chat-results-label";label.textContent="Compare restaurants · Sample ratings and delivery estimates";wrap.appendChild(label);
+    wrap.insertAdjacentHTML("beforeend",picks.map(r=>'<article class="chat-restaurant-card"><img loading="lazy" src="'+esc(r.image)+'" alt="'+esc(r.name)+'"><div class="chat-restaurant-info"><strong>'+esc(r.name)+'</strong><small>'+esc(r.cuisine)+'</small><div class="chat-restaurant-rating">★ '+r.rating+' <span>('+esc(r.reviews)+' ratings)</span></div><div class="chat-restaurant-meta"><span>⌖ '+esc(r.time)+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="chat-restaurant-offer">'+esc(r.offer)+' · '+esc(r.distance)+'</div></div><button type="button" data-chat-restaurant="'+r.id+'">View menu</button></article>').join(""));
+    $("chatContent").appendChild(wrap);$("chatContent").scrollTop=$("chatContent").scrollHeight;
+  }
+  function showChatRestaurant(id){
+    selectedRestaurant=id;category="all";searchText="";
+    renderRestaurants();renderMenu();
+    const r=restaurant(id),picks=chatFoodsForRestaurant(id).slice(0,4);
+    botRecommendations(r.name+" is rated "+r.rating+"/5 from "+r.reviews+" sample ratings, with "+r.time+" delivery and a "+euro(r.fee)+" fee. Here are some matching picks:",picks);
+  }
+  function botAddOnRecommendations(){
+    const first=cartItems()[0]?.item;
+    if(!first||upsellPromptedForOrder)return;
+    upsellPromptedForOrder=true;
+    const already=new Set(cartItems().map(x=>x.item.id));
+    const extras=foods.filter(f=>f.restaurant===first.restaurant&&!already.has(f.id)&&f.tags.some(t=>["drink","dessert"].includes(t.toLowerCase()))).sort((a,b)=>a.popular-b.popular).slice(0,3);
+    if(extras.length)botRecommendations("Want to make it a little more complete? Add a drink or dessert from "+restaurant(first.restaurant).name+" before checkout.",extras);
   }
   let lastAddedItems=[];
   const numberWords={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
