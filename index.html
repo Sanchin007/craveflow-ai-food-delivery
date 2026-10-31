@@ -520,13 +520,13 @@
     $("chatContent").appendChild(wrap);$("chatContent").scrollTop=$("chatContent").scrollHeight;
   }
   function showChatRestaurant(id){
-    selectedRestaurant=id;category="all";searchText="";
+    selectedRestaurant=id;category="all";searchText="";chatFoodMode=null;
     renderRestaurants();renderMenu();
     const r=restaurant(id),picks=chatFoodsForRestaurant(id).slice(0,4);
     botRecommendations(r.name+" is rated "+r.rating+"/5 from "+r.reviews+" sample ratings, with "+r.time+" delivery and a "+euro(r.fee)+" fee. Here are some matching picks:",picks);
   }
-  function showChatCategory(mode,label){
-    const activeRestaurant=cartItems()[0]?.item.restaurant||selectedRestaurant;
+  function showChatCategory(mode,label,requestedRestaurantId){
+    const activeRestaurant=cartItems()[0]?.item.restaurant||requestedRestaurantId||selectedRestaurant;
     const r=restaurant(activeRestaurant);
     selectedRestaurant=activeRestaurant;category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;chatFoodMode=mode;
     renderRestaurants();renderMenu();
@@ -682,9 +682,21 @@
       }else{sideEffects.push("Tell me which item in your bag you'd like removed");}
     }
     let toAdd=[];
-    if(addMatch){toAdd=foodMentions(addMatch[1]);}
+    const namedRestaurant=restaurants.find(r=>t.includes(r.name.toLowerCase()));
+    const unknownRestaurant=t.match(/\bfrom\s+([a-z][a-z0-9&' -]{1,35}\s+(?:restaurant|kitchen|cafe|café|bistro|eatery|house))\b/i);
+    if(unknownRestaurant&&!namedRestaurant){
+      botReply("I can’t find "+unknownRestaurant[1]+" in this demo’s restaurant list. I haven’t added anything — would you like to compare the available restaurants?");
+      botRestaurantRecommendations("Here are the restaurants currently in the CraveFlow sample area.",restaurantsForChat());
+      return;
+    }
+    if(addMatch){toAdd=foodMentions(addMatch[1],namedRestaurant?.id);}
     else if(!removeMatch&&(/\b(order|buy|get me|i want|i'd like|i would like|can i have|can i get|i'll have|let me have|make me)\b/.test(t))){
-      toAdd=foodMentions(t);
+      toAdd=foodMentions(t,namedRestaurant?.id);
+    }
+    if(namedRestaurant&&toAdd.some(m=>m.food.restaurant!==namedRestaurant.id)){
+      botReply("I can’t find that item on "+namedRestaurant.name+"’s sample menu. I’ve left your current bag untouched — here’s what they do have.");
+      showChatRestaurant(namedRestaurant.id);
+      return;
     }
     if(toAdd.length){
       const result=applyAddMentions(toAdd);
