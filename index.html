@@ -49,6 +49,18 @@
     .chat-message{font-size:12px;line-height:1.65;padding:12px 14px}
     .suggestions button{font-size:10px;padding:8px 11px}
     @media(max-width:760px){.prompt-stage{grid-template-columns:1fr;gap:22px;padding:24px 19px;margin:12px 0 26px}.prompt-stage h2{font-size:32px}.prompt-stage:after{right:-20px;top:-55px;font-size:180px}.prompt-example b{font-size:9px}}
+    .chat-results{display:grid;gap:8px;margin:0 0 14px;max-width:100%}
+    .chat-results-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:#7a806f;margin:2px 0}
+    .chat-food-card{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:9px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px;box-shadow:0 3px 12px #20241f08}
+    .chat-food-card img{width:58px;height:58px;border-radius:8px;object-fit:cover;background:#eee}
+    .chat-food-info{min-width:0}
+    .chat-food-info strong{display:block;font-size:10px;line-height:1.35;color:var(--ink)}
+    .chat-food-info small{display:block;font-size:8px;color:var(--muted);line-height:1.35;margin-top:3px}
+    .chat-food-info b{display:block;font-size:10px;margin-top:4px}
+    .chat-food-card button{border:0;border-radius:8px;padding:8px 9px;background:#fce8df;color:var(--orange-dark);font-size:9px;font-weight:900;white-space:nowrap}
+    .chat-food-card button:hover{background:var(--orange);color:#fff}
+    .assistant-panel{width:min(500px,calc(100vw - 28px));}
+    @media(max-width:390px){.chat-food-card{grid-template-columns:48px minmax(0,1fr) auto;gap:6px}.chat-food-card img{width:48px;height:48px}.chat-food-card button{padding:7px 6px;font-size:8px}}
   </style>
 </head>
 <body>
@@ -263,8 +275,7 @@
     });
     $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+'</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
   }
-  function renderMenu(){
-    const r=restaurant(selectedRestaurant);$("menuTitle").textContent=r?r.name+" menu":"Explore the menu";$("menuSub").textContent=r?r.cuisine+" · Tap + to add a little happiness to your bag.":"Tap + to add a little happiness to your bag.";
+  function visibleFoods(){
     let list=foods.filter(f=>f.restaurant===selectedRestaurant);
     if(searchText)list=list.filter(f=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(searchText)||!restaurant(selectedRestaurant));
     if(vegetarianOnly)list=list.filter(f=>f.vegetarian);
@@ -272,6 +283,11 @@
     if(maxPrice!==null)list=list.filter(f=>f.price<=maxPrice);
     list=list.filter(f=>f.spice<=spiceMax);
     const sort=$("sortMenu").value;if(sort==="price-low")list.sort((a,b)=>a.price-b.price);if(sort==="price-high")list.sort((a,b)=>b.price-a.price);if(sort==="popular")list.sort((a,b)=>a.popular-b.popular);
+    return list;
+  }
+  function renderMenu(){
+    const r=restaurant(selectedRestaurant);$("menuTitle").textContent=r?r.name+" menu":"Explore the menu";$("menuSub").textContent=r?r.cuisine+" · Tap + to add a little happiness to your bag.":"Tap + to add a little happiness to your bag.";
+    const list=visibleFoods();
     $("menuGrid").innerHTML=list.length?list.map(f=>'<article class="menu-card"><img loading="lazy" src="'+f.image+'" alt="'+esc(f.name)+'"><div class="menu-info"><h3>'+esc(f.name)+'</h3><p>'+esc(f.desc)+'</p><div class="food-tags">'+f.tags.slice(0,2).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div><div class="menu-bottom"><span class="price">'+euro(f.price)+'</span><button class="add-btn" data-add="'+f.id+'" aria-label="Add '+esc(f.name)+'">+</button></div></div></article>').join(""):'<div class="no-results">No dishes match those preferences in this menu. Try another restaurant or loosen a filter.</div>';
   }
   function renderCart(){
@@ -284,6 +300,15 @@
   function assistantOpen(){ $("assistantPanel").classList.add("open");$("chatInput").focus()}
   function addMessage(message,who){const el=document.createElement("div");el.className="chat-message "+who;el.textContent=message;$("chatContent").appendChild(el);$("chatContent").scrollTop=$("chatContent").scrollHeight}
   function botReply(message){addMessage(message,"bot")}
+  function botRecommendations(message,items){
+    botReply(message);
+    const picks=(items||[]).slice(0,4);
+    if(!picks.length)return;
+    const wrap=document.createElement("div");wrap.className="chat-results";
+    const label=document.createElement("div");label.className="chat-results-label";label.textContent="Tap add to put it straight in your bag";wrap.appendChild(label);
+    wrap.insertAdjacentHTML("beforeend",picks.map(f=>'<article class="chat-food-card"><img loading="lazy" src="'+esc(f.image)+'" alt="'+esc(f.name)+'"><div class="chat-food-info"><strong>'+esc(f.name)+'</strong><small>'+esc(restaurant(f.restaurant).name)+' · '+esc(f.desc)+'</small><b>'+euro(f.price)+'</b></div><button type="button" data-chat-add="'+f.id+'">+ Add</button></article>').join(""));
+    $("chatContent").appendChild(wrap);$("chatContent").scrollTop=$("chatContent").scrollHeight;
+  }
   let lastAddedItems=[];
   const numberWords={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
   function foodMentions(text,preferredRestaurant){
@@ -457,21 +482,21 @@
       const budget=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/);
       maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botReply("I've filtered the menu to vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good starting points. Say “add the tofu bowl” or name any dish to put it in your bag.");
+      botRecommendations("I've found vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". You can add a dish here without leaving the chat.",visibleFoods());
       return;
     }
     if(/\b(high protein|protein-rich|more protein)\b/.test(t)){
       proteinOnly=true;vegetarianOnly=false;selectedRestaurant="burger";category="protein";searchText="";spiceMax=4;
       const budget=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:[.,]\d+)?)/);maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botReply("I've highlighted protein-forward dishes. The crispy chicken burger (€12.90) and classic smash burger (€13.50) are shown in the current menu. Tell me which one to add.");
+      botRecommendations("Here are protein-forward choices. Tap Add on any dish to put it straight in your bag.",visibleFoods());
       return;
     }
     if(/\b(spicy|spice)\b/.test(t)){
       spiceMax=/not too spicy|mild|a little spicy|slightly spicy/.test(t)?2:3;
       vegetarianOnly=false;proteinOnly=false;category="all";searchText="";selectedRestaurant="fire";
       renderRestaurants();renderMenu();
-      botReply("I've filtered for a spice level up to "+spiceMax+" out of 3. The chicken burrito bowl has a gentle kick; the firecracker wings are hotter. Tell me what you'd like added.");
+      botRecommendations("Here are dishes within your requested spice level. Tap Add to choose one.",visibleFoods());
       return;
     }
     if(/\b(for two|two people|dinner for two)\b/.test(t)&&/\b40\b/.test(t)){
@@ -480,20 +505,20 @@
         const result=applyAddMentions([{food:food("burrito"),qty:2}]);
         botReply("I've added two chicken burrito bowls for two. "+result.reply);
       }else{
-        botReply("For two under €40 in food, two chicken burrito bowls come to €27.80 before fees. Say “order two chicken burrito bowls” and I'll add them to your bag.");
+        botRecommendations("For two under €40 in food, two chicken burrito bowls come to €27.80 before fees. Here is the dish — tap Add twice or tell me to order two.",[food("burrito")]);
       }
       return;
     }
     const budgetMatch=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/)||t.match(/€\s*(\d+(?:[.,]\d+)?)/);
     if(budgetMatch){
       maxPrice=Number(budgetMatch[1].replace(",","."));category="all";searchText="";renderRestaurants();renderMenu();
-      botReply("I've set the menu filter to "+euro(maxPrice)+" per dish. Delivery and service fees are separate. If you want me to order something, just say “add [dish]” or “order [dish and sides]”.");
+      botRecommendations("Here are dishes at or below "+euro(maxPrice)+" each. Delivery and service fees are separate. Tap Add to build your bag here.",visibleFoods());
       return;
     }
     const found=foodMentions(t);
     if(found.length){
       const f=found[0].food;selectedRestaurant=f.restaurant;category="all";searchText="";renderRestaurants();renderMenu();
-      botReply("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". "+f.desc+" Say “add "+f.name+"” and I'll put it in your bag.");
+      botRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". Tap Add below to put it straight in your bag.",[f]);
       return;
     }
     if(sideEffects.length){botReply(sideEffects.join(". ")+".");return;}
@@ -543,7 +568,15 @@
   $("openPromptAssistant").addEventListener("click",assistantOpen);
   $("promptStage").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;assistantOpen();addMessage(v,"user");assistantAction(v);});$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
   $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
-  $("chatContent").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v)});
+  $("chatContent").addEventListener("click",e=>{
+    const addButton=e.target.closest("[data-chat-add]");
+    if(addButton){
+      const id=addButton.dataset.chatAdd;add(id,1);
+      botReply("Added "+food(id).name+" to your bag. Keep chatting to add sides or change quantities, or say “checkout” when you're ready.");
+      return;
+    }
+    const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v);
+  });
   $("searchBtn").addEventListener("click",()=>{const q=$("mainSearch").value.trim();if(!q)return;assistantOpen();addMessage(q,"user");assistantAction(q)});
   $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
   $("clearFilters").addEventListener("click",()=>{category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
