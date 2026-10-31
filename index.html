@@ -433,7 +433,7 @@
   const count=()=>cartItems().reduce((s,x)=>s+x.qty,0);
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2400)}
-  function add(id,qty){if(!food(id))return;const current=cartItems();if(!current.length)upsellPromptedForOrder=false;if(current.some(x=>x.item.restaurant!==food(id).restaurant)){cart={};upsellPromptedForOrder=false;toast("Switched restaurant — this demo keeps one restaurant per order.");}cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
+  function add(id,qty){if(!food(id))return;const current=cartItems();if(!current.length)upsellPromptedForOrder=false;if(current.some(x=>x.item.restaurant!==food(id).restaurant)){toast("Your bag is with another restaurant. Clear it before switching.");return;}cart[id]=(cart[id]||0)+(qty||1);lastAddedItems=[id];renderCart();toast(food(id).name+" added to your bag")}
   function setQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart()}
   function renderRestaurants(){
     const list=restaurants.filter(r=>{
@@ -549,6 +549,9 @@
         }
       });
     });
+    const restaurantSpans=restaurants.map(r=>{const start=text.indexOf(r.name.toLowerCase());return start<0?null:{start,end:start+r.name.length};}).filter(Boolean);
+    const validMatches=matches.filter(m=>!restaurantSpans.some(span=>m.start<span.end&&m.end>span.start));
+    matches.splice(0,matches.length,...validMatches);
     matches.sort((x,y)=>y.alias.length-x.alias.length||x.start-y.start);
     const strong=matches.find(x=>x.alias.length>=7);
     const current=cartItems()[0]?.item.restaurant||selectedRestaurant;
@@ -582,8 +585,8 @@
     const restaurantId=groups[0];
     const current=cartItems()[0]?.item.restaurant;
     const switched=!!current&&current!==restaurantId;
-    if(!current||switched)upsellPromptedForOrder=false;
-    if(switched)cart={};
+    if(switched){return {ok:false,reply:"Your bag is already with "+restaurant(current).name+", while those items are from "+restaurant(restaurantId).name+". I haven’t changed or cleared anything. Finish this order first, or say “clear my bag” if you want to start again."};}
+    if(!current)upsellPromptedForOrder=false;
     Object.keys(grouped[restaurantId]).forEach(id=>{cart[id]=(cart[id]||0)+grouped[restaurantId][id];});
     selectedRestaurant=restaurantId;category="all";searchText="";proteinOnly=false;vegetarianOnly=false;maxPrice=null;spiceMax=4;chatFoodMode=null;
     lastAddedItems=Object.keys(grouped[restaurantId]);
