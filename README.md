@@ -4,10 +4,13 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 
 ## What you can try
 
-- Compare sample restaurant cards with star ratings, review counts, delivery estimates, delivery fees, distance and offer labels directly in the assistant chat.
+- Browse 11 sample restaurants across Indian North and South Indian, Hyderabadi biryani, Indian street food, Japanese, Thai, Mediterranean, Italian, burgers, grill and healthy bowls.
+- Search by restaurant name, cuisine or dish; sort the marketplace by recommended, top-rated, fastest delivery or lowest delivery fee.
+- Compare restaurant cards with sample star ratings, review counts, delivery estimates, delivery fees, distance, offer labels and an open-status visual.
 - Browse sample restaurant menus, including burgers, sides, drinks, sauces and dips, desserts, ramen, bowls, salads, and pasta.
 - Keep a live order-context strip in the assistant showing the active restaurant, item count and estimated total, with one-tap shortcuts to drinks, sauces, desserts and the bag.
-- Filter for vegetarian meals, high-protein dishes, spice level, and per-dish budget.
+- Filter by cuisine including Indian, Asian and Mediterranean, plus vegetarian meals, high-protein dishes, spice level and per-dish budget.
+- See a brighter, more welcoming visual system with animated food inspiration, slow-moving hero imagery, responsive cards and reduced-motion support.
 - See matching food recommendations directly inside the assistant conversation, with an **Add** button on each dish — no need to scroll down to a separate menu section to choose it.
 - Ask for restaurants, drinks, sauces or desserts; when an order is active, category requests show items from that same restaurant directly in chat.
 - Start with a named dish and restaurant, for example a cheeseburger from Burger Atelier, then continue with “show me the drinks menu”, “what sauces do they have?” or “anything for dessert?” without losing the active restaurant context.
@@ -21,6 +24,8 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 - Review the order summary and enter a name and delivery address before confirming.
 - Complete a simulated checkout with card, Apple Pay, PayPal, or cash-on-delivery selections.
 - Watch a simulated order-tracking journey with a moving courier marker, ETA, and status timeline.
+- Start a group order from the header, bag or assistant. Choose one restaurant, name the room, set a per-person spend limit and deadline, and select host-pays or each-person-pays.
+- Add demo guests, assign menu items to each person, see individual subtotals and the combined total, lock the room, and move the shared bag into checkout.
 - Follow the workflow map: understand → discover → validate → build → confirm.
 
 ## Try these assistant prompts
@@ -65,8 +70,14 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 - “Show me desserts.”
 - “Add a vanilla milkshake.”
 - “Can I see the desserts at Pasta Social?”
+- “Find me Indian food.”
+- “Show me the menu at Spice Route Kitchen.”
+- “Order butter chicken and garlic naan from Spice Route Kitchen.”
+- “Find me a dosa place.”
+- “Search for Biryani House.”
+- “Start a group order.”
 
-The browser-side assistant interprets supported natural-language patterns and performs local cart/filter/checkout actions. It is not connected to a hosted LLM or restaurant inventory API, so it is a deterministic prompt-driven demo rather than a live ChatGPT integration. It supports one restaurant per order and asks for clarification when a prompt combines dishes from different restaurants.
+The browser-side assistant interprets supported natural-language patterns and performs local cart/filter/checkout actions. It is not connected to a hosted LLM or restaurant inventory API, so it is a deterministic prompt-driven demo rather than a live ChatGPT integration. Individual orders and group orders each use one restaurant per bag. The group-order room supports local demo participants and a preview invite URL, but it does not synchronize across devices or browsers.
 
 ## Run locally
 
@@ -86,6 +97,8 @@ No build step or package installation is required. Open `index.html` in a browse
 This is a front-end product demo with sample restaurants, menu items, prices, fees, and delivery estimates.
 
 - No real restaurant search, inventory, booking, courier dispatch, or map-routing API is connected.
+- The 11 restaurant profiles, cuisine listings, menu items, ratings, review counts, offers, fees, distances and ETAs are sample data. The OPEN marker is a visual demo state, not a live opening-hours check.
+- Group guests, participant totals, budgets, deadlines, locking and payment choices are simulated in the current browser session. The copied invite URL is a preview only; a backend, persistent group session and real-time event channel are needed for cross-device collaboration.
 - Checkout is simulated. No real payment is processed and no card credentials are requested or stored.
 - Restaurant ratings, review counts, offers, distances, menu prices, fees and delivery estimates are illustrative sample data, not live marketplace data.
 - Delivery and pickup status, courier movement, ETA, and scheduled times are simulated.
@@ -101,6 +114,6 @@ A production implementation could replace the local demo logic with a backend-fo
 ## Tech
 
 - Semantic HTML, CSS, and vanilla JavaScript
-- Responsive layouts and CSS motion
+- Responsive layouts, CSS motion, animated food ticker and reduced-motion support
 - Sample imagery from Unsplash
 - No runtime framework or build dependency
