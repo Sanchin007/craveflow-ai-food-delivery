@@ -1030,7 +1030,7 @@
     }
     if(!toAdd.length&&/\b(indian|biryani|dosa|idli|paneer|butter chicken|tikka masala|curry|naan|samosa|chaat|pani puri|masala dosa)\b/.test(t)){
       const indianMatches=restaurants.filter(r=>r.category.includes("indian")||(r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes("indian")).sort((a,b)=>Number(b.rating)-Number(a.rating));
-      category="indian";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
+      category="indian";restaurantSort="rating";$("restaurantSort").value="rating";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
       document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="indian"));
       renderRestaurants();renderMenu();
       botRestaurantRecommendations("Absolutely — let's find something Indian. Here are North Indian, South Indian, biryani and street-food spots to compare. You can also type a restaurant name if you already have one in mind.",indianMatches);
@@ -1059,8 +1059,11 @@
     const current=cartItems()[0]?.item.restaurant;
     if(current&&current!==restaurantId){toast("Your individual bag is with "+restaurant(current).name+". Choose that restaurant or clear your bag first.");return;}
     const existing=current===restaurantId?cartItems().map(x=>({foodId:x.item.id,qty:x.qty})):[];
+    const budget=Math.max(5,Number($("groupBudget").value)||25);
+    const hostExistingTotal=existing.reduce((sum,line)=>sum+(food(line.foodId)?.price||0)*line.qty,0);
+    if(hostExistingTotal>budget){toast("Your current bag is above the per-person limit. Raise the limit or clear the bag first.");return;}
     const hostName=$("customerName").value.trim()||"You";
-    groupOrder={code:"CF"+Math.floor(10000+Math.random()*89999),name:$("groupName").value.trim()||"Food with friends",restaurantId,budget:Math.max(5,Number($("groupBudget").value)||25),deadline:$("groupDeadline").value||"19:00",payment:groupPayment,locked:false,participants:[{id:"host",name:hostName,items:existing}]};
+    groupOrder={code:"CF"+Math.floor(10000+Math.random()*89999),name:$("groupName").value.trim()||"Food with friends",restaurantId,budget,deadline:$("groupDeadline").value||"19:00",payment:groupPayment,locked:false,participants:[{id:"host",name:hostName,items:existing}]};
     $("groupSetup").hidden=true;$("groupRoom").hidden=false;
     renderGroupRoom();
   }
@@ -1176,7 +1179,7 @@
     $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
     if(orderStep===3){$("feedbackSection").style.display="block";$("feedbackSection").scrollIntoView({behavior:"smooth",block:"nearest"});}
   }
-  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";if(category==="indian"){selectedRestaurant="spice";restaurantQuery="";$("restaurantSearch").value="";}maxPrice=null;renderRestaurants();renderMenu()});
+  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";if(category==="indian"){selectedRestaurant="spice";restaurantSort="rating";$("restaurantSort").value="rating";restaurantQuery="";$("restaurantSearch").value="";}maxPrice=null;renderRestaurants();renderMenu()});
   $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;chatFoodMode=null;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
   $("menuGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)add(b.dataset.add,1)});
   $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
@@ -1217,7 +1220,7 @@
   $("groupAddItem").addEventListener("click",addGroupItem);
   $("groupParticipants").addEventListener("click",e=>{const b=e.target.closest("[data-group-remove]");if(b)removeGroupItem(b.dataset.groupRemove,b.dataset.groupFood);});
   $("groupLines").addEventListener("click",e=>{const b=e.target.closest("[data-group-remove]");if(b)removeGroupItem(b.dataset.groupRemove,b.dataset.groupFood);});
-  $("lockGroupOrder").addEventListener("click",()=>{if(!groupOrder)return;groupOrder.locked=true;renderGroupRoom();toast("Group order locked — everyone is done adding items");});
+  $("lockGroupOrder").addEventListener("click",()=>{if(!groupOrder)return;const over=groupOrder.participants.filter(p=>groupPersonTotal(p)>groupOrder.budget);if(over.length){toast(over.map(p=>p.name).join(", ")+" is over the per-person limit");return;}groupOrder.locked=true;renderGroupRoom();toast("Group order locked — everyone is done adding items");});
   $("groupCheckout").addEventListener("click",groupCheckoutOpen);
   $("copyGroupLink").addEventListener("click",copyGroupInvite);
   document.querySelectorAll("[data-group-payment]").forEach(b=>b.addEventListener("click",()=>{groupPayment=b.dataset.groupPayment;document.querySelectorAll("[data-group-payment]").forEach(x=>x.classList.toggle("active",x===b));}));
