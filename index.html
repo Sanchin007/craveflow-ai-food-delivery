@@ -297,6 +297,7 @@
         <button data-prompt="Show me drinks">🥤 Drinks</button>
         <button data-prompt="Show me sauces">🥫 Sauces</button>
         <button data-prompt="Show me desserts">🍰 Desserts</button>
+        <button data-prompt="Start a group order">👯 Group order</button>
       </div>
     </div>
     <form class="assistant-input" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask for a dish, change your cart…"><button type="submit" aria-label="Send message">➤</button></form>
@@ -769,6 +770,11 @@
         sideEffects.push("Delivery address added to checkout");
       }
     }
+    if(/\b(group order|order together|invite (?:my )?(?:friends|team|everyone)|start a group)\b/.test(t)){
+      groupOpen();
+      botReply("Let's make it a group order. Choose one restaurant, set a per-person budget and deadline, then add your guests. This demo simulates the room locally; live shared invitations will come with the backend.");
+      return;
+    }
     if(/\b(checkout|check out|go to payment|pay now)\b/.test(t)){
       if(!count()){botReply("Your bag is empty. Tell me what you'd like to order first, then I can open checkout.");return;}
       checkoutOpen();
@@ -1091,6 +1097,20 @@
   $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
   $("clearFilters").addEventListener("click",()=>{chatFoodMode=null;category="all";searchText="";restaurantQuery="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";$("restaurantSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
   $("sortMenu").addEventListener("change",renderMenu);
+  $("openGroupOrder").addEventListener("click",groupOpen);
+  $("openGroupOrderFromCart").addEventListener("click",groupOpen);
+  $("createGroupBtn").addEventListener("click",createGroupRoom);
+  $("addGroupGuest").addEventListener("click",addGroupGuest);
+  $("groupGuestName").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addGroupGuest();}});
+  $("groupAddItem").addEventListener("click",addGroupItem);
+  $("groupParticipants").addEventListener("click",e=>{const b=e.target.closest("[data-group-remove]");if(b)removeGroupItem(b.dataset.groupRemove,b.dataset.groupFood);});
+  $("groupLines").addEventListener("click",e=>{const b=e.target.closest("[data-group-remove]");if(b)removeGroupItem(b.dataset.groupRemove,b.dataset.groupFood);});
+  $("lockGroupOrder").addEventListener("click",()=>{if(!groupOrder)return;groupOrder.locked=true;renderGroupRoom();toast("Group order locked — everyone is done adding items");});
+  $("groupCheckout").addEventListener("click",groupCheckoutOpen);
+  $("copyGroupLink").addEventListener("click",copyGroupInvite);
+  document.querySelectorAll("[data-group-payment]").forEach(b=>b.addEventListener("click",()=>{groupPayment=b.dataset.groupPayment;document.querySelectorAll("[data-group-payment]").forEach(x=>x.classList.toggle("active",x===b));}));
+  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
+  $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
   $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
