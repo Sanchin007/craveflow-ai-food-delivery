@@ -84,7 +84,7 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 - “Search for Biryani House.”
 - “Start a group order.”
 
-The browser-side assistant interprets supported natural-language patterns and performs local cart/filter/checkout actions. It is not connected to a hosted LLM or restaurant inventory API, so it is a deterministic prompt-driven demo rather than a live ChatGPT integration. Individual orders and group orders each use one restaurant per bag. The group-order room supports local demo participants and a preview invite URL, but it does not synchronize across devices or browsers.
+The browser-side assistant retains an offline deterministic fallback. CraveFlow 2.0 also includes an optional secure Cloudflare Worker integration for hosted AI responses and controlled tool calls over the sample catalogue. See AI_SETUP.md to deploy and connect it. Individual orders and group orders each use one restaurant per bag. The group-order room supports local demo participants and a preview invite URL, but it does not synchronize across devices or browsers.
 
 ## Run locally
 
@@ -121,6 +121,8 @@ A production implementation could replace the local demo logic with a backend-fo
 ## Tech
 
 - Semantic HTML, CSS, and vanilla JavaScript
+- Optional Cloudflare Worker backend with server-side OpenAI API key and controlled tool calling
+- Browser speech recognition for voice input
 - Responsive layouts, CSS motion, branded launch animation, scroll reveals, staggered cards, animated food ticker and reduced-motion support
 - Sample imagery from Unsplash
 - No runtime framework or build dependency

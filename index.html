@@ -346,27 +346,22 @@
       .launch-mark,.launch-pin,.launch-core,.launch-cross,.launch-wordmark,.launch-tagline,.launch-bottom,.launch-progress i,.launch-glow,.launch-orbit,.hero-art>img,.floating-note,.restaurant-card,.menu-card,.assistant-fab{animation:none!important}
     }
 
+  
+/* CraveFlow 2.0: premium surface and restrained motion */
+:root{--paper:#faf9f6;--white:#fff;--ink:#20251f;--muted:#777d73;--line:#e9e7df;--orange:#d96c4d;--orange-dark:#bf573b;--green:#2f5140;--shadow:0 14px 40px rgba(32,37,31,.07)}
+html{scroll-behavior:smooth}body{background:#faf9f6;color:#20251f;letter-spacing:-.01em}.shell{max-width:1360px;padding-left:clamp(18px,4vw,56px);padding-right:clamp(18px,4vw,56px)}
+.topbar{height:76px;border-color:#e8e6df}.brand{font-size:22px}.brand-mark{background:#2f5140;box-shadow:none;border-radius:13px}.brand span:last-child{color:#d96c4d}.nav{gap:30px;font-size:12px}.location-pill,.icon-btn{background:#fff;border-color:#e7e5dd}
+.hero{padding:62px 0 42px;gap:clamp(24px,5vw,72px)}.hero-art{height:390px;border-radius:24px;background:#e8e7df}.hero-art:after{background:linear-gradient(110deg,#15231c08,#15231c00 55%,#15231c24)}h1{font-size:clamp(42px,5vw,66px);letter-spacing:-2.7px;line-height:1.02}.hero-copy{font-size:14px;max-width:460px}.eyebrow{letter-spacing:1.35px}.hero-search{border-radius:13px;box-shadow:0 8px 24px #20251f0a;border-color:#e8e6df}.primary-btn{background:#2f5140;box-shadow:none}.primary-btn:hover{background:#244332}.hero-meta{gap:30px}.hero-meta strong{font-size:14px}
+.prompt-stage{background:#f0f1eb;color:#20251f;border:1px solid #e6e8df;box-shadow:none;border-radius:20px;padding:26px 30px}.prompt-stage:after{color:#2f514008}.prompt-stage-kicker,.prompt-stage-label{color:#647568}.prompt-stage h2 em{color:#d96c4d}.prompt-stage-copy p{color:#73796f}.prompt-example{background:#fff;border-color:#e7e8df;color:#343a33;border-radius:10px}.prompt-example:hover{background:#fff;border-color:#d96c4d;transform:translateX(2px)}.prompt-example i{color:#d96c4d}.prompt-stage-cta{background:#2f5140;color:#fff;border-radius:10px}
+.section-head{margin-top:32px}.section-head h2,.menu-head h2{letter-spacing:-1.2px}.category-row{padding-bottom:13px}.chip{background:#fff;border-color:#e9e7df;color:#5f665d}.chip.active,.chip:hover{background:#2f5140;border-color:#2f5140}.layout{grid-template-columns:minmax(0,1fr) 310px;gap:24px}.restaurant-grid{gap:15px}.restaurant-card{border-radius:15px;border-color:#e9e7df;box-shadow:none}.restaurant-card:hover,.restaurant-card.selected{transform:translateY(-2px);box-shadow:0 12px 30px #20251f0d;border-color:#d6b4a6}.restaurant-img{height:145px}.restaurant-info{padding:14px}.restaurant-info h3{font-size:14px}.menu-card{border-radius:13px;border-color:#e9e7df;background:#fff}.cart-panel{border-radius:16px;border-color:#e9e7df;box-shadow:0 8px 28px #20251f07;padding:18px}.assist-promo{background:#f0f2ec}.process-strip{background:#263b30;border-radius:16px}
+.assistant-fab{background:#2f5140;box-shadow:0 8px 24px #2f51403a}.assistant-fab:hover{transform:translateY(-2px)}.assistant-panel{border-radius:18px;border-color:#e6e5dc;box-shadow:0 20px 70px #20251f25}.assistant-head{background:#263b30}.bot-avatar{background:#e7eddc}.assistant-content{background:#faf9f6}.chat-message{font-size:12px}.chat-message.user{background:#e9eee5;color:#304a3b}.assistant-input{align-items:center}.assistant-input input{font-size:12px;border-radius:11px}.assistant-input button[type=submit]{background:#2f5140}.voice-btn{width:38px;height:38px;flex:0 0 38px;border:1px solid #e5e6de;border-radius:10px;background:#f4f5ef;color:#2f5140;font-size:20px}.voice-btn.listening{background:#fbe9e3;border-color:#d96c4d;color:#bf573b}
+.restaurant-card,.menu-card,.assistant-fab,.hero-art>img,.floating-note{animation:none!important}.motion-reveal,.motion-reveal.in-view{opacity:1!important;transform:none!important;transition:none!important}.hero-art>img{transform:none!important}.floating-note{animation:none!important}.assistant-fab{animation:none!important}
+@media(max-width:760px){.hero{padding:28px 0 24px}.hero-art{height:240px}.prompt-stage{padding:22px 18px}.layout{grid-template-columns:1fr}.restaurant-img{height:112px}.assistant-panel{border-radius:17px}}
+
   </style>
 </head>
 <body>
 
-  <div class="launch-intro" id="launchIntro" role="status" aria-label="CraveFlow is opening">
-    <div class="launch-glow launch-glow-a"></div><div class="launch-glow launch-glow-b"></div>
-    <div class="launch-orbit launch-orbit-a"></div><div class="launch-orbit launch-orbit-b"></div>
-    <div class="launch-center">
-      <div class="launch-mark">
-        <svg viewBox="0 0 96 104" aria-hidden="true">
-          <path class="launch-pin" d="M48 5C27.6 5 11 21.5 11 41.7 11 67.8 48 99 48 99s37-31.2 37-57.3C85 21.5 68.4 5 48 5Z"/>
-          <circle class="launch-core" cx="48" cy="40" r="19"/>
-          <path class="launch-cross" d="M48 29v22M37 40h22"/>
-        </svg>
-      </div>
-      <div class="launch-wordmark"><span>crave</span><em>flow</em></div>
-      <div class="launch-tagline">YOUR NEXT FAVOURITE IS CLOSER</div>
-    </div>
-    <div class="launch-bottom"><span>FRESH IDEAS. EASY ORDERS.</span><div class="launch-progress"><i></i></div></div>
-    <button class="launch-skip" id="skipIntro" type="button">Skip intro ↗</button>
-  </div>
   <div class="shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="CraveFlow home"><span class="brand-mark">✳</span><span>crave<span>flow</span></span></a>
@@ -377,8 +372,8 @@
     <section class="hero">
       <div>
         <div class="eyebrow">Good food. Less back and forth.</div>
-        <h1>Your next great meal starts with a <em>conversation.</em></h1>
-        <p class="hero-copy">Tell us what you're craving, what you're avoiding, or how much time you've got. We'll help you find the right bite — without the endless scrolling.</p>
+        <h1>Good food, found through a <em>better conversation.</em></h1>
+        <p class="hero-copy">Tell CraveFlow what you feel like eating. Share a craving, a budget, a dietary preference or a time limit. Your assistant helps turn it into a considered order.</p>
         <div class="hero-search"><span class="search-icon">⌕</span><input id="mainSearch" type="search" placeholder="Try: one cheeseburger from Burger Atelier…"><button class="primary-btn" id="searchBtn">Ask assistant</button></div>
         <div class="hero-meta"><div><strong>4.8 / 5</strong>sample rating avg.</div><div><strong>20–45 min</strong>sample ETAs</div><div><strong>One chat</strong>to your next meal</div></div>
       </div>
@@ -507,8 +502,8 @@
         <button data-prompt="Start a group order">👯 Group order</button>
       </div>
     </div>
-    <form class="assistant-input" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask for a dish, change your cart…"><button type="submit" aria-label="Send message">➤</button></form>
-    <div class="assistant-disclaimer">Natural-language ordering demo · Cart and order flow run locally · No live AI, payment or courier service is connected.</div>
+    <form class="assistant-input" id="chatForm"><button class="voice-btn" id="voiceButton" type="button" aria-label="Speak your request" title="Speak your request">⌁</button><input id="chatInput" autocomplete="off" placeholder="Tell me what you’re craving…"><button type="submit" aria-label="Send message">➤</button></form>
+    <div class="assistant-disclaimer">AI assistant · Voice input supported · Sample menus and checkout only. Connect the secure Worker to enable live model responses.</div>
   </section>
 
   <div class="overlay" id="checkoutOverlay">
@@ -611,6 +606,7 @@
   </div>
   <div class="toast" id="toast" role="status"></div>
 
+<script src="config.js"></script>
 <script>
 (function(){
   const restaurants = [
@@ -806,24 +802,6 @@
   };
   let selectedRestaurant="burger",category="all",searchText="",restaurantQuery="",restaurantSort="recommended",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null,feedbackSubmission=null,groupOrder=null,groupPayment="host",lastOrderWasGroup=false;
   const $=id=>document.getElementById(id);
-
-  function runLaunchIntro(){
-    const intro=$("launchIntro"),skip=$("skipIntro");
-    if(!intro)return;
-    document.body.classList.add("launching");
-    let timer;
-    const finish=()=>{
-      if(intro.dataset.done==="true")return;
-      intro.dataset.done="true";
-      if(timer)clearTimeout(timer);
-      intro.classList.add("launch-out");
-      document.body.classList.remove("launching");
-      setTimeout(()=>intro.remove(),420);
-    };
-    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){finish();return;}
-    timer=setTimeout(finish,1400);
-    if(skip)skip.addEventListener("click",finish,{once:true});
-  }
 
   const euro=n=>"€"+Number(n).toFixed(2);
   const restaurant=id=>restaurants.find(r=>r.id===id);
@@ -1050,7 +1028,61 @@
     }
     field.value=value;
   }
-  function assistantAction(raw){
+
+  const CRAVEFLOW_API_URL=String(window.CRAVEFLOW_AI_API_URL||"").trim();
+  function applyAssistantActions(actions){
+    (actions||[]).forEach(action=>{
+      if(!action||typeof action!=="object")return;
+      if(action.type==="add_to_cart"&&food(action.item_id))add(action.item_id,Math.max(1,Math.min(10,Number(action.quantity)||1)));
+      else if(action.type==="remove_from_cart"&&food(action.item_id))setQty(action.item_id,-Math.max(1,Math.min(10,Number(action.quantity)||1)));
+      else if(action.type==="clear_cart"){cart={};lastAddedItems=[];renderCart();}
+      else if(action.type==="set_fulfillment"&&["delivery","pickup"].includes(action.value))updateFulfillment(action.value);
+      else if(action.type==="set_payment"&&["card","apple","paypal","cash"].includes(action.value))choosePayment(action.value);
+      else if(action.type==="open_checkout"&&count())checkoutOpen();
+    });
+  }
+  async function runCloudAssistant(){
+    if(!CRAVEFLOW_API_URL)return false;
+    const messages=Array.from($("chatContent").querySelectorAll(".chat-message")).slice(-12).map(el=>({role:el.classList.contains("user")?"user":"assistant",content:el.textContent.trim()})).filter(m=>m.content);
+    const payload={
+      messages,
+      restaurants:restaurants.map(r=>({id:r.id,name:r.name,cuisine:r.cuisine,rating:r.rating,delivery_time:r.time,delivery_fee:r.fee,tags:r.tags})),
+      foods:foods.map(f=>({id:f.id,restaurant:f.restaurant,name:f.name,description:f.desc,price:f.price,tags:f.tags,vegetarian:f.vegetarian,vegan:f.vegan,high_protein:f.protein,spice:f.spice,allergens:f.allergens})),
+      cart:cartItems().map(x=>({item_id:x.item.id,quantity:x.qty}))
+    };
+    try{
+      const response=await fetch(CRAVEFLOW_API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+      if(!response.ok)throw new Error("AI service returned "+response.status);
+      const data=await response.json();
+      if(!data||typeof data.reply!=="string")throw new Error("AI response was incomplete");
+      applyAssistantActions(data.actions);
+      botReply(data.reply);
+      if(Array.isArray(data.recommendations)&&data.recommendations.length){
+        const picks=data.recommendations.map(x=>food(x.id)).filter(Boolean);
+        if(picks.length)botRecommendations("A few options worth considering:",picks);
+      }
+      return true;
+    }catch(error){
+      console.warn("CraveFlow AI unavailable; using local demo assistant.",error);
+      toast("AI connection unavailable — using the local demo assistant");
+      return false;
+    }
+  }
+  function setupVoiceInput(){
+    const button=$("voiceButton"),input=$("chatInput"),form=$("chatForm");
+    if(!button)return;
+    const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SpeechRecognition){button.disabled=true;button.title="Voice input is not supported in this browser";button.setAttribute("aria-label","Voice input unavailable");return;}
+    const recognition=new SpeechRecognition();recognition.lang="en-US";recognition.interimResults=false;recognition.maxAlternatives=1;
+    recognition.onstart=()=>{button.classList.add("listening");button.textContent="●";button.title="Listening…";};
+    recognition.onend=()=>{button.classList.remove("listening");button.textContent="⌁";button.title="Speak your request";};
+    recognition.onerror=()=>toast("Could not hear that clearly. Please try again.");
+    recognition.onresult=event=>{input.value=event.results[0][0].transcript;form.requestSubmit();};
+    button.addEventListener("click",()=>{try{recognition.start();}catch(error){recognition.stop();}});
+  }
+
+  async function assistantAction(raw){
+    if(await runCloudAssistant())return;
     const t=raw.toLowerCase().replace(/[’]/g,"'");
     const sideEffects=[];
     if(t.includes("peanut")||t.includes("allerg")){
@@ -1476,7 +1508,7 @@
     $("submitFeedback").disabled=true;$("submitFeedback").textContent="Feedback received ✓";$("feedbackThanks").style.display="block";
     toast("Thanks for sharing your feedback");
   });
-  runLaunchIntro();initMotion();
+  initMotion();setupVoiceInput();
   renderRestaurants();renderMenu();renderCart();
 })();
 </script>

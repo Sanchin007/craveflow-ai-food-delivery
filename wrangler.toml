@@ -1,0 +1,7 @@
+name = "craveflow-ai"
+main = "worker/index.js"
+compatibility_date = "2026-10-31"
+
+[vars]
+ALLOWED_ORIGIN = "https://sanchin007.github.io"
+OPENAI_MODEL = "gpt-4.1-mini"
