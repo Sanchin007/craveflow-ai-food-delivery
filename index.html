@@ -604,7 +604,7 @@
       const f=food(id),q=grouped[restaurantId][id];
       return (q>1?q+" × ":"")+f.name;
     }).join(", ");
-    return {ok:true,reply:(switched?"I switched your bag to "+restaurant(restaurantId).name+". ":"Added to your bag: "+summary+". ")+ "Food subtotal "+euro(subtotal())+"; estimated total "+euro(estimatedBagTotal())+" including the demo delivery and service fees. Say “checkout” when you're ready."};
+    return {ok:true,reply:"Done — "+summary+" is in your "+restaurant(restaurantId).name+" bag. Your food subtotal is "+euro(subtotal())+" and your estimated total is "+euro(estimatedBagTotal())+". You can ask for drinks, sauces or dessert from the same restaurant whenever you like."};
   }
   function applyRemoveMentions(mentions){
     const removed=[];
@@ -736,7 +736,7 @@
     }
     if(didChange){
       botReply(sideEffects.join(". ").replace(/\.\./g,".")+" ");
-      if(sideEffects.some(x=>x.startsWith("Added to your bag:")||x.startsWith("I switched your bag to")))botAddOnRecommendations();
+      if(toAdd.length)botAddOnRecommendations();
       return;
     }
     if(/\b(dessert|desserts|sweet tooth|something sweet|cake|mochi|ice cream|tiramisu)\b/.test(t)){
@@ -868,8 +868,11 @@
     if(restaurantButton){showChatRestaurant(restaurantButton.dataset.chatRestaurant);return;}
     const addButton=e.target.closest("[data-chat-add]");
     if(addButton){
-      const id=addButton.dataset.chatAdd;add(id,1);lastAddedItems=[id];
-      botReply("Added "+food(id).name+". Your bag is up to date — want to keep browsing this restaurant’s menu or head to checkout?");
+      const id=addButton.dataset.chatAdd;
+      const activeRestaurant=cartItems()[0]?.item.restaurant;
+      if(activeRestaurant&&activeRestaurant!==food(id).restaurant){botReply("Your bag is with "+restaurant(activeRestaurant).name+". I won’t mix restaurants in one order, so I’ve left it unchanged. Say “clear my bag” if you want to start a new order with "+restaurant(food(id).restaurant).name+".");return;}
+      add(id,1);lastAddedItems=[id];
+      botReply("Lovely — "+food(id).name+" is in your bag. Anything else from "+restaurant(food(id).restaurant).name+"?");
       botAddOnRecommendations();
       return;
     }
