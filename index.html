@@ -285,7 +285,7 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
     /* CraveFlow launch sequence and motion system */
-    .launch-intro{display:none;position:fixed;inset:0;z-index:1000;place-items:center;overflow:hidden;background:#17251c;color:#fff;isolation:isolate;opacity:1;transition:opacity .48s cubic-bezier(.22,.8,.25,1),transform .48s cubic-bezier(.22,.8,.25,1)}
+    .launch-intro{display:none;position:fixed;inset:0;z-index:1000;place-items:center;overflow:hidden;background:#17251c;color:#fff;isolation:isolate;opacity:1;transition:opacity .38s cubic-bezier(.22,.8,.25,1),transform .38s cubic-bezier(.22,.8,.25,1)}
     .js-enabled .launch-intro{display:grid}
     .launch-intro:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#345b43 0,#203729 35%,#17251c 72%);z-index:-2}
     .launch-glow{position:absolute;width:44vw;height:44vw;min-width:280px;min-height:280px;border-radius:50%;filter:blur(60px);opacity:.22;pointer-events:none}
@@ -307,7 +307,7 @@
     .launch-tagline{font-size:9px;font-weight:800;letter-spacing:3.1px;color:#c7d6c8;animation:wordArrive .65s .55s ease both}
     .launch-bottom{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);width:min(220px,60vw);text-align:center;color:#aabbaa;font-size:8px;font-weight:800;letter-spacing:2px;white-space:nowrap;animation:wordArrive .6s .5s ease both}
     .launch-progress{height:3px;background:#ffffff1c;border-radius:99px;overflow:hidden;margin-top:13px}
-    .launch-progress i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#f26b45,#d9ef9a);transform:scaleX(0);transform-origin:left;animation:progressSweep 1.35s .12s cubic-bezier(.5,0,.2,1) forwards}
+    .launch-progress i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#f26b45,#d9ef9a);transform:scaleX(0);transform-origin:left;animation:progressSweep 1.05s .12s cubic-bezier(.5,0,.2,1) forwards}
     .launch-skip{position:absolute;right:28px;bottom:26px;border:1px solid #ffffff30;background:#ffffff0c;color:#fff;border-radius:99px;padding:9px 13px;font-size:10px;font-weight:800;letter-spacing:.3px;transition:background .2s,transform .2s}
     .launch-skip:hover{background:#ffffff20;transform:translateY(-2px)}
     .launch-intro.launch-out{opacity:0;transform:scale(1.025);pointer-events:none}
@@ -818,10 +818,10 @@
       if(timer)clearTimeout(timer);
       intro.classList.add("launch-out");
       document.body.classList.remove("launching");
-      setTimeout(()=>intro.remove(),520);
+      setTimeout(()=>intro.remove(),420);
     };
     if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){finish();return;}
-    timer=setTimeout(finish,1750);
+    timer=setTimeout(finish,1400);
     if(skip)skip.addEventListener("click",finish,{once:true});
   }
 
