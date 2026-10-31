@@ -260,7 +260,7 @@
     }else{
       const words=t.replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(w=>w.length>3);
       const match=foods.find(f=>words.some(w=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(w)));
-      if(match){selectedRestaurant=match.restaurant;searchText="";category="all";renderRestaurants();renderMenu();reply="I found "+match.name+" at "+restaurant(match.restaurant).name+" for "+euro(match.price)+". "+match.desc+" Tap the + button to add it, or tell me to add it for you.");}
+      if(match){selectedRestaurant=match.restaurant;searchText="";category="all";renderRestaurants();renderMenu();reply="I found "+match.name+" at "+restaurant(match.restaurant).name+" for "+euro(match.price)+". "+match.desc+" Tap the + button to add it, or tell me to add it for you."; }
       else{reply="I can help with menu discovery, dietary preferences, budget, spice level, cart edits, pickup or delivery timing. Try “Find me a vegetarian dinner under €15”, “Add chicken ramen and miso soup”, or “Change this to pickup”.";}
     }
     botReply(reply);
