@@ -227,11 +227,11 @@
       vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
       reply="Thanks for telling me. I can show menu information, but this demo cannot guarantee allergen safety or prevent cross-contact. I don't have a verified peanut-free certification for these kitchens. Please contact the restaurant directly and get confirmation before ordering. I can help you review the listed allergen notes, but never treat them as a safety guarantee.";
     }else if(t.includes("vegetarian")||t.includes("vegan")){
-      vegetarianOnly=true;proteinOnly=false;const vm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=vm?Number(vm[1]):null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
+      vegetarianOnly=true;proteinOnly=false;selectedRestaurant="green";const vm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=vm?Number(vm[1]):null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
       if(t.includes("make")&&count()){let removed=[];cartItems().forEach(x=>{if(!x.item.vegetarian){removed.push(x.item.name);delete cart[x.item.id]}});if(!count())cart["tofu-bowl"]=1;renderCart();reply="I've adjusted the demo bag toward vegetarian choices"+(removed.length?". Removed: "+removed.join(", ")+".":"")+". I added a crispy tofu bowl as a replacement. Please review the bag before checkout."}
       else reply="On it 🌱 I've filtered the restaurants and menu toward vegetarian options. The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good places to start.";
     }else if(t.includes("protein")){
-      proteinOnly=true;vegetarianOnly=false;const pm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=pm?Number(pm[1]):null;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
+      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="fire";const pm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=pm?Number(pm[1]):null;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
     }else if(t.includes("spicy")||t.includes("spice")){
       spiceMax=2;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();reply="I've kept the spice level gentle — up to 2 out of 3. The chicken burrito bowl has a little warmth, while the chicken ramen is milder. I've filtered out the extra-hot wings.";
     }else if(t.includes("under")||t.includes("budget")||t.includes("€")){
@@ -248,7 +248,7 @@
       if(t.includes("miso"))cart["miso-soup"]=(cart["miso-soup"]||0)+1;
       renderCart();reply="Done — I've added "+(t.includes("ramen")?"chicken ramen":"")+(t.includes("ramen")&&t.includes("miso")?" and ":"")+(t.includes("miso")?"miso soup":"")+" to your bag. Your updated total is "+euro(subtotal())+" before fees.";
     }else if(t.includes("remove")&&t.includes("fries")&&t.includes("salad")){
-      delete cart["fries"];cart["salad"]=(cart["salad"]||0)+1;renderCart();reply="Done. I removed the rosemary fries and added a garden glow salad (€11.50). Check your bag to review the change.";
+      cart={"salad":1};selectedRestaurant="green";renderRestaurants();renderMenu();renderCart();reply="Done. I removed the rosemary fries and added a garden glow salad (€11.50). Check your bag to review the change.";
     }else if(t.includes("pickup")){
       updateFulfillment("pickup");reply="Pickup selected. I'll keep the bag in pickup mode; the checkout summary will remove the delivery fee. Choose a collection time at checkout.";
     }else if(t.includes("19:30")||t.includes("schedule")||t.includes("before 19")){
@@ -297,7 +297,7 @@
     $("trackingTimeline").innerHTML=labels.map((l,i)=>'<div class="timeline-step '+(i<=orderStep?'done':'')+'"><b>'+l+'</b><small>'+(i<orderStep?"Complete":i===orderStep?"In progress":"Pending")+'</small></div>').join("");
     $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
   }
-  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";maxPrice=null;renderRestaurants();renderMenu()});
+  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";maxPrice=null;renderRestaurants();renderMenu()});
   $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
   $("menuGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)add(b.dataset.add,1)});
   $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
