@@ -303,7 +303,7 @@
       <div class="hero-art">
         <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85" alt="Colourful fresh meal bowl">
         <div class="floating-note note-top"><div class="tiny-label">Your food mood</div><div class="note-value">Fresh & feel-good 🌿</div></div>
-        <div class="floating-note note-bottom"><div class="note-row"><div class="avatar-stack"><i></i><i></i><i></i></div><div><div class="tiny-label"><span class="online-dot"></span>Good things nearby</div><div class="note-value">11 places to explore</div></div></div></div>
+        <div class="floating-note note-bottom"><div class="note-row"><div class="avatar-stack"><i></i><i></i><i></i></div><div><div class="tiny-label"><span class="online-dot"></span>Good things nearby</div><div class="note-value">18 places to explore</div></div></div></div>
       </div>
     </section>
 
@@ -335,6 +335,9 @@
         <button class="prompt-example" data-prompt="Show me the drinks menu."><span>🥤</span><b>“Show me the drinks menu.”</b><i>↗</i></button>
         <button class="prompt-example" data-prompt="What sauces and desserts do they have?"><span>🍰</span><b>“What sauces and desserts do they have?”</b><i>↗</i></button>
         <button class="prompt-example" data-prompt="Find me Indian food."><span>🇮🇳</span><b>“Find me Indian food.”</b><i>↗</i></button>
+      <button class="prompt-example" data-prompt="Find me Mexican food."><span>🌮</span><b>“Find me Mexican food.”</b><i>↗</i></button>
+      <button class="prompt-example" data-prompt="Find me Korean food."><span>🥢</span><b>“Find me Korean food.”</b><i>↗</i></button>
+      <button class="prompt-example" data-prompt="Find me French food."><span>🥐</span><b>“Find me French food.”</b><i>↗</i></button>
         <button class="prompt-stage-cta" id="openPromptAssistant">Start ordering by chat <span>→</span></button>
       </div>
     </section>
@@ -350,12 +353,22 @@
       <button class="chip" data-category="indian"><span class="emoji">🇮🇳</span>Indian</button>
       <button class="chip" data-category="asian"><span class="emoji">🍜</span>Asian</button>
       <button class="chip" data-category="mediterranean"><span class="emoji">🫒</span>Mediterranean</button>
+      <button class="chip" data-category="mexican"><span class="emoji">🌮</span>Mexican</button>
+      <button class="chip" data-category="korean"><span class="emoji">🥢</span>Korean</button>
+      <button class="chip" data-category="chinese"><span class="emoji">🥟</span>Chinese</button>
+      <button class="chip" data-category="french"><span class="emoji">🥐</span>French</button>
+      <button class="chip" data-category="greek"><span class="emoji">🫒</span>Greek</button>
+      <button class="chip" data-category="middle-eastern"><span class="emoji">🧆</span>Middle Eastern</button>
+      <button class="chip" data-category="american"><span class="emoji">🍖</span>American BBQ</button>
+      <button class="chip" data-category="italian"><span class="emoji">🍝</span>Italian</button>
+      <button class="chip" data-category="japanese"><span class="emoji">🍣</span>Japanese</button>
+      <button class="chip" data-category="thai"><span class="emoji">🍜</span>Thai</button>
     </div>
     <div class="restaurant-tools">
       <div class="restaurant-search"><span>⌕</span><input id="restaurantSearch" type="search" placeholder="Search restaurants, cuisines or dishes…"><kbd>↵</kbd></div>
       <label class="sort-label" for="restaurantSort">Sort by</label>
       <select id="restaurantSort" aria-label="Sort restaurants"><option value="recommended">Recommended</option><option value="rating">Top rated</option><option value="fastest">Fastest delivery</option><option value="fee">Lowest delivery fee</option></select>
-      <span class="result-hint" id="restaurantResultHint">Explore 11 sample restaurants</span>
+      <span class="result-hint" id="restaurantResultHint">Explore 18 sample restaurants</span>
     </div>
 
     <div class="layout">
@@ -403,6 +416,9 @@
         <button data-prompt="Surprise me">🎲 Surprise me</button>
         <button data-prompt="Show me restaurants">🍽 Compare restaurants</button>
         <button data-prompt="Find me Indian food">🇮🇳 Indian food</button>
+        <button data-prompt="Find me Mexican food">🌮 Mexican food</button>
+        <button data-prompt="Find me Korean food">🥢 Korean food</button>
+        <button data-prompt="Find me Italian food">🍝 Italian food</button>
         <button data-prompt="Show me drinks">🥤 Drinks</button>
         <button data-prompt="Show me sauces">🥫 Sauces</button>
         <button data-prompt="Show me desserts">🍰 Desserts</button>
@@ -516,17 +532,26 @@
 <script>
 (function(){
   const restaurants = [
-    {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",reviews:"1.2k",time:"25–30 min",fee:1.49,distance:"1.4 km",offer:"10% off selected dishes",category:["comfort","quick"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
+    {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",reviews:"1.2k",time:"25–30 min",fee:1.49,distance:"1.4 km",offer:"10% off selected dishes",category:["comfort","quick","asian","japanese"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
     {id:"green",name:"The Green Fork",cuisine:"Healthy · Bowls",rating:"4.8",reviews:"860",time:"20–25 min",fee:0.99,distance:"0.9 km",offer:"Free delivery over €20",category:["healthy","vegetarian","quick"],tags:["Fresh picks","Plant-forward"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"},
     {id:"fire",name:"Firebird Kitchen",cuisine:"Grill · Street food",rating:"4.7",reviews:"2.1k",time:"30–35 min",fee:1.79,distance:"2.2 km",offer:"15% off orders over €25",category:["comfort","protein"],tags:["Big flavours","High protein"],image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80"},
-    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",reviews:"740",time:"25–35 min",fee:1.29,distance:"1.8 km",offer:"Free dessert over €30",category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"},
+    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",reviews:"740",time:"25–35 min",fee:1.29,distance:"1.8 km",offer:"Free dessert over €30",category:["comfort","vegetarian","italian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"},
     {id:"burger",name:"Burger Atelier",cuisine:"Burgers · Loaded sides",rating:"4.9",reviews:"3.4k",time:"20–30 min",fee:1.59,distance:"1.1 km",offer:"Combo deal on selected meals",category:["comfort","quick"],tags:["Handcrafted","Crowd favourites"],image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80"},
     {id:"spice",name:"Spice Route Kitchen",cuisine:"Indian · North Indian",rating:"4.8",reviews:"2.4k",time:"30–40 min",fee:1.49,distance:"1.7 km",offer:"Free naan over €25",category:["indian","comfort","protein"],tags:["North Indian","Bestsellers"],image:"https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=900&q=80"},
     {id:"dosa",name:"Dosa District",cuisine:"Indian · South Indian",rating:"4.7",reviews:"980",time:"25–35 min",fee:1.19,distance:"2.1 km",offer:"10% off vegetarian favourites",category:["indian","vegetarian","quick"],tags:["South Indian","Crispy dosas"],image:"https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=900&q=80"},
     {id:"biryani",name:"Biryani House",cuisine:"Indian · Hyderabadi",rating:"4.9",reviews:"3.1k",time:"35–45 min",fee:1.79,distance:"2.8 km",offer:"Raita included with biryani",category:["indian","comfort","protein"],tags:["Hyderabadi style","Fan favourite"],image:"https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=900&q=80"},
     {id:"chaat",name:"Chaat Street",cuisine:"Indian · Street food",rating:"4.6",reviews:"1.1k",time:"20–30 min",fee:0.99,distance:"1.2 km",offer:"Snack combo from €9",category:["indian","vegetarian","quick"],tags:["Street-food hits","Veg friendly"],image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80"},
-    {id:"thai",name:"Bangkok Bowl",cuisine:"Thai · Noodles & curry",rating:"4.8",reviews:"1.5k",time:"25–35 min",fee:1.29,distance:"2.0 km",offer:"Free drink over €22",category:["asian","comfort","quick"],tags:["Thai favourites","Fresh herbs"],image:"https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80"},
+    {id:"thai",name:"Bangkok Bowl",cuisine:"Thai · Noodles & curry",rating:"4.8",reviews:"1.5k",time:"25–35 min",fee:1.29,distance:"2.0 km",offer:"Free drink over €22",category:["asian","comfort","quick","thai"],tags:["Thai favourites","Fresh herbs"],image:"https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=80"},
     {id:"med",name:"Olive & Za'atar",cuisine:"Mediterranean · Mezze",rating:"4.7",reviews:"860",time:"20–30 min",fee:1.09,distance:"1.5 km",offer:"Mezze box for two",category:["mediterranean","healthy","vegetarian"],tags:["Mezze & dips","Freshly made"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"}
+    ,
+    {id:"taco",name:"Taco Fiesta",cuisine:"Mexican · Tacos & bowls",rating:"4.8",reviews:"1.7k",time:"20–30 min",fee:1.39,distance:"1.6 km",offer:"Taco trio deal",category:["mexican","comfort","quick"],tags:["Street-style tacos","Fresh salsas"],image:"https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=900&q=80"},
+    {id:"seoul",name:"Seoul Kitchen",cuisine:"Korean · BBQ & bowls",rating:"4.9",reviews:"2.2k",time:"25–35 min",fee:1.49,distance:"2.4 km",offer:"Free kimchi side over €20",category:["korean","asian","comfort"],tags:["Korean favourites","Bold flavours"],image:"https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80"},
+    {id:"wok",name:"Wok & Roll",cuisine:"Chinese · Dumplings & noodles",rating:"4.7",reviews:"1.4k",time:"20–30 min",fee:1.19,distance:"1.9 km",offer:"Dumpling combo",category:["chinese","asian","quick"],tags:["Wok-fired","Noodles & dumplings"],image:"https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=900&q=80"},
+    {id:"bistro",name:"Le Petit Bistro",cuisine:"French · Bistro classics",rating:"4.8",reviews:"1.1k",time:"30–40 min",fee:1.69,distance:"2.5 km",offer:"Free dessert over €25",category:["french","comfort"],tags:["French classics","Made with care"],image:"https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=900&q=80"},
+    {id:"aegean",name:"Aegean Table",cuisine:"Greek · Grills & mezze",rating:"4.7",reviews:"920",time:"25–35 min",fee:1.29,distance:"1.7 km",offer:"Mezze for two",category:["greek","mediterranean","healthy"],tags:["Grilled favourites","Fresh mezze"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"},
+    {id:"smoke",name:"Smokehouse 27",cuisine:"American · BBQ & comfort",rating:"4.8",reviews:"1.9k",time:"30–40 min",fee:1.79,distance:"2.7 km",offer:"BBQ combo on selected plates",category:["american","comfort","protein"],tags:["Low & slow","Big portions"],image:"https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=900&q=80"},
+    {id:"falafel",name:"Falafel & Co.",cuisine:"Middle Eastern · Wraps & mezze",rating:"4.9",reviews:"1.3k",time:"20–30 min",fee:0.99,distance:"1.3 km",offer:"Wrap + hummus combo",category:["middle-eastern","mediterranean","vegetarian","quick"],tags:["Fresh wraps","Plant-forward"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"}
+
   ];
   const foods = [
     {id:"ramen",restaurant:"miso",name:"Chicken ramen",desc:"Slow-braised chicken, spring onion, rich miso broth.",price:14.5,cal:610,tags:["High protein","Comfort"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","gluten","sesame"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",popular:1},
@@ -581,6 +606,36 @@
     {id:"pani-puri",restaurant:"chaat",name:"Pani puri",desc:"Crisp shells with spiced potato and bright mint water.",price:6.5,cal:260,tags:["Street food","Vegan"],protein:false,vegetarian:true,vegan:true,spice:2,allergens:["gluten"],image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",popular:2},
     {id:"thai-green-curry",restaurant:"thai",name:"Thai green curry",desc:"Coconut curry, vegetables, fragrant basil and jasmine rice.",price:15.5,cal:610,tags:["Thai favourite","Comfort"],protein:false,vegetarian:true,vegan:false,spice:2,allergens:["soy"],image:"https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=80",popular:1},
     {id:"falafel-mezze",restaurant:"med",name:"Falafel mezze plate",desc:"Crisp falafel, hummus, tabbouleh, pickles and warm pita.",price:13.5,cal:520,tags:["Vegetarian","Fresh"],protein:true,vegetarian:true,vegan:true,spice:0,allergens:["sesame","gluten"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",popular:1}
+    ,
+    {id:"taco-trio",restaurant:"taco",name:"Baja fish taco trio",desc:"Crispy fish, cabbage slaw, lime crema and bright salsa.",price:14.9,cal:620,tags:["Best seller","High protein"],protein:true,vegetarian:false,vegan:false,spice:2,allergens:["fish","gluten","dairy"],image:"https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"chipotle-quesadilla",restaurant:"taco",name:"Chipotle chicken quesadilla",desc:"Griddled tortilla, smoky chicken, melted cheese and pico de gallo.",price:13.5,cal:680,tags:["Comfort","Popular"],protein:true,vegetarian:false,vegan:false,spice:2,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"horchata",restaurant:"taco",name:"Cinnamon horchata",desc:"Chilled rice milk with cinnamon and a little vanilla.",price:3.9,cal:180,tags:["Drink"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"churros",restaurant:"taco",name:"Cinnamon sugar churros",desc:"Warm churros with a rich chocolate dipping sauce.",price:5.5,cal:390,tags:["Dessert","Sweet"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1624371414361-e670edf4898d?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"bulgogi-bowl",restaurant:"seoul",name:"Beef bulgogi rice bowl",desc:"Korean-style marinated beef, rice, sesame and crunchy greens.",price:15.5,cal:640,tags:["High protein","Korean favourite"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","sesame"],image:"https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"kimchi-rice",restaurant:"seoul",name:"Kimchi fried rice",desc:"Wok-fried rice, kimchi, spring onion and a soft egg.",price:12.5,cal:540,tags:["Vegetarian option","Comfort"],protein:false,vegetarian:true,vegan:false,spice:2,allergens:["soy","egg"],image:"https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"yuzu-soda",restaurant:"seoul",name:"Yuzu sparkling soda",desc:"Bright citrus, gentle fizz and a clean finish.",price:3.9,cal:110,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"hotteok",restaurant:"seoul",name:"Korean sweet pancakes",desc:"Warm griddled pancakes with brown sugar and cinnamon.",price:6.5,cal:410,tags:["Dessert"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten"],image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"pork-dumplings",restaurant:"wok",name:"Pork & chive dumplings",desc:"Pan-seared dumplings with ginger-soy dipping sauce.",price:10.5,cal:460,tags:["Popular","High protein"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","gluten"],image:"https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"veg-fried-rice",restaurant:"wok",name:"Vegetable fried rice",desc:"Wok-tossed rice, seasonal vegetables, egg and spring onion.",price:11.5,cal:510,tags:["Vegetarian","Wok-fired"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["egg","soy"],image:"https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"jasmine-tea",restaurant:"wok",name:"Jasmine iced tea",desc:"Lightly brewed jasmine tea served over ice.",price:3.5,cal:45,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"mango-pudding",restaurant:"wok",name:"Mango coconut pudding",desc:"Silky mango pudding with coconut cream.",price:5.5,cal:280,tags:["Dessert"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1488477181946-6428a0291778?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"croque-monsieur",restaurant:"bistro",name:"Croque monsieur",desc:"Golden toasted brioche with ham, cheese and béchamel.",price:13.9,cal:650,tags:["French classic","Comfort"],protein:true,vegetarian:false,vegan:false,spice:0,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"ratatouille",restaurant:"bistro",name:"Provençal ratatouille",desc:"Slow-roasted aubergine, courgette, peppers and tomato.",price:12.5,cal:390,tags:["Vegetarian","Vegan"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"citronnade",restaurant:"bistro",name:"Maison citronnade",desc:"Fresh lemon, mint and a little sparkle.",price:3.8,cal:95,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"creme-brulee",restaurant:"bistro",name:"Crème brûlée",desc:"Vanilla custard under a crisp caramelised top.",price:6.9,cal:340,tags:["Dessert","French classic"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy","egg"],image:"https://images.unsplash.com/photo-1470324161839-ce2bb6fa6bc3?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"chicken-souvlaki",restaurant:"aegean",name:"Chicken souvlaki plate",desc:"Grilled chicken, lemon potatoes, tzatziki and warm pita.",price:15.9,cal:610,tags:["High protein","Grilled"],protein:true,vegetarian:false,vegan:false,spice:0,allergens:["dairy","gluten"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"spanakopita",restaurant:"aegean",name:"Spinach & feta pie",desc:"Flaky filo pastry with spinach, herbs and feta.",price:11.9,cal:480,tags:["Vegetarian","Greek classic"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"mint-lemonade",restaurant:"aegean",name:"Mint lemon cooler",desc:"Fresh lemon, garden mint and sparkling water.",price:3.9,cal:80,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"baklava",restaurant:"aegean",name:"Pistachio baklava",desc:"Crisp filo layers, pistachio and fragrant syrup.",price:5.9,cal:360,tags:["Dessert"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["nuts","gluten"],image:"https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"smoked-brisket",restaurant:"smoke",name:"Slow-smoked beef brisket",desc:"Tender brisket, house BBQ glaze, slaw and pickles.",price:18.5,cal:760,tags:["High protein","BBQ favourite"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy"],image:"https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"smoked-mac",restaurant:"smoke",name:"Smoked mac & cheese",desc:"Creamy macaroni, smoked cheddar and crisp herb crumbs.",price:10.9,cal:590,tags:["Vegetarian","Comfort"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","dairy"],image:"https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"peach-iced-tea",restaurant:"smoke",name:"Peach iced tea",desc:"Black tea, ripe peach and a refreshing finish.",price:3.5,cal:90,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"ny-cheesecake",restaurant:"smoke",name:"New York cheesecake",desc:"Creamy baked cheesecake with a buttery biscuit base.",price:6.5,cal:430,tags:["Dessert"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy","gluten","egg"],image:"https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"chicken-shawarma",restaurant:"falafel",name:"Chicken shawarma wrap",desc:"Spiced chicken, crisp salad, pickles and garlic tahini.",price:13.5,cal:590,tags:["High protein","Popular"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["sesame","gluten"],image:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"hummus-falafel-bowl",restaurant:"falafel",name:"Hummus & falafel bowl",desc:"Creamy hummus, falafel, tabbouleh and pickled vegetables.",price:12.9,cal:540,tags:["Vegetarian","Plant protein"],protein:true,vegetarian:true,vegan:true,spice:0,allergens:["sesame","gluten"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"pomegranate-fizz",restaurant:"falafel",name:"Pomegranate fizz",desc:"Tart pomegranate, lime and sparkling water.",price:3.8,cal:85,tags:["Drink"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:[],image:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"date-tahini-bites",restaurant:"falafel",name:"Date & tahini bites",desc:"Soft dates, toasted sesame and a touch of dark chocolate.",price:5.5,cal:260,tags:["Dessert","Naturally sweet"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["sesame"],image:"https://images.unsplash.com/photo-1488477181946-6428a0291778?auto=format&fit=crop&w=600&q=80",popular:4}
+
   ];
   const foodAliases = {
     "ramen":["chicken ramen","ramen","noodles"],
@@ -636,6 +691,36 @@
     "thai-green-curry":["thai green curry","green curry"],
     "falafel-mezze":["falafel mezze plate","falafel mezze","mezze plate"],
     "classic-burger":["classic smash burger","classic burger","beef burger","cheeseburger","cheese burger"] 
+,
+    "taco-trio":["baja fish taco trio","fish tacos","taco trio","tacos"],
+    "chipotle-quesadilla":["chipotle chicken quesadilla","chicken quesadilla","quesadilla"],
+    "horchata":["cinnamon horchata","horchata"],
+    "churros":["cinnamon sugar churros","churros"],
+    "bulgogi-bowl":["beef bulgogi rice bowl","bulgogi bowl","bulgogi"],
+    "kimchi-rice":["kimchi fried rice","kimchi rice","fried rice"],
+    "yuzu-soda":["yuzu sparkling soda","yuzu soda"],
+    "hotteok":["korean sweet pancakes","hotteok"],
+    "pork-dumplings":["pork and chive dumplings","pork dumplings","dumplings"],
+    "veg-fried-rice":["vegetable fried rice","veg fried rice"],
+    "jasmine-tea":["jasmine iced tea","jasmine tea"],
+    "mango-pudding":["mango coconut pudding","mango pudding"],
+    "croque-monsieur":["croque monsieur","croque"],
+    "ratatouille":["provençal ratatouille","ratatouille"],
+    "citronnade":["maison citronnade","citronnade","lemonade"],
+    "creme-brulee":["crème brûlée","creme brulee"],
+    "chicken-souvlaki":["chicken souvlaki plate","chicken souvlaki","souvlaki"],
+    "spanakopita":["spinach and feta pie","spanakopita"],
+    "mint-lemonade":["mint lemon cooler","mint lemonade"],
+    "baklava":["pistachio baklava","baklava"],
+    "smoked-brisket":["slow-smoked beef brisket","smoked brisket","brisket"],
+    "smoked-mac":["smoked mac and cheese","mac and cheese","mac & cheese"],
+    "peach-iced-tea":["peach iced tea","iced tea"],
+    "ny-cheesecake":["new york cheesecake","cheesecake"],
+    "chicken-shawarma":["chicken shawarma wrap","chicken shawarma","shawarma"],
+    "hummus-falafel-bowl":["hummus and falafel bowl","hummus falafel bowl"],
+    "pomegranate-fizz":["pomegranate fizz","pomegranate soda"],
+    "date-tahini-bites":["date and tahini bites","date bites"]
+
   };
   let selectedRestaurant="burger",category="all",searchText="",restaurantQuery="",restaurantSort="recommended",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null,feedbackSubmission=null,groupOrder=null,groupPayment="host",lastOrderWasGroup=false;
   const $=id=>document.getElementById(id);
@@ -1027,6 +1112,30 @@
     if(found.length){
       const f=found[0].food;selectedRestaurant=f.restaurant;category="all";searchText="";chatFoodMode=null;renderRestaurants();renderMenu();
       botRestaurantRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". This restaurant is rated "+restaurant(f.restaurant).rating+"/5. Open its menu to add the dish.",[restaurant(f.restaurant)]);
+      return;
+    }
+
+    const cuisineIntents = [
+      {terms:["mexican","tacos","taco"],label:"Mexican",category:"mexican"},
+      {terms:["korean","bulgogi","kimchi"],label:"Korean",category:"korean"},
+      {terms:["chinese","dumplings","dumpling"],label:"Chinese",category:"chinese"},
+      {terms:["french","bistro","ratatouille"],label:"French",category:"french"},
+      {terms:["greek","souvlaki","spanakopita"],label:"Greek",category:"greek"},
+      {terms:["middle eastern","middle-eastern","shawarma","hummus"],label:"Middle Eastern",category:"middle-eastern"},
+      {terms:["american","barbecue","bbq","brisket"],label:"American BBQ",category:"american"},
+      {terms:["italian"],label:"Italian",category:"italian"},
+      {terms:["japanese"],label:"Japanese",category:"japanese"},
+      {terms:["thai"],label:"Thai",category:"thai"},
+      {terms:["mediterranean"],label:"Mediterranean",category:"mediterranean"},
+      {terms:["asian"],label:"Asian",category:"asian"}
+    ];
+    const cuisineIntent=cuisineIntents.find(c=>c.terms.some(term=>t.includes(term)));
+    if(cuisineIntent){
+      const matches=restaurants.filter(r=>r.category.includes(cuisineIntent.category)).sort((a,b)=>Number(b.rating)-Number(a.rating));
+      category=cuisineIntent.category;restaurantSort="rating";$("restaurantSort").value="rating";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
+      document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category===category));
+      renderRestaurants();renderMenu();
+      botRestaurantRecommendations("Here are "+cuisineIntent.label+" restaurants in the CraveFlow sample area. Compare the ratings, delivery times and fees, then open a menu to choose a dish.",matches);
       return;
     }
     if(!toAdd.length&&/\b(indian|biryani|dosa|idli|paneer|butter chicken|tikka masala|curry|naan|samosa|chaat|pani puri|masala dosa)\b/.test(t)){
