@@ -1029,7 +1029,7 @@
       return;
     }
     if(!toAdd.length&&/\b(indian|biryani|dosa|idli|paneer|butter chicken|tikka masala|curry|naan|samosa|chaat|pani puri|masala dosa)\b/.test(t)){
-      const indianMatches=restaurants.filter(r=>r.category.includes("indian")||(r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes("indian"));
+      const indianMatches=restaurants.filter(r=>r.category.includes("indian")||(r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes("indian")).sort((a,b)=>Number(b.rating)-Number(a.rating));
       category="indian";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
       document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="indian"));
       renderRestaurants();renderMenu();
