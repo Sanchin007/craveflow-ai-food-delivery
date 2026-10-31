@@ -962,8 +962,12 @@
       if(toAdd.length)botAddOnRecommendations();
       return;
     }
-    if(namedRestaurant&&!toAdd.length&&/\b(menu|browse|show|from|at|restaurant|order from)\b/.test(t)){
+    if(namedRestaurant&&!toAdd.length){
       showChatRestaurant(namedRestaurant.id);
+      return;
+    }
+    if(!toAdd.length&&/\b(show me the menu|show menu|browse the menu|open the menu)\b/.test(t)){
+      showChatRestaurant(selectedRestaurant);
       return;
     }
     if(/\b(dessert|desserts|sweet tooth|something sweet|cake|mochi|ice cream|tiramisu)\b/.test(t)){
