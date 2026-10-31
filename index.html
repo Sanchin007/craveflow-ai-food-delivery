@@ -322,7 +322,7 @@
           </div>
           <label class="field-label" for="tipField">Add a little thank-you for your courier</label><select class="field" id="tipField"><option value="0">No tip</option><option value="1">€1.00</option><option value="2">€2.00</option><option value="3">€3.00</option></select>
         </div>
-        <div class="summary-box"><h3>Order summary</h3><div class="summary-items" id="checkoutItems"></div><div class="total-row"><span>Subtotal</span><b id="checkoutSubtotal">€0.00</b></div><div class="total-row"><span>Delivery fee</span><b id="checkoutDelivery">€0.00</b></div><div class="total-row"><span>Service fee</span><b id="checkoutService">€0.00</b></div><div class="total-row"><span>Tip</span><b id="checkoutTip">€0.00</b></div><div class="total-row grand"><span>Total</span><b id="checkoutTotal">€0.00</b></div><div class="demo-banner">Demo checkout: no real payment is collected. Card and wallet selections only simulate a successful payment flow.</div><button class="primary-btn pay-now" id="payNow">Confirm demo order · €0.00</button><p class="secure-note">Your order is confirmed only after you press the button. No payment credentials are requested or stored in this demo.</p></div>
+        <div class="summary-box"><h3>Order summary</h3><div class="summary-items" id="checkoutItems"></div><div class="total-row"><span>Subtotal</span><b id="checkoutSubtotal">€0.00</b></div><div class="total-row"><span>Delivery fee</span><b id="checkoutDelivery">€0.00</b></div><div class="total-row"><span>Service fee</span><b id="checkoutService">€0.00</b></div><div class="total-row"><span>Tip</span><b id="checkoutTip">€0.00</b></div><div class="total-row grand"><span>Total</span><b id="checkoutTotal">€0.00</b></div><div class="demo-banner" id="checkoutDemoBanner">Demo checkout: no real payment is collected. Card and wallet selections only simulate a successful payment flow.</div><button class="primary-btn pay-now" id="payNow">Confirm demo order · €0.00</button><p class="secure-note">Your order is confirmed only after you press the button. No payment credentials are requested or stored in this demo.</p></div>
       </div>
     </div>
   </div>
@@ -927,6 +927,94 @@
     if(sideEffects.length){botReply(sideEffects.join(". ")+".");return;}
     botReply("I can understand full order prompts and cart edits. Try “Order me a chicken burger, fries and a Coke”, “Make that two burgers”, “Remove the Coke and add onion rings”, “Change this to pickup”, “Pay by PayPal”, or “Checkout”.");
   }
+  function groupOpen(){
+    groupOrder=null;groupPayment="host";
+    $("groupSetup").hidden=false;$("groupRoom").hidden=true;
+    $("groupRestaurant").innerHTML=restaurants.map(r=>'<option value="'+r.id+'">'+esc(r.name)+' · '+esc(r.cuisine)+'</option>').join("");
+    const current=cartItems()[0]?.item.restaurant||selectedRestaurant;
+    $("groupRestaurant").value=restaurant(current)?current:"burger";
+    $("groupOverlay").classList.add("open");
+    document.querySelectorAll("[data-group-payment]").forEach(b=>b.classList.toggle("active",b.dataset.groupPayment==="host"));
+  }
+  function createGroupRoom(){
+    const restaurantId=$("groupRestaurant").value;
+    const current=cartItems()[0]?.item.restaurant;
+    if(current&&current!==restaurantId){toast("Your individual bag is with "+restaurant(current).name+". Choose that restaurant or clear your bag first.");return;}
+    const existing=current===restaurantId?cartItems().map(x=>({foodId:x.item.id,qty:x.qty})):[];
+    const hostName=$("customerName").value.trim()||"You";
+    groupOrder={code:"CF"+Math.floor(10000+Math.random()*89999),name:$("groupName").value.trim()||"Food with friends",restaurantId,budget:Math.max(5,Number($("groupBudget").value)||25),deadline:$("groupDeadline").value||"19:00",payment:groupPayment,locked:false,participants:[{id:"host",name:hostName,items:existing}]};
+    $("groupSetup").hidden=true;$("groupRoom").hidden=false;
+    renderGroupRoom();
+  }
+  function groupPersonTotal(person){return person.items.reduce((sum,line)=>sum+(food(line.foodId)?.price||0)*line.qty,0);}
+  function groupTotal(){return groupOrder?groupOrder.participants.reduce((sum,p)=>sum+groupPersonTotal(p),0):0;}
+  function renderGroupRoom(){
+    if(!groupOrder)return;
+    const r=restaurant(groupOrder.restaurantId);
+    $("groupRoomName").textContent=groupOrder.name;
+    $("groupRoomRestaurant").textContent=r.name+" · "+r.cuisine+" · "+r.time+" estimated";
+    $("groupCode").textContent=groupOrder.code;
+    $("groupInviteLink").value=window.location.origin+window.location.pathname+"?demoGroup="+groupOrder.code;
+    $("groupStatus").textContent=groupOrder.locked?"● LOCKED":"● OPEN";
+    $("groupPeopleCount").textContent=groupOrder.participants.length+" "+(groupOrder.participants.length===1?"person":"people");
+    $("groupParticipants").innerHTML=groupOrder.participants.map(p=>'<div class="group-person"><div class="group-person-avatar">'+esc(p.name.slice(0,1).toUpperCase())+'</div><div class="group-person-copy"><b>'+esc(p.name)+(p.id==="host"?' <small>HOST</small>':'')+'</b><small>'+p.items.reduce((n,x)=>n+x.qty,0)+' item'+(p.items.reduce((n,x)=>n+x.qty,0)===1?'':'s')+'</small></div><strong>'+euro(groupPersonTotal(p))+'</strong></div>').join("");
+    $("groupMemberSelect").innerHTML=groupOrder.participants.map(p=>'<option value="'+p.id+'">'+esc(p.name)+(p.id==="host"?" (you)":"")+'</option>').join("");
+    $("groupFoodSelect").innerHTML=foods.filter(f=>f.restaurant===groupOrder.restaurantId).map(f=>'<option value="'+f.id+'">'+esc(f.name)+' · '+euro(f.price)+'</option>').join("");
+    $("groupLines").innerHTML=groupOrder.participants.map(p=>p.items.length?'<div class="group-person-lines"><b>'+esc(p.name)+'</b>'+p.items.map(line=>'<div class="group-order-line"><span>'+line.qty+' × '+esc(food(line.foodId).name)+'</span><span>'+euro(food(line.foodId).price*line.qty)+'</span><button type="button" data-group-remove="'+p.id+'" data-group-food="'+line.foodId+'" aria-label="Remove one">−</button></div>').join("")+'</div>':"").join("")||'<p class="group-no-items">The shared bag is empty. Add something delicious for your crew.</p>';
+    $("groupTotal").textContent=euro(groupTotal());
+    $("groupBudgetNote").textContent="€"+groupOrder.budget.toFixed(0)+" per person · "+groupOrder.participants.filter(p=>groupPersonTotal(p)>groupOrder.budget).length+" over limit";
+    $("groupPaymentSummary").textContent=groupOrder.payment==="host"?"Host pays":"Each person pays";
+    $("groupDeadlineSummary").textContent="Closes at "+groupOrder.deadline;
+    $("groupAddItem").disabled=groupOrder.locked;$("addGroupGuest").disabled=groupOrder.locked;
+    $("groupGuestName").disabled=groupOrder.locked;
+    $("groupMemberSelect").disabled=groupOrder.locked;$("groupFoodSelect").disabled=groupOrder.locked;
+    $("lockGroupOrder").disabled=groupOrder.locked||!groupOrder.participants.some(p=>p.items.length);
+    $("lockGroupOrder").textContent=groupOrder.locked?"Order locked ✓":"Lock group order";
+    $("groupCheckout").disabled=!groupOrder.locked;
+  }
+  function addGroupGuest(){
+    if(!groupOrder||groupOrder.locked)return;
+    const name=$("groupGuestName").value.trim();
+    if(!name){toast("Add your guest's name first");return;}
+    if(groupOrder.participants.length>=8){toast("This demo room supports up to 8 people");return;}
+    if(groupOrder.participants.some(p=>p.name.toLowerCase()===name.toLowerCase())){toast("That guest is already in the room");return;}
+    groupOrder.participants.push({id:"guest"+Date.now(),name,items:[]});
+    $("groupGuestName").value="";renderGroupRoom();toast(name+" joined the demo room");
+  }
+  function addGroupItem(){
+    if(!groupOrder||groupOrder.locked)return;
+    const person=groupOrder.participants.find(p=>p.id===$("groupMemberSelect").value);
+    const item=food($("groupFoodSelect").value);
+    if(!person||!item)return;
+    const nextTotal=groupPersonTotal(person)+item.price;
+    if(nextTotal>groupOrder.budget){toast("That would take "+person.name+" over the €"+groupOrder.budget+" per-person limit");return;}
+    const line=person.items.find(x=>x.foodId===item.id);
+    if(line)line.qty++;else person.items.push({foodId:item.id,qty:1});
+    renderGroupRoom();toast(item.name+" added for "+person.name);
+  }
+  function removeGroupItem(personId,foodId){
+    if(!groupOrder||groupOrder.locked)return;
+    const person=groupOrder.participants.find(p=>p.id===personId),line=person?.items.find(x=>x.foodId===foodId);
+    if(!line)return;
+    line.qty--;if(line.qty<=0)person.items=person.items.filter(x=>x.foodId!==foodId);
+    renderGroupRoom();
+  }
+  async function copyGroupInvite(){
+    if(!groupOrder)return;
+    const link=$("groupInviteLink").value;
+    try{await navigator.clipboard.writeText(link);toast("Demo invite link copied");}
+    catch(e){$("groupInviteLink").focus();$("groupInviteLink").select();toast("Select and copy the demo invite link");}
+  }
+  function groupCheckoutOpen(){
+    if(!groupOrder||!groupOrder.locked)return;
+    const current=cartItems()[0]?.item.restaurant;
+    if(current&&current!==groupOrder.restaurantId){toast("Your individual bag is from another restaurant. Clear it before group checkout.");return;}
+    cart={};
+    groupOrder.participants.forEach(p=>p.items.forEach(line=>{cart[line.foodId]=(cart[line.foodId]||0)+line.qty;}));
+    selectedRestaurant=groupOrder.restaurantId;lastOrderWasGroup=true;
+    renderCart();$("groupOverlay").classList.remove("open");checkoutOpen();
+    $("checkoutDemoBanner").textContent=groupOrder.payment==="host"?"Group order demo · The host pays for the combined bag. No real payment is collected.":"Group order demo · Each guest's share is shown in the group room; split payments are simulated. No real payment is collected.";
+  }
   function checkoutOpen(){
     if(!count()){toast("Add a dish before checkout");return}
     $("checkoutOverlay").classList.add("open");
@@ -955,12 +1043,12 @@
       btn.disabled=false;btn.textContent="Confirm demo order";
       $("checkoutOverlay").classList.remove("open");
       orderStep=0;orderTimer=true;
-      $("trackingTitle").textContent="Your order is confirmed!";$("trackingSub").textContent="Order CF-"+Math.floor(2000+Math.random()*7000)+" · "+(payment==="cash"?"Cash on delivery selected":"Payment simulated successfully");
+      $("trackingTitle").textContent=lastOrderWasGroup?"Your group order is confirmed!":"Your order is confirmed!";$("trackingSub").textContent=(lastOrderWasGroup?"Group order · "+(groupOrder?.name||"Food with friends")+" · ":"Order CF-")+Math.floor(2000+Math.random()*7000)+" · "+(payment==="cash"?"Cash on delivery selected":"Payment simulated successfully");
       $("etaText").textContent=fulfillment==="pickup"?"15 min":"28 min";$("statusText").textContent="Confirmed";$("fulfillmentText").textContent=fulfillment==="pickup"?"Pickup":"Delivery";
       $("trackingOverlay").classList.add("open");cart={};renderCart();updateTimeline();
       if(window._orderInterval)clearInterval(window._orderInterval);
       window._orderInterval=setInterval(()=>{if(orderStep<3){orderStep++;updateTimeline()}else{clearInterval(window._orderInterval)}},6500);
-      toast("Demo order confirmed");
+      toast(lastOrderWasGroup?"Demo group order confirmed":"Demo order confirmed");lastOrderWasGroup=false;groupOrder=null;
     },900);
   }
   function updateTimeline(){
