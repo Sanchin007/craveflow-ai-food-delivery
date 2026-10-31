@@ -1108,7 +1108,7 @@ html{scroll-behavior:smooth}body{background:#faf9f6;color:#20251f;letter-spacing
   }
   async function assistantAction(raw){
     const request=raw.toLowerCase();
-    if(/\\b(veg|vegetarian|veggie|vegan)\\b/.test(request)&&/\\b(burger|burgers)\\b/.test(request)){
+    if(/\b(veg|vegetarian|veggie|vegan)\b/.test(request)&&/\b(burger|burgers)\b/.test(request)){
       vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";chatFoodMode=null;
       const matches=findMenuItemMatches(request);
       if(matches.length){
