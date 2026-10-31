@@ -234,11 +234,11 @@
     "fries":["rosemary fries","fries","french fries","chips"],
     "pasta":["basil pesto pasta","pesto pasta","pasta"],
     "tomato-pasta":["slow tomato rigatoni","tomato rigatoni","rigatoni","tomato pasta"],
-    "chicken-burger":["crispy chicken burger","chicken burgers","chicken burger","burger"],
+    "chicken-burger":["crispy chicken burger","chicken burgers","chicken burger","burgers","burger"],
     "classic-burger":["classic smash burger","classic burger","beef burger"],
     "veggie-burger":["garden veggie burger","veggie burger","vegetarian burger","plant burger"],
     "burger-fries":["golden skin-on fries","loaded fries","fries","french fries","chips"],
-    "coke":["coca-cola","coca cola","coke","cola","soft drink"],
+    "coke":["coca-cola","coca cola","cokes","coke","cola","soft drink"],
     "onion-rings":["crispy onion rings","onion rings","onion ring"]
   };
   let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0;
@@ -387,8 +387,8 @@
     else if(/\b(cash|pay on delivery)\b/.test(t)){choosePayment("cash");sideEffects.push("Cash on delivery selected");}
     else if(/\b(card|credit card|debit card)\b/.test(t)){choosePayment("card");sideEffects.push("Card selected");}
     const timeMatch=t.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
-    if(timeMatch){chooseSchedule((timeMatch[1].length===1?"0":"")+timeMatch[1]+":"+timeMatch[2]);sideEffects.push("Requested time set to "+scheduled);}
-    else if(/\b(before|by)\s+19\b/.test(t)){chooseSchedule("18:45");sideEffects.push("Requested time set to 18:45, ahead of 19:00");}
+    if(/\b(before|by)\s+19(?::00)?\b/.test(t)){chooseSchedule("18:45");sideEffects.push("Requested time set to 18:45, ahead of 19:00");}
+    else if(timeMatch){chooseSchedule((timeMatch[1].length===1?"0":"")+timeMatch[1]+":"+timeMatch[2]);sideEffects.push("Requested time set to "+scheduled);}
     if(/\b(saved address|my saved address)\b/.test(t)){
       sideEffects.push("I don't have a saved address in this demo. Add your address at checkout.");
     }else{
@@ -434,9 +434,15 @@
       sideEffects.push("I replaced the current bag with one crispy tofu bowl. Please review it before checkout.");
       didChange=true;
     }
-    if(/\b(double that|make that two|make it two)\b/.test(t)&&lastAddedItems.length){
-      lastAddedItems.forEach(id=>{cart[id]=(cart[id]||0)+1;});
-      renderCart();sideEffects.push("I doubled the most recently added items.");didChange=true;
+    const makeTwo=/\b(make that two|make it two)\b/.test(t);
+    if(makeTwo){
+      const exact=foodMentions(t);
+      if(exact.length){exact.forEach(m=>{cart[m.food.id]=m.qty;});renderCart();sideEffects.push("Updated the named items to the quantities you requested.");didChange=true;}
+      else if(lastAddedItems.length){lastAddedItems.forEach(id=>{cart[id]=2;});renderCart();sideEffects.push("Set the most recently added items to quantity two.");didChange=true;}
+    }
+    if(/\bdouble that\b/.test(t)&&lastAddedItems.length&&!makeTwo){
+      lastAddedItems.forEach(id=>{cart[id]=(cart[id]||0)*2;});
+      renderCart();sideEffects.push("Doubled the most recently added quantities.");didChange=true;
     }
     if(/\b(surprise me|surprise)\b/.test(t)){
       const result=applyAddMentions([{food:food("tofu-bowl"),qty:1}]);
@@ -468,15 +474,20 @@
       botReply("I've filtered for a spice level up to "+spiceMax+" out of 3. The chicken burrito bowl has a gentle kick; the firecracker wings are hotter. Tell me what you'd like added.");
       return;
     }
+    if(/\b(for two|two people|dinner for two)\b/.test(t)&&/\b40\b/.test(t)){
+      selectedRestaurant="fire";category="all";searchText="";maxPrice=null;renderRestaurants();renderMenu();
+      if(/\b(order|buy|get me|i want)\b/.test(t)){
+        const result=applyAddMentions([{food:food("burrito"),qty:2}]);
+        botReply("I've added two chicken burrito bowls for two. "+result.reply);
+      }else{
+        botReply("For two under €40 in food, two chicken burrito bowls come to €27.80 before fees. Say “order two chicken burrito bowls” and I'll add them to your bag.");
+      }
+      return;
+    }
     const budgetMatch=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/)||t.match(/€\s*(\d+(?:[.,]\d+)?)/);
     if(budgetMatch){
       maxPrice=Number(budgetMatch[1].replace(",","."));category="all";searchText="";renderRestaurants();renderMenu();
       botReply("I've set the menu filter to "+euro(maxPrice)+" per dish. Delivery and service fees are separate. If you want me to order something, just say “add [dish]” or “order [dish and sides]”.");
-      return;
-    }
-    if(/\b(for two|two people|dinner for two)\b/.test(t)&&/\b40\b/.test(t)){
-      selectedRestaurant="fire";category="all";searchText="";maxPrice=null;renderRestaurants();renderMenu();
-      botReply("For two under €40 in food, two chicken burrito bowls come to €27.80 before fees. Say “order two chicken burrito bowls” and I'll add them to your bag.");
       return;
     }
     const found=foodMentions(t);
