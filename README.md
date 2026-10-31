@@ -5,11 +5,14 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 ## What you can try
 
 - Compare sample restaurant cards with star ratings, review counts, delivery estimates, delivery fees, distance and offer labels directly in the assistant chat.
-- Browse sample restaurant menus, including burgers, sides, drinks, desserts, ramen, bowls, salads, and pasta.
+- Browse sample restaurant menus, including burgers, sides, drinks, sauces and dips, desserts, ramen, bowls, salads, and pasta.
+- Keep a live order-context strip in the assistant showing the active restaurant, item count and estimated total, with one-tap shortcuts to drinks, sauces, desserts and the bag.
 - Filter for vegetarian meals, high-protein dishes, spice level, and per-dish budget.
 - See matching food recommendations directly inside the assistant conversation, with an **Add** button on each dish — no need to scroll down to a separate menu section to choose it.
-- Ask for restaurants, drinks or desserts; choose a restaurant from the chat and browse its matching menu items without leaving the conversation.
-- Get a contextual drink/dessert suggestion after adding food, with one-tap add-on buttons.
+- Ask for restaurants, drinks, sauces or desserts; when an order is active, category requests show items from that same restaurant directly in chat.
+- Start with a named dish and restaurant, for example a cheeseburger from Burger Atelier, then continue with “show me the drinks menu”, “what sauces do they have?” or “anything for dessert?” without losing the active restaurant context.
+- Get contextual drink, sauce and dessert suggestions after adding food, with one-tap add-on buttons.
+- Keep the current basket intact if a different restaurant is mentioned; the demo does not silently replace or clear an existing order.
 - Rate food/restaurant and delivery separately after the simulated order reaches Delivered, add quick feedback tags and leave a comment.
 - Type a full natural-language order such as “Order me a chicken burger, fries and a Coke.”
 - Add multiple items and quantities in one prompt.
@@ -23,8 +26,15 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 ## Try these assistant prompts
 
 ### Build an order
-- “Order me a chicken burger, fries and a Coke.”
+- “Order one cheeseburger from Burger Atelier.”
+- “Show me the drinks menu.”
+- “What sauces do they have?”
+- “Add garlic mayo.”
+- “Anything good for dessert?”
+- “Add the chocolate fudge brownie.”
+- “What’s in my bag?”
 - “Add two chicken burgers and two Cokes.”
+- “Clear my bag.”
 - “I would like a chicken ramen and miso soup.”
 - “Order two chicken burrito bowls.”
 
@@ -51,6 +61,7 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 - “Surprise me.”
 - “Show me restaurants.”
 - “Show me drinks.”
+- “Show me sauces.”
 - “Show me desserts.”
 - “Add a vanilla milkshake.”
 - “Can I see the desserts at Pasta Social?”
