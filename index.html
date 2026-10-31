@@ -182,7 +182,7 @@
     <header class="topbar">
       <a class="brand" href="#" aria-label="CraveFlow home"><span class="brand-mark">✳</span><span>crave<span>flow</span></span></a>
       <nav class="nav"><a href="#order-by-prompt">Order by chat</a><a href="#discover">Discover</a><a href="#menu">Menu</a><a href="#how-it-works">How it works</a></nav>
-      <div class="top-actions"><div class="location-pill"><span>⌖</span> Delivering to <b>Marseille, France</b> ▾</div><button class="icon-btn" id="headerCart" aria-label="View cart">♧<span class="cart-count" id="headerCount">0</span></button></div>
+      <div class="top-actions"><div class="location-pill"><span>⌖</span> Delivering to <b>Marseille, France</b> ▾</div><button class="group-nav-btn" id="openGroupOrder">↗ Group order</button><button class="icon-btn" id="headerCart" aria-label="View cart">♧<span class="cart-count" id="headerCount">0</span></button></div>
     </header>
 
     <section class="hero">
@@ -198,6 +198,22 @@
         <div class="floating-note note-top"><div class="tiny-label">Your food mood</div><div class="note-value">Fresh & feel-good 🌿</div></div>
         <div class="floating-note note-bottom"><div class="note-row"><div class="avatar-stack"><i></i><i></i><i></i></div><div><div class="tiny-label"><span class="online-dot"></span>Good things nearby</div><div class="note-value">12 places to explore</div></div></div></div>
       </div>
+    </section>
+
+    <section class="food-ticker" aria-label="Food inspiration">
+      <div class="ticker-label"><span class="online-dot"></span> A little inspiration, while you decide</div>
+      <div class="ticker-window"><div class="ticker-track">
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=180&q=80" alt=""><b>Indian comfort</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=180&q=80" alt=""><b>Ramen nights</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=180&q=80" alt=""><b>Burger cravings</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=180&q=80" alt=""><b>Fresh pasta</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=180&q=80" alt=""><b>Feel-good bowls</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=180&q=80" alt=""><b>Indian comfort</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=180&q=80" alt=""><b>Ramen nights</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=180&q=80" alt=""><b>Burger cravings</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=180&q=80" alt=""><b>Fresh pasta</b></div>
+        <div class="ticker-item"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=180&q=80" alt=""><b>Feel-good bowls</b></div>
+      </div></div>
     </section>
 
     <section class="prompt-stage" id="promptStage">
@@ -223,6 +239,15 @@
       <button class="chip" data-category="vegetarian"><span class="emoji">🌱</span>Vegetarian</button>
       <button class="chip" data-category="protein"><span class="emoji">💪</span>High protein</button>
       <button class="chip" data-category="quick"><span class="emoji">⚡</span>Quick delivery</button>
+      <button class="chip" data-category="indian"><span class="emoji">🇮🇳</span>Indian</button>
+      <button class="chip" data-category="asian"><span class="emoji">🍜</span>Asian</button>
+      <button class="chip" data-category="mediterranean"><span class="emoji">🫒</span>Mediterranean</button>
+    </div>
+    <div class="restaurant-tools">
+      <div class="restaurant-search"><span>⌕</span><input id="restaurantSearch" type="search" placeholder="Search restaurants, cuisines or dishes…"><kbd>↵</kbd></div>
+      <label class="sort-label" for="restaurantSort">Sort by</label>
+      <select id="restaurantSort" aria-label="Sort restaurants"><option value="recommended">Recommended</option><option value="rating">Top rated</option><option value="fastest">Fastest delivery</option><option value="fee">Lowest delivery fee</option></select>
+      <span class="result-hint" id="restaurantResultHint">Explore 11 sample restaurants</span>
     </div>
 
     <div class="layout">
@@ -247,6 +272,7 @@
         <div class="cart-title"><h2>Your bag <span style="color:var(--orange)">✳</span></h2><small id="cartCountText">0 items</small></div>
         <div class="delivery-switch"><button class="active" data-fulfillment="delivery">⌖ Delivery</button><button data-fulfillment="pickup">↗ Pickup</button></div>
         <div id="cartContent"></div>
+        <button class="cart-group-btn" id="openGroupOrderFromCart"><span>👯</span><span><b>Ordering with others?</b><small>Start a shared group order</small></span><i>↗</i></button>
         <div class="assist-promo"><span class="spark">✳</span><div><strong>Need a little inspiration?</strong><p>Ask your food assistant to find your next favourite.</p></div><button id="openAssistantFromCart">↗</button></div>
       </aside>
     </div>
@@ -331,6 +357,47 @@
           <textarea id="feedbackText" rows="3" placeholder="Anything else you'd like us to know? (optional)"></textarea>
           <button class="primary-btn" id="submitFeedback">Send feedback</button><p class="feedback-thanks" id="feedbackThanks" style="display:none">Thank you — your feedback has been recorded in this demo session.</p>
         </section>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="groupOverlay">
+    <div class="modal group-modal">
+      <div class="modal-head">
+        <div><div class="eyebrow">Better together</div><h2>Make it a group order</h2><p class="group-subtitle">Pick one restaurant, invite your people and bring everyone's favourites into one bag.</p></div>
+        <button class="close-btn" data-close="groupOverlay" aria-label="Close">×</button>
+      </div>
+      <div class="group-body">
+        <div class="group-setup" id="groupSetup">
+          <div class="group-setup-art"><div class="group-art-orbit orbit-one"></div><div class="group-art-orbit orbit-two"></div><div class="group-art-emoji">🍜</div><div class="group-art-bubble bubble-a">🍕</div><div class="group-art-bubble bubble-b">🥗</div><div class="group-art-bubble bubble-c">🍰</div><div class="group-art-caption"><b>One table. Many cravings.</b><small>Everyone chooses their own meal.</small></div></div>
+          <div class="group-setup-form">
+            <label class="field-label" for="groupRestaurant">Choose a restaurant</label><select class="field" id="groupRestaurant"></select>
+            <label class="field-label" for="groupName">Give your order a name</label><input class="field" id="groupName" value="Friday food club" placeholder="Team lunch, movie night…">
+            <div class="group-form-split"><div><label class="field-label" for="groupBudget">Spend limit per person</label><div class="group-input-prefix"><span>€</span><input id="groupBudget" type="number" min="5" max="200" value="25"></div></div><div><label class="field-label" for="groupDeadline">Order deadline</label><input class="field" id="groupDeadline" type="time" value="19:00"></div></div>
+            <label class="field-label">How should the group pay?</label>
+            <div class="group-pay-options"><button type="button" class="active" data-group-payment="host"><b>I'll pay</b><small>One checkout for everyone</small></button><button type="button" data-group-payment="individual"><b>Split by person</b><small>Each guest pays their own share</small></button></div>
+            <button class="primary-btn group-create-btn" id="createGroupBtn">Create group room <span>→</span></button>
+            <small class="group-demo-note">Frontend demo: group members and invite links are simulated locally until the backend is connected.</small>
+          </div>
+        </div>
+        <div class="group-room" id="groupRoom" hidden>
+          <div class="group-room-heading"><div><span class="group-status" id="groupStatus">● OPEN</span><h3 id="groupRoomName">Friday food club</h3><p id="groupRoomRestaurant"></p></div><div class="group-code"><small>GROUP CODE</small><b id="groupCode"></b></div></div>
+          <div class="group-invite-row"><div><small>YOUR INVITE LINK</small><input id="groupInviteLink" readonly></div><button class="secondary-btn" id="copyGroupLink">Copy link ↗</button></div>
+          <p class="group-demo-note">Invite link is a preview in this frontend-only build. Guests can be simulated below; real cross-device joining and live updates come with the backend.</p>
+          <div class="group-room-grid">
+            <section class="group-people-card"><div class="group-card-heading"><div><b>Your people</b><small id="groupPeopleCount">1 person</small></div><span>👋</span></div>
+              <div class="group-add-guest"><input id="groupGuestName" placeholder="Friend's name"><button id="addGroupGuest">+ Add guest</button></div>
+              <div class="group-participants" id="groupParticipants"></div>
+            </section>
+            <section class="group-menu-card"><div class="group-card-heading"><div><b>Build the shared bag</b><small>Choose who you're adding for</small></div><span>🥡</span></div>
+              <label class="field-label" for="groupMemberSelect">Adding for</label><select class="field" id="groupMemberSelect"></select>
+              <label class="field-label" for="groupFoodSelect">Choose from the menu</label><select class="field" id="groupFoodSelect"></select>
+              <button class="primary-btn group-add-item-btn" id="groupAddItem">Add to group bag +</button>
+              <div class="group-lines" id="groupLines"></div>
+            </section>
+          </div>
+          <div class="group-summary"><div><small>GROUP TOTAL</small><b id="groupTotal">€0.00</b><span id="groupBudgetNote">Budget €25 per person</span></div><div><small>PAYMENT PLAN</small><b id="groupPaymentSummary">Host pays</b><span id="groupDeadlineSummary">Closes at 19:00</span></div></div>
+          <div class="group-room-actions"><button class="secondary-btn" id="lockGroupOrder">Lock group order</button><button class="primary-btn" id="groupCheckout" disabled>Review group checkout →</button></div>
+        </div>
       </div>
     </div>
   </div>
