@@ -919,7 +919,7 @@
     }
     let toAdd=[];
     const namedRestaurant=restaurants.find(r=>t.includes(r.name.toLowerCase()));
-    const unknownRestaurant=t.match(/\b(?:from|at)\s+(?!the\b|my\b|your\b)([a-z][a-z0-9&' -]{1,35}?)(?=\s*(?:[,.!?]|$))/i);
+    const unknownRestaurant=t.match(/\bfrom\s+(?!the\b|my\b|your\b|home\b|work\b)([a-z][a-z0-9&' -]{1,35}?)(?=\s*(?:[,.!?]|$))/i);
     if(unknownRestaurant&&!namedRestaurant){
       botReply("I can’t find "+unknownRestaurant[1]+" in this demo’s restaurant list. I haven’t added anything — would you like to compare the available restaurants?");
       botRestaurantRecommendations("Here are the restaurants currently in the CraveFlow sample area.",restaurantsForChat());
