@@ -334,6 +334,7 @@
         <button class="prompt-example" data-prompt="Order one cheeseburger from Burger Atelier."><span>🍔</span><b>“Order one cheeseburger from Burger Atelier.”</b><i>↗</i></button>
         <button class="prompt-example" data-prompt="Show me the drinks menu."><span>🥤</span><b>“Show me the drinks menu.”</b><i>↗</i></button>
         <button class="prompt-example" data-prompt="What sauces and desserts do they have?"><span>🍰</span><b>“What sauces and desserts do they have?”</b><i>↗</i></button>
+        <button class="prompt-example" data-prompt="Find me Indian food."><span>🇮🇳</span><b>“Find me Indian food.”</b><i>↗</i></button>
         <button class="prompt-stage-cta" id="openPromptAssistant">Start ordering by chat <span>→</span></button>
       </div>
     </section>
@@ -737,7 +738,7 @@
     $("chatContent").appendChild(wrap);$("chatContent").scrollTop=$("chatContent").scrollHeight;
   }
   function showChatRestaurant(id){
-    selectedRestaurant=id;category="all";searchText="";chatFoodMode=null;
+    selectedRestaurant=id;category="all";searchText="";restaurantQuery="";$("restaurantSearch").value="";chatFoodMode=null;
     renderRestaurants();renderMenu();
     const r=restaurant(id),picks=chatFoodsForRestaurant(id).slice(0,4);
     botRecommendations(r.name+" is rated "+r.rating+"/5 from "+r.reviews+" sample ratings, with "+r.time+" delivery and a "+euro(r.fee)+" fee. Here are some matching picks:",picks);
@@ -1216,7 +1217,7 @@
   $("groupCheckout").addEventListener("click",groupCheckoutOpen);
   $("copyGroupLink").addEventListener("click",copyGroupInvite);
   document.querySelectorAll("[data-group-payment]").forEach(b=>b.addEventListener("click",()=>{groupPayment=b.dataset.groupPayment;document.querySelectorAll("[data-group-payment]").forEach(x=>x.classList.toggle("active",x===b));}));
-  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
+  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();if(restaurantQuery){category="all";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));}renderRestaurants()});
   $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
   document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
