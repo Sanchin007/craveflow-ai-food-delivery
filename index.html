@@ -667,7 +667,7 @@
       botReply("Opening checkout. Review your items, delivery details and selected payment method, then confirm the demo order when you're happy.");
       return;
     }
-    if(/\b(show|view|check|what(?:'s| is) in)\b.*\b(bag|cart|order)\b|\b(my bag|my cart)\b/.test(t)){
+    if(/\b(show|view|check|what(?:'s| is) in)\b.*\b(bag|cart|order)\b/.test(t)){
       const items=cartItems();
       if(!items.length){botReply("Your bag is empty at the moment. Tell me what you’d like and I’ll start one.");return;}
       const summary=items.map(x=>x.qty+" × "+x.item.name).join(", ");
