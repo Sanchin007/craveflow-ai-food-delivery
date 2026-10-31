@@ -1090,8 +1090,8 @@ html{scroll-behavior:smooth}body{background:#faf9f6;color:#20251f;letter-spacing
       return names.some(name=>q.includes(name)||name.includes(q));
     });
     if(exact.length)return exact;
-    const wantsVegetarian=/\\b(vegetarian|veggie|vegan)\\b/.test(q);
-    const wantsBurger=/\\b(burger|burgers)\\b/.test(q);
+    const wantsVegetarian=/\b(vegetarian|veggie|vegan)\b/.test(q);
+    const wantsBurger=/\b(burger|burgers)\b/.test(q);
     if(wantsVegetarian&&wantsBurger)return foods.filter(item=>item.vegetarian&&/burger/i.test(item.name+" "+(foodAliases[item.id]||[]).join(" ")));
     return [];
   }
@@ -1108,7 +1108,7 @@ html{scroll-behavior:smooth}body{background:#faf9f6;color:#20251f;letter-spacing
   }
   async function assistantAction(raw){
     const request=raw.toLowerCase();
-    if(/\\b(vegetarian|veggie|vegan)\\b/.test(request)&&/\\b(burger|burgers)\\b/.test(request)){
+    if(/\b(vegetarian|veggie|vegan)\b/.test(request)&&/\b(burger|burgers)\b/.test(request)){
       vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";chatFoodMode=null;
       const matches=findMenuItemMatches(request);
       if(matches.length){
