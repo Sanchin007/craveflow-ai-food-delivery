@@ -311,7 +311,7 @@
     "vanilla-shake":["vanilla bean milkshake","vanilla milkshake","milkshake","shake"],
     "burger-brownie":["chocolate fudge brownie","fudge brownie"]
   };
-  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null;
+  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null,feedbackSubmission=null;
   const $=id=>document.getElementById(id);
   const euro=n=>"€"+Number(n).toFixed(2);
   const restaurant=id=>restaurants.find(r=>r.id===id);
@@ -321,7 +321,7 @@
   const count=()=>cartItems().reduce((s,x)=>s+x.qty,0);
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2400)}
-  function add(id,qty){if(!food(id))return;const current=cartItems();if(current.some(x=>x.item.restaurant!==food(id).restaurant)){cart={};toast("Switched restaurant — this demo keeps one restaurant per order.");}cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
+  function add(id,qty){if(!food(id))return;const current=cartItems();if(!current.length)upsellPromptedForOrder=false;if(current.some(x=>x.item.restaurant!==food(id).restaurant)){cart={};upsellPromptedForOrder=false;toast("Switched restaurant — this demo keeps one restaurant per order.");}cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
   function setQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart()}
   function renderRestaurants(){
     const list=restaurants.filter(r=>{
@@ -657,7 +657,7 @@
     $("checkoutSubtotal").textContent=euro(subtotal());$("checkoutDelivery").textContent=euro(fee);$("checkoutService").textContent=euro(service);$("checkoutTip").textContent=euro(tip);$("checkoutTotal").textContent=euro(total);$("payNow").textContent="Confirm demo order · "+euro(total);
   }
   function resetFeedback(){
-    feedbackFoodRating=0;feedbackDeliveryRating=0;feedbackTags=[];
+    feedbackFoodRating=0;feedbackDeliveryRating=0;feedbackTags=[];feedbackSubmission=null;
     $("feedbackSection").style.display="none";$("feedbackText").value="";
     $("feedbackThanks").style.display="none";$("submitFeedback").disabled=false;$("submitFeedback").textContent="Send feedback";
     document.querySelectorAll("[data-feedback-rating]").forEach(b=>b.classList.remove("active"));
@@ -685,7 +685,7 @@
     $("statusText").textContent=labels[orderStep];$("etaText").textContent=orderStep===0?"28 min":orderStep===1?"20 min":orderStep===2?"8 min":"Arrived";
     $("trackingTimeline").innerHTML=labels.map((l,i)=>'<div class="timeline-step '+(i<=orderStep?'done':'')+'"><b>'+l+'</b><small>'+(i<orderStep?"Complete":i===orderStep?"In progress":"Pending")+'</small></div>').join("");
     $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
-    if(orderStep===3){$("feedbackSection").style.display="block";}
+    if(orderStep===3){$("feedbackSection").style.display="block";$("feedbackSection").scrollIntoView({behavior:"smooth",block:"nearest"});}
   }
   $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";maxPrice=null;renderRestaurants();renderMenu()});
   $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;chatFoodMode=null;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
@@ -737,6 +737,7 @@
   $("submitFeedback").addEventListener("click",()=>{
     const note=$("feedbackText").value.trim();
     if(!feedbackFoodRating&&!feedbackDeliveryRating&&!feedbackTags.length&&!note){toast("Choose a rating or add a comment first");return;}
+    feedbackSubmission={restaurant:lastOrderRestaurant,foodRating:feedbackFoodRating,deliveryRating:feedbackDeliveryRating,tags:[...feedbackTags],comment:note};
     $("submitFeedback").disabled=true;$("submitFeedback").textContent="Feedback received ✓";$("feedbackThanks").style.display="block";
     toast("Thanks for sharing your feedback");
   });
