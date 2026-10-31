@@ -918,7 +918,7 @@
     }
     let toAdd=[];
     const namedRestaurant=restaurants.find(r=>t.includes(r.name.toLowerCase()));
-    const unknownRestaurant=t.match(/\bfrom\s+([a-z][a-z0-9&' -]{1,35}\s+(?:restaurant|kitchen|cafe|café|bistro|eatery|house))\b/i);
+    const unknownRestaurant=t.match(/\b(?:from|at)\s+(?!the\b|my\b|your\b)([a-z][a-z0-9&' -]{1,35}?)(?=\s*(?:[,.!?]|$))/i);
     if(unknownRestaurant&&!namedRestaurant){
       botReply("I can’t find "+unknownRestaurant[1]+" in this demo’s restaurant list. I haven’t added anything — would you like to compare the available restaurants?");
       botRestaurantRecommendations("Here are the restaurants currently in the CraveFlow sample area.",restaurantsForChat());
@@ -1221,7 +1221,7 @@
   $("groupCheckout").addEventListener("click",groupCheckoutOpen);
   $("copyGroupLink").addEventListener("click",copyGroupInvite);
   document.querySelectorAll("[data-group-payment]").forEach(b=>b.addEventListener("click",()=>{groupPayment=b.dataset.groupPayment;document.querySelectorAll("[data-group-payment]").forEach(x=>x.classList.toggle("active",x===b));}));
-  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();if(restaurantQuery){category="all";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));}renderRestaurants()});
+  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();if(restaurantQuery){category="all";vegetarianOnly=false;proteinOnly=false;chatFoodMode=null;document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));}renderRestaurants()});
   $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
   document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
