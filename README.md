@@ -6,6 +6,7 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 
 - Browse sample restaurants and menus, including burgers, sides, drinks, ramen, bowls, salads, and pasta.
 - Filter for vegetarian meals, high-protein dishes, spice level, and per-dish budget.
+- See matching food recommendations directly inside the assistant conversation, with an **Add** button on each dish — no need to scroll down to a separate menu section to choose it.
 - Type a full natural-language order such as “Order me a chicken burger, fries and a Coke.”
 - Add multiple items and quantities in one prompt.
 - Edit a bag by saying “Make that two chicken burgers and two fries” or “Remove the Coke and add onion rings.”
