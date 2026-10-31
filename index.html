@@ -958,6 +958,10 @@
       if(toAdd.length)botAddOnRecommendations();
       return;
     }
+    if(namedRestaurant&&!toAdd.length&&/\b(menu|browse|show|from|at|restaurant|order from)\b/.test(t)){
+      showChatRestaurant(namedRestaurant.id);
+      return;
+    }
     if(/\b(dessert|desserts|sweet tooth|something sweet|cake|mochi|ice cream|tiramisu)\b/.test(t)){
       showChatCategory("dessert","Desserts",namedRestaurant?.id);
       return;
