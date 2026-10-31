@@ -333,7 +333,7 @@
       if(chatFoodMode==="dessert"&&!foods.some(f=>f.restaurant===r.id&&f.tags.some(t=>t.toLowerCase()==="dessert")))return false;
       return true;
     });
-    $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+'</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
+    $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+' ('+esc(r.reviews)+')</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+' · '+esc(r.distance)+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
   }
   function visibleFoods(){
     let list=foods.filter(f=>f.restaurant===selectedRestaurant);
@@ -456,9 +456,10 @@
     const restaurantId=groups[0];
     const current=cartItems()[0]?.item.restaurant;
     const switched=!!current&&current!==restaurantId;
+    if(!current||switched)upsellPromptedForOrder=false;
     if(switched)cart={};
     Object.keys(grouped[restaurantId]).forEach(id=>{cart[id]=(cart[id]||0)+grouped[restaurantId][id];});
-    selectedRestaurant=restaurantId;category="all";searchText="";proteinOnly=false;vegetarianOnly=false;maxPrice=null;spiceMax=4;
+    selectedRestaurant=restaurantId;category="all";searchText="";proteinOnly=false;vegetarianOnly=false;maxPrice=null;spiceMax=4;chatFoodMode=null;
     lastAddedItems=Object.keys(grouped[restaurantId]);
     renderRestaurants();renderMenu();renderCart();
     const summary=Object.keys(grouped[restaurantId]).map(id=>{
@@ -573,32 +574,47 @@
     }
     if(didChange){
       botReply(sideEffects.join(". ").replace(/\.\./g,".")+" ");
+      if(sideEffects.some(x=>x.startsWith("Added to your bag:")||x.startsWith("I switched your bag to")))botAddOnRecommendations();
+      return;
+    }
+    if(/\b(dessert|desserts|sweet tooth|something sweet|cake|mochi|ice cream|tiramisu)\b/.test(t)){
+      chatFoodMode="dessert";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
+      renderRestaurants();renderMenu();
+      botRestaurantRecommendations("A sweet finish? Here are restaurants with desserts on their menu. Open one to see cakes, mochi and other treats.",restaurantsForChat());
+      return;
+    }
+    if(/\b(drink|drinks|beverage|beverages|something to drink|smoothie|milkshake|juice|iced tea)\b/.test(t)){
+      const directDrinks=foodMentions(t).filter(m=>m.food.tags.some(tag=>tag.toLowerCase()==="drink"));
+      if(directDrinks.length){botRecommendations("Here are the drinks you mentioned. Tap Add to put one in your bag.",directDrinks.map(m=>m.food));return;}
+      chatFoodMode="drink";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
+      renderRestaurants();renderMenu();
+      botRestaurantRecommendations("Fancy something to sip? These restaurants have drinks on the menu. Open one to see the options.",restaurantsForChat());
       return;
     }
     if(/\b(vegetarian|veggie|vegan)\b/.test(t)){
-      vegetarianOnly=true;proteinOnly=false;selectedRestaurant="green";category="vegetarian";searchText="";
+      vegetarianOnly=true;proteinOnly=false;chatFoodMode=null;selectedRestaurant="green";category="vegetarian";searchText="";
       const budget=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/);
       maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botRecommendations("I've found vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". You can add a dish here without leaving the chat.",visibleFoods());
+      botRestaurantRecommendations("I've found vegetarian-friendly restaurants"+(maxPrice!==null?" with dishes under "+euro(maxPrice):"")+". Compare their ratings and delivery details, then open a menu.",restaurantsForChat());
       return;
     }
     if(/\b(high protein|protein-rich|more protein)\b/.test(t)){
-      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="burger";category="protein";searchText="";spiceMax=4;
+      proteinOnly=true;vegetarianOnly=false;chatFoodMode=null;selectedRestaurant="burger";category="protein";searchText="";spiceMax=4;
       const budget=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:[.,]\d+)?)/);maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botRecommendations("Here are protein-forward choices. Tap Add on any dish to put it straight in your bag.",visibleFoods());
+      botRestaurantRecommendations("Here are restaurants with protein-forward dishes. Compare ratings, delivery estimates and fees before choosing.",restaurantsForChat());
       return;
     }
     if(/\b(spicy|spice)\b/.test(t)){
       spiceMax=/not too spicy|mild|a little spicy|slightly spicy/.test(t)?2:3;
-      vegetarianOnly=false;proteinOnly=false;category="all";searchText="";selectedRestaurant="fire";
+      vegetarianOnly=false;proteinOnly=false;chatFoodMode=null;category="all";searchText="";selectedRestaurant="fire";
       renderRestaurants();renderMenu();
-      botRecommendations("Here are dishes within your requested spice level. Tap Add to choose one.",visibleFoods());
+      botRestaurantRecommendations("Here are restaurants with dishes at your requested spice level. Compare the options, then view a menu.",restaurantsForChat());
       return;
     }
     if(/\b(for two|two people|dinner for two)\b/.test(t)&&/\b40\b/.test(t)){
-      selectedRestaurant="fire";category="all";searchText="";maxPrice=null;renderRestaurants();renderMenu();
+      chatFoodMode=null;selectedRestaurant="fire";category="all";searchText="";maxPrice=null;renderRestaurants();renderMenu();
       if(/\b(order|buy|get me|i want)\b/.test(t)){
         const result=applyAddMentions([{food:food("burrito"),qty:2}]);
         botReply("I've added two chicken burrito bowls for two. "+result.reply);
@@ -609,14 +625,20 @@
     }
     const budgetMatch=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/)||t.match(/€\s*(\d+(?:[.,]\d+)?)/);
     if(budgetMatch){
-      maxPrice=Number(budgetMatch[1].replace(",","."));category="all";searchText="";renderRestaurants();renderMenu();
-      botRecommendations("Here are dishes at or below "+euro(maxPrice)+" each. Delivery and service fees are separate. Tap Add to build your bag here.",visibleFoods());
+      maxPrice=Number(budgetMatch[1].replace(",","."));category="all";chatFoodMode=null;searchText="";renderRestaurants();renderMenu();
+      botRestaurantRecommendations("Here are restaurants with dishes at or below "+euro(maxPrice)+". Compare ratings, delivery estimates and fees; delivery and service fees are separate.",restaurantsForChat());
       return;
     }
     const found=foodMentions(t);
     if(found.length){
-      const f=found[0].food;selectedRestaurant=f.restaurant;category="all";searchText="";renderRestaurants();renderMenu();
-      botRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". Tap Add below to put it straight in your bag.",[f]);
+      const f=found[0].food;selectedRestaurant=f.restaurant;category="all";searchText="";chatFoodMode=null;renderRestaurants();renderMenu();
+      botRestaurantRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". This restaurant is rated "+restaurant(f.restaurant).rating+"/5. Open its menu to add the dish.",[restaurant(f.restaurant)]);
+      return;
+    }
+    if(/\b(restaurants?|places|options|nearby|where can i order)\b/.test(t)){
+      chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
+      renderRestaurants();renderMenu();
+      botRestaurantRecommendations("Here are the restaurants in the CraveFlow sample area. Compare ratings, delivery times, fees and offers, then open a menu.",restaurantsForChat());
       return;
     }
     if(sideEffects.length){botReply(sideEffects.join(". ")+".");return;}
@@ -634,9 +656,17 @@
     $("checkoutItems").innerHTML=items.map(x=>'<div class="summary-item"><span>'+x.qty+' × '+esc(x.item.name)+'</span><b>'+euro(x.qty*x.item.price)+'</b></div>').join("");
     $("checkoutSubtotal").textContent=euro(subtotal());$("checkoutDelivery").textContent=euro(fee);$("checkoutService").textContent=euro(service);$("checkoutTip").textContent=euro(tip);$("checkoutTotal").textContent=euro(total);$("payNow").textContent="Confirm demo order · "+euro(total);
   }
+  function resetFeedback(){
+    feedbackFoodRating=0;feedbackDeliveryRating=0;feedbackTags=[];
+    $("feedbackSection").style.display="none";$("feedbackText").value="";
+    $("feedbackThanks").style.display="none";$("submitFeedback").disabled=false;$("submitFeedback").textContent="Send feedback";
+    document.querySelectorAll("[data-feedback-rating]").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll("[data-feedback-tag]").forEach(b=>b.classList.remove("active"));
+  }
   function placeOrder(){
     if(fulfillment==="delivery"&&!$("addressField").value.trim()){toast("Add a delivery address before confirming");$("addressField").focus();return;}
     if(!$("customerName").value.trim()){toast("Add your name before confirming");$("customerName").focus();return;}
+    lastOrderRestaurant=cartItems()[0]?.item.restaurant||null;resetFeedback();
     const btn=$("payNow");btn.disabled=true;btn.textContent="Confirming demo order…";
     setTimeout(()=>{
       btn.disabled=false;btn.textContent="Confirm demo order";
@@ -655,9 +685,10 @@
     $("statusText").textContent=labels[orderStep];$("etaText").textContent=orderStep===0?"28 min":orderStep===1?"20 min":orderStep===2?"8 min":"Arrived";
     $("trackingTimeline").innerHTML=labels.map((l,i)=>'<div class="timeline-step '+(i<=orderStep?'done':'')+'"><b>'+l+'</b><small>'+(i<orderStep?"Complete":i===orderStep?"In progress":"Pending")+'</small></div>').join("");
     $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
+    if(orderStep===3){$("feedbackSection").style.display="block";}
   }
-  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";maxPrice=null;renderRestaurants();renderMenu()});
-  $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
+  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";maxPrice=null;renderRestaurants();renderMenu()});
+  $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;chatFoodMode=null;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
   $("menuGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)add(b.dataset.add,1)});
   $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
   document.querySelectorAll("[data-fulfillment]").forEach(b=>b.addEventListener("click",()=>updateFulfillment(b.dataset.fulfillment)));
@@ -667,17 +698,20 @@
   $("promptStage").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;assistantOpen();addMessage(v,"user");assistantAction(v);});$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
   $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
   $("chatContent").addEventListener("click",e=>{
+    const restaurantButton=e.target.closest("[data-chat-restaurant]");
+    if(restaurantButton){showChatRestaurant(restaurantButton.dataset.chatRestaurant);return;}
     const addButton=e.target.closest("[data-chat-add]");
     if(addButton){
       const id=addButton.dataset.chatAdd;add(id,1);
       botReply("Added "+food(id).name+" to your bag. Keep chatting to add sides or change quantities, or say “checkout” when you're ready.");
+      botAddOnRecommendations();
       return;
     }
     const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v);
   });
   $("searchBtn").addEventListener("click",()=>{const q=$("mainSearch").value.trim();if(!q)return;assistantOpen();addMessage(q,"user");assistantAction(q)});
   $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
-  $("clearFilters").addEventListener("click",()=>{category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
+  $("clearFilters").addEventListener("click",()=>{chatFoodMode=null;category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
   $("sortMenu").addEventListener("change",renderMenu);
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
   document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
@@ -685,6 +719,27 @@
   document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>{payment=b.dataset.payment;document.querySelectorAll("[data-payment]").forEach(x=>x.classList.toggle("active",x===b))}));
   $("tipField").addEventListener("change",updateCheckoutSummary);$("scheduleField").addEventListener("change",()=>{scheduled=$("scheduleField").value});
   $("payNow").addEventListener("click",placeOrder);
+  $("feedbackSection").addEventListener("click",e=>{
+    const star=e.target.closest("[data-feedback-rating]");
+    if(star){
+      const type=star.dataset.feedbackType,value=Number(star.dataset.feedbackRating);
+      if(type==="food")feedbackFoodRating=value;else feedbackDeliveryRating=value;
+      document.querySelectorAll('[data-feedback-type="'+type+'"]').forEach(b=>b.classList.toggle("active",Number(b.dataset.feedbackRating)<=value));
+      return;
+    }
+    const tag=e.target.closest("[data-feedback-tag]");
+    if(tag){
+      const value=tag.dataset.feedbackTag;
+      feedbackTags=feedbackTags.includes(value)?feedbackTags.filter(x=>x!==value):[...feedbackTags,value];
+      tag.classList.toggle("active",feedbackTags.includes(value));
+    }
+  });
+  $("submitFeedback").addEventListener("click",()=>{
+    const note=$("feedbackText").value.trim();
+    if(!feedbackFoodRating&&!feedbackDeliveryRating&&!feedbackTags.length&&!note){toast("Choose a rating or add a comment first");return;}
+    $("submitFeedback").disabled=true;$("submitFeedback").textContent="Feedback received ✓";$("feedbackThanks").style.display="block";
+    toast("Thanks for sharing your feedback");
+  });
   renderRestaurants();renderMenu();renderCart();
 })();
 </script>
