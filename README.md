@@ -4,13 +4,13 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 
 ## What you can try
 
-- Browse 18 sample restaurants across Indian North and South Indian, Hyderabadi biryani, Indian street food, Japanese, Thai, Korean, Chinese, Mexican, French, Greek, Middle Eastern, Mediterranean, Italian, American BBQ, burgers, grill and healthy bowls.
+- Browse 18 sample restaurants and 80 sample menu items across Indian North and South Indian, Hyderabadi biryani, Indian street food, Japanese, Thai, Korean, Chinese, Mexican, French, Greek, Middle Eastern, Mediterranean, Italian, American BBQ, burgers, grill and healthy bowls.
 - Search by restaurant name, cuisine or dish; sort the marketplace by recommended, top-rated, fastest delivery or lowest delivery fee.
 - Compare restaurant cards with sample star ratings, review counts, delivery estimates, delivery fees, distance, offer labels and an open-status visual.
 - Browse sample restaurant menus, including burgers, sides, drinks, sauces and dips, desserts, ramen, bowls, salads, and pasta.
 - Keep a live order-context strip in the assistant showing the active restaurant, item count and estimated total, with one-tap shortcuts to drinks, sauces, desserts and the bag.
 - Filter by cuisine including Indian, Asian and Mediterranean, plus vegetarian meals, high-protein dishes, spice level and per-dish budget.
-- See a brighter visual system with a branded animated CraveFlow launch sequence, orbiting map-pin motif, animated logo reveal, short progress sweep, staggered restaurant/menu cards, scroll reveals, floating hero imagery, button shimmer and reduced-motion support. The intro is skippable and lasts about 1.75 seconds.
+- See a brighter visual system with a branded animated CraveFlow launch sequence, orbiting map-pin motif, animated logo reveal, short progress sweep, staggered restaurant/menu cards, scroll reveals, floating hero imagery, button shimmer and reduced-motion support. The intro is skippable and lasts about 1.4 seconds.
 - See matching food recommendations directly inside the assistant conversation, with an **Add** button on each dish — no need to scroll down to a separate menu section to choose it.
 - Ask for restaurants, drinks, sauces or desserts; when an order is active, category requests show items from that same restaurant directly in chat.
 - Start with a named dish and restaurant, for example a cheeseburger from Burger Atelier, then continue with “show me the drinks menu”, “what sauces do they have?” or “anything for dessert?” without losing the active restaurant context.
