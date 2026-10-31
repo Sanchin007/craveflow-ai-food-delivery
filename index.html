@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f4ee">
+  <title>CraveFlow — Food, figured out.</title>
+  <meta name="description" content="CraveFlow is an interactive AI-assisted food delivery experience demo. Explore menus, build a cart, check out and track a simulated delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#20241f;--muted:#777b72;--paper:#f7f4ee;--white:#fffefa;--line:#e8e4da;--orange:#f26b45;--orange-dark:#df5633;--green:#345c45;--lime:#d9ef9a;--shadow:0 18px 50px rgba(38,42,34,.09);--radius:22px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.shell{max-width:1440px;margin:auto;padding:0 42px}
+    .topbar{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:relative;z-index:4}.brand{display:flex;align-items:center;gap:11px;font-family:Manrope,sans-serif;font-size:21px;font-weight:800;letter-spacing:-1px}.brand-mark{width:36px;height:36px;border-radius:12px;background:var(--orange);display:grid;place-items:center;color:white;font-size:20px;box-shadow:0 7px 15px #f26b4540}.brand span:last-child{color:var(--orange)}.nav{display:flex;align-items:center;gap:28px;color:#666b61;font-size:13px;font-weight:700}.nav a:hover{color:var(--orange)}.top-actions{display:flex;align-items:center;gap:12px}.location-pill,.icon-btn{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 14px;font-size:12px;font-weight:700;color:var(--ink)}.location-pill span{color:var(--orange);margin-right:6px}.icon-btn{width:42px;height:42px;padding:0;display:grid;place-items:center;position:relative}.cart-count{position:absolute;right:-3px;top:-4px;width:18px;height:18px;border-radius:50%;background:var(--orange);color:white;font-size:10px;display:grid;place-items:center}
+    .hero{display:grid;grid-template-columns:1.08fr .92fr;gap:30px;align-items:center;padding:46px 0 34px}.eyebrow{display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1.6px;font-size:10px;font-weight:800;color:var(--green)}.eyebrow:before{content:"";width:20px;height:2px;background:var(--orange)}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-1.6px}h1{font-size:clamp(40px,5vw,68px);line-height:1.04;margin:17px 0 16px;max-width:650px}h1 em{font-style:normal;color:var(--orange)}.hero-copy{color:#777b72;font-size:15px;line-height:1.75;max-width:500px}.hero-search{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);padding:7px 8px 7px 17px;border-radius:15px;max-width:520px;margin-top:25px;box-shadow:0 10px 30px #282b2110}.hero-search .search-icon{font-size:18px;color:var(--orange)}.hero-search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:13px;color:var(--ink)}.primary-btn{border:0;background:var(--orange);color:white;border-radius:11px;padding:13px 18px;font-weight:800;font-size:12px;transition:.2s;box-shadow:0 7px 16px #f26b4530}.primary-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}.hero-meta{display:flex;gap:22px;margin-top:21px;color:#777b72;font-size:11px}.hero-meta strong{color:var(--ink);font-size:13px;display:block;margin-bottom:3px}
+    .hero-art{height:340px;position:relative;border-radius:28px;overflow:hidden;background:#d8e0c8}.hero-art>img{width:100%;height:100%;object-fit:cover;filter:saturate(.9)}.hero-art:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#17271b10,#17271b00 50%,#17271b35)}.floating-note{position:absolute;z-index:1;background:#fffefaee;backdrop-filter:blur(10px);border:1px solid #ffffffb8;border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}.note-top{left:18px;top:18px}.note-bottom{right:18px;bottom:18px;min-width:190px}.tiny-label{font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px}.note-value{font-family:Manrope;font-size:17px;font-weight:800;margin-top:5px}.note-row{display:flex;align-items:center;gap:9px}.avatar-stack{display:flex}.avatar-stack i{width:25px;height:25px;border:2px solid white;border-radius:50%;background:#e7a67e;margin-left:-6px}.avatar-stack i:first-child{margin:0;background:#779a79}.avatar-stack i:last-child{background:#e8c66d}.online-dot{width:7px;height:7px;border-radius:50%;background:#5ca46d;display:inline-block;margin-right:5px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;margin:25px 0 17px}.section-head h2{font-size:27px;margin:5px 0 0}.section-sub{color:var(--muted);font-size:12px}.text-link{color:var(--orange-dark);font-size:12px;font-weight:800;background:none;border:0}
+    .category-row{display:flex;gap:9px;overflow:auto;padding:2px 0 16px;scrollbar-width:none}.category-row::-webkit-scrollbar{display:none}.chip{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:10px 15px;font-size:11px;font-weight:700;color:#696e64;white-space:nowrap;transition:.2s}.chip.active,.chip:hover{background:var(--ink);border-color:var(--ink);color:white}.chip .emoji{margin-right:6px}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start;padding-bottom:70px}.main-column{min-width:0}.restaurant-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.restaurant-card{background:var(--white);border:1px solid var(--line);border-radius:17px;overflow:hidden;cursor:pointer;transition:.22s;position:relative}.restaurant-card:hover,.restaurant-card.selected{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#f1a087}.restaurant-card.selected:after{content:"Selected";position:absolute;right:11px;top:11px;background:var(--ink);color:white;padding:6px 9px;border-radius:99px;font-size:9px;font-weight:800}.restaurant-img{height:130px;position:relative;overflow:hidden;background:#e6e0d4}.restaurant-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.restaurant-card:hover img{transform:scale(1.05)}.restaurant-info{padding:12px 13px 14px}.restaurant-info h3{font-size:14px;letter-spacing:-.4px;margin:0 0 6px}.restaurant-detail{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.rating{color:#b57b22;font-weight:800}.restaurant-tags{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}.mini-tag{background:#f2f0e9;color:#777b72;padding:5px 7px;border-radius:6px;font-size:9px;font-weight:700}
+    .menu-head{display:flex;justify-content:space-between;align-items:center;margin:31px 0 13px}.menu-head h2{font-size:25px;margin:4px 0}.menu-head select{border:1px solid var(--line);background:var(--white);padding:9px 12px;border-radius:9px;font-size:11px;color:#666}.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.menu-card{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:10px;display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;min-height:130px}.menu-card>img{width:112px;height:110px;object-fit:cover;border-radius:10px;background:#eee}.menu-info{display:flex;flex-direction:column;min-width:0}.menu-info h3{font-size:13px;letter-spacing:-.3px;margin:3px 0 5px}.menu-info p{font-size:10px;line-height:1.5;color:var(--muted);margin:0 0 7px}.menu-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:auto}.price{font-family:Manrope;font-size:14px;font-weight:800}.add-btn{border:0;border-radius:9px;background:#fce8df;color:var(--orange-dark);font-weight:900;width:31px;height:31px;font-size:19px;transition:.2s}.add-btn:hover{background:var(--orange);color:white}.food-tags{display:flex;gap:4px;flex-wrap:wrap}.food-tags span{font-size:8px;font-weight:800;color:var(--green);background:#edf3e8;padding:4px 6px;border-radius:5px}
+    .cart-panel{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:19px;position:sticky;top:18px;box-shadow:0 8px 28px #282b2108}.cart-title{display:flex;justify-content:space-between;align-items:center}.cart-title h2{font-size:20px;margin:0}.cart-title small{font-size:10px;color:var(--muted)}.delivery-switch{display:grid;grid-template-columns:1fr 1fr;background:#f3f0e9;border-radius:10px;padding:4px;margin:17px 0}.delivery-switch button{border:0;background:transparent;padding:9px;border-radius:8px;font-size:10px;font-weight:800;color:#777}.delivery-switch button.active{background:white;color:var(--ink);box-shadow:0 2px 7px #0000000c}.cart-empty{text-align:center;padding:25px 8px 22px;color:var(--muted)}.empty-icon{width:54px;height:54px;border-radius:17px;background:#f8eee5;display:grid;place-items:center;margin:0 auto 12px;font-size:24px}.cart-empty strong{display:block;color:var(--ink);font-family:Manrope;font-size:13px;margin-bottom:5px}.cart-empty p{font-size:10px;line-height:1.6;margin:0}.cart-lines{display:grid;gap:12px;margin:15px 0}.cart-line{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.cart-line strong{display:block;font-size:11px}.cart-line small{color:var(--muted);font-size:9px}.qty{display:flex;align-items:center;gap:8px}.qty button{width:22px;height:22px;border:1px solid var(--line);background:white;border-radius:7px;font-size:13px}.qty span{font-size:10px;font-weight:800;min-width:8px;text-align:center}.cart-totals{border-top:1px dashed var(--line);padding-top:12px;display:grid;gap:8px}.total-row{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.total-row.grand{color:var(--ink);font-size:14px;font-weight:900;padding-top:6px}.checkout-btn{width:100%;margin-top:15px}.cart-footnote{font-size:9px;text-align:center;color:var(--muted);margin:9px 0 0}.assist-promo{margin-top:13px;background:#edf2e6;border-radius:13px;padding:12px;display:flex;gap:10px;align-items:center}.assist-promo .spark{font-size:18px}.assist-promo strong{font-size:10px;display:block}.assist-promo p{font-size:9px;color:#6f786a;margin:3px 0 0;line-height:1.4}.assist-promo button{margin-left:auto;border:0;background:transparent;color:var(--green);font-weight:900;font-size:18px}
+    .process-strip{margin:22px 0 0;background:#202a22;border-radius:19px;padding:19px 20px;color:white;overflow:hidden;position:relative}.process-strip:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#91ae5c18;right:-50px;top:-95px}.process-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.process-top h3{font-size:16px;margin:0;letter-spacing:-.4px}.process-top span{font-size:9px;color:#c5d5bd;background:#ffffff12;padding:6px 9px;border-radius:99px}.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px;position:relative;z-index:1}.process-step{border-top:1px solid #ffffff45;padding-top:10px;position:relative}.process-step:before{content:"";width:7px;height:7px;border-radius:50%;background:#f58b68;position:absolute;top:-4px;left:0;box-shadow:0 0 0 4px #f58b6822}.process-step b{font-size:9px;display:block;margin-bottom:4px}.process-step small{font-size:8px;color:#aeb9a9;line-height:1.4;display:block}
+    .assistant-fab{position:fixed;right:24px;bottom:22px;z-index:10;border:0;background:var(--orange);color:white;border-radius:999px;padding:14px 19px;display:flex;gap:10px;align-items:center;font-weight:900;font-size:12px;box-shadow:0 12px 30px #f26b4560;transition:.2s}.assistant-fab:hover{transform:translateY(-3px)}.assistant-fab .spark{font-size:17px}.assistant-panel{position:fixed;right:24px;bottom:86px;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100vh - 120px));background:var(--white);border:1px solid var(--line);border-radius:22px;box-shadow:0 25px 90px #20241f35;z-index:11;display:none;flex-direction:column;overflow:hidden}.assistant-panel.open{display:flex;animation:pop .25s ease}@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}.assistant-head{background:#26352a;color:white;padding:16px 17px;display:flex;align-items:center;gap:11px}.bot-avatar{width:36px;height:36px;border-radius:12px;background:var(--lime);color:#26352a;display:grid;place-items:center;font-size:19px}.assistant-head strong{font-family:Manrope;font-size:13px;display:block}.assistant-head small{font-size:9px;color:#c7d5c3}.assistant-head button{margin-left:auto;border:0;background:#ffffff17;color:white;width:28px;height:28px;border-radius:8px;font-size:17px}.assistant-content{flex:1;overflow:auto;padding:16px;background:#fbfaf6}.chat-message{max-width:90%;padding:11px 12px;border-radius:13px;margin-bottom:10px;font-size:11px;line-height:1.6;white-space:pre-line}.chat-message.bot{background:white;border:1px solid var(--line);border-top-left-radius:4px;color:#4f554d}.chat-message.user{margin-left:auto;background:#fbe6dd;color:#683b2e;border-top-right-radius:4px}.chat-message strong{color:var(--ink)}.suggestions{display:flex;gap:6px;flex-wrap:wrap;margin:5px 0 13px}.suggestions button{border:1px solid #e8e4da;background:white;color:#656b60;padding:7px 9px;border-radius:99px;font-size:9px;font-weight:700}.suggestions button:hover{border-color:var(--orange);color:var(--orange-dark)}.assistant-input{display:flex;gap:7px;padding:12px;border-top:1px solid var(--line);background:white}.assistant-input input{min-width:0;flex:1;border:1px solid var(--line);border-radius:10px;padding:11px;font-size:11px;outline:none}.assistant-input input:focus{border-color:#ee9a7f}.assistant-input button{border:0;background:var(--orange);color:white;width:40px;border-radius:10px;font-size:17px}.assistant-disclaimer{font-size:8px;color:#9a9d94;text-align:center;padding:0 12px 9px;background:white}
+    .overlay{position:fixed;inset:0;background:#1820199c;backdrop-filter:blur(4px);z-index:20;display:none;align-items:center;justify-content:center;padding:18px}.overlay.open{display:flex}.modal{width:min(760px,100%);max-height:min(92vh,900px);overflow:auto;background:var(--white);border-radius:23px;box-shadow:0 30px 90px #0005;animation:pop .2s ease}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:21px 24px;border-bottom:1px solid var(--line)}.modal-head h2{font-size:23px;margin:0}.close-btn{border:0;background:#f0eee8;width:33px;height:33px;border-radius:9px;font-size:18px}.checkout-body{padding:22px 24px;display:grid;grid-template-columns:1.1fr .9fr;gap:24px}.field-label{font-size:10px;font-weight:900;display:block;margin:0 0 7px}.field{width:100%;border:1px solid var(--line);background:white;border-radius:10px;padding:12px;font-size:11px;outline:none;margin-bottom:14px}.field:focus{border-color:#ed9779}.fulfillment-options,.payment-options{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}.option-card{border:1px solid var(--line);border-radius:11px;background:white;padding:11px;text-align:left}.option-card.active{border-color:var(--orange);background:#fff5f0;box-shadow:inset 0 0 0 1px var(--orange)}.option-card strong{font-size:10px;display:block}.option-card small{font-size:9px;color:var(--muted);display:block;margin-top:4px}.payment-options{grid-template-columns:repeat(2,1fr)}.payment-card{border:1px solid var(--line);border-radius:10px;padding:10px;background:white;font-size:10px;font-weight:800;text-align:left}.payment-card.active{border-color:var(--green);background:#f1f6ec}.payment-card span{display:block;color:var(--muted);font-weight:500;font-size:9px;margin-top:4px}.summary-box{background:#f5f2eb;border-radius:15px;padding:16px;height:max-content}.summary-box h3{font-size:14px;margin:0 0 13px}.summary-items{display:grid;gap:8px;padding-bottom:12px;border-bottom:1px solid #e3dfd5}.summary-item{display:flex;justify-content:space-between;font-size:10px;gap:8px}.summary-box .total-row{margin-top:9px}.summary-box .grand{margin-top:12px}.pay-now{width:100%;margin-top:16px}.secure-note{font-size:8px;color:var(--muted);line-height:1.5;margin:9px 0 0}.demo-banner{background:#fff1e8;border:1px solid #f6d5c7;color:#8d4c35;padding:9px 11px;border-radius:9px;font-size:9px;line-height:1.5;margin:12px 0}
+    .tracking-body{padding:22px 24px}.order-success{display:flex;align-items:center;gap:11px;margin-bottom:17px}.success-icon{width:42px;height:42px;background:#e9f2df;color:var(--green);border-radius:14px;display:grid;place-items:center;font-size:22px}.order-success h3{font-size:16px;margin:0 0 4px}.order-success p{font-size:10px;color:var(--muted);margin:0}.map-card{height:260px;background:#e9eee2;border-radius:16px;position:relative;overflow:hidden;border:1px solid #dce4d5}.map-card svg{width:100%;height:100%;position:absolute;inset:0}.map-label{position:absolute;background:#fffefa;border-radius:8px;padding:7px 9px;font-size:9px;font-weight:800;box-shadow:0 3px 12px #26352a20}.map-label.restaurant{left:9%;top:18%}.map-label.home{right:8%;bottom:18%}.courier{position:absolute;left:50%;top:47%;width:35px;height:35px;border-radius:12px;background:var(--orange);display:grid;place-items:center;color:white;font-size:17px;box-shadow:0 0 0 7px #f26b4528;animation:ride 8s ease-in-out infinite alternate}@keyframes ride{0%{left:28%;top:30%}50%{left:55%;top:57%}100%{left:78%;top:42%}}.tracking-meta{display:flex;justify-content:space-between;gap:10px;margin:14px 0}.tracking-meta div{flex:1;background:#f5f2eb;border-radius:10px;padding:10px}.tracking-meta small{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;font-weight:800;letter-spacing:.6px}.tracking-meta strong{display:block;font-family:Manrope;font-size:13px;margin-top:4px}.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:17px}.timeline-step{border-top:2px solid #ddd9ce;padding-top:9px;color:#999}.timeline-step.done{border-color:#6e956c;color:var(--green)}.timeline-step b{display:block;font-size:9px}.timeline-step small{font-size:8px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#26352a;color:white;padding:12px 17px;border-radius:11px;font-size:11px;box-shadow:var(--shadow);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.no-results{padding:30px;text-align:center;color:var(--muted);font-size:12px;background:white;border-radius:14px;border:1px dashed var(--line);grid-column:1/-1}
+    footer{border-top:1px solid var(--line);padding:24px 0 35px;color:var(--muted);font-size:10px;display:flex;justify-content:space-between;gap:15px}.footer-brand{font-family:Manrope;font-weight:900;color:var(--ink)}
+    @media(max-width:1050px){.shell{padding:0 24px}.layout{grid-template-columns:minmax(0,1fr) 300px}.restaurant-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{gap:20px}.hero-art{height:300px}.menu-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){.shell{padding:0 16px}.topbar{height:68px}.nav{display:none}.location-pill{display:none}.hero{grid-template-columns:1fr;padding:30px 0 20px}.hero-art{height:230px;grid-row:1}.hero-copy{font-size:13px}.hero-meta{gap:14px}.layout{grid-template-columns:1fr;gap:16px}.cart-panel{position:static;grid-row:1}.cart-empty{padding:14px}.cart-panel .assist-promo{display:none}.cart-panel .cart-title{margin-bottom:2px}.restaurant-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.restaurant-img{height:105px}.restaurant-info{padding:10px}.restaurant-info h3{font-size:12px}.menu-grid{grid-template-columns:1fr}.section-head h2{font-size:23px}.process-steps{grid-template-columns:repeat(5,minmax(80px,1fr));overflow:auto;padding-bottom:4px}.process-strip{padding:16px}.checkout-body{grid-template-columns:1fr;padding:17px}.summary-box{grid-row:1}.modal-head{padding:17px}.modal-head h2{font-size:20px}.tracking-body{padding:17px}.map-card{height:210px}.assistant-fab{right:13px;bottom:13px;padding:12px 15px}.assistant-panel{right:10px;bottom:72px;height:min(590px,calc(100vh - 90px))}footer{flex-direction:column}.hero-search{max-width:none}}
+    @media(max-width:390px){.restaurant-grid{grid-template-columns:1fr}.hero-meta{font-size:9px}.hero-meta strong{font-size:12px}.menu-card{grid-template-columns:95px minmax(0,1fr)}.menu-card>img{width:95px;height:104px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="CraveFlow home"><span class="brand-mark">✳</span><span>crave<span>flow</span></span></a>
+      <nav class="nav"><a href="#discover">Discover</a><a href="#menu">Menu</a><a href="#how-it-works">How it works</a></nav>
+      <div class="top-actions"><div class="location-pill"><span>⌖</span> Delivering to <b>Marseille, France</b> ▾</div><button class="icon-btn" id="headerCart" aria-label="View cart">♧<span class="cart-count" id="headerCount">0</span></button></div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Good food. Less back and forth.</div>
+        <h1>Your next great meal starts with a <em>conversation.</em></h1>
+        <p class="hero-copy">Tell us what you're craving, what you're avoiding, or how much time you've got. We'll help you find the right bite — without the endless scrolling.</p>
+        <div class="hero-search"><span class="search-icon">⌕</span><input id="mainSearch" type="search" placeholder="Try “vegetarian dinner under €15”"><button class="primary-btn" id="searchBtn">Explore</button></div>
+        <div class="hero-meta"><div><strong>4.8 / 5</strong>local favourites</div><div><strong>25–35 min</strong>typical delivery</div><div><strong>One chat</strong>to your next meal</div></div>
+      </div>
+      <div class="hero-art">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85" alt="Colourful fresh meal bowl">
+        <div class="floating-note note-top"><div class="tiny-label">Your food mood</div><div class="note-value">Fresh & feel-good 🌿</div></div>
+        <div class="floating-note note-bottom"><div class="note-row"><div class="avatar-stack"><i></i><i></i><i></i></div><div><div class="tiny-label"><span class="online-dot"></span>Good things nearby</div><div class="note-value">12 places to explore</div></div></div></div>
+      </div>
+    </section>
+
+    <div class="section-head" id="discover"><div><div class="eyebrow">Made for your kind of hungry</div><h2>Find your flavour</h2></div><div class="section-sub">Curated picks around Marseille</div></div>
+    <div class="category-row" id="categoryRow">
+      <button class="chip active" data-category="all"><span class="emoji">✦</span>All picks</button>
+      <button class="chip" data-category="healthy"><span class="emoji">🥑</span>Fresh & healthy</button>
+      <button class="chip" data-category="comfort"><span class="emoji">🍜</span>Comfort food</button>
+      <button class="chip" data-category="vegetarian"><span class="emoji">🌱</span>Vegetarian</button>
+      <button class="chip" data-category="protein"><span class="emoji">💪</span>High protein</button>
+      <button class="chip" data-category="quick"><span class="emoji">⚡</span>Quick delivery</button>
+    </div>
+
+    <div class="layout">
+      <main class="main-column">
+        <div class="section-head" style="margin-top:5px"><div><div class="eyebrow">A few local favourites</div><h2>Restaurants worth a look</h2></div><button class="text-link" id="clearFilters">Clear filters ↗</button></div>
+        <div class="restaurant-grid" id="restaurantGrid"></div>
+        <div class="menu-head" id="menu"><div><div class="eyebrow">Made fresh, picked for you</div><h2 id="menuTitle">Explore the menu</h2><div class="section-sub" id="menuSub">Tap + to add a little happiness to your bag.</div></div><select id="sortMenu" aria-label="Sort menu"><option value="popular">Most popular</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
+        <div class="menu-grid" id="menuGrid"></div>
+        <section class="process-strip" id="how-it-works">
+          <div class="process-top"><h3>From “I'm hungry” to “that's delicious”</h3><span>THE CRAVEFLOW LOOP</span></div>
+          <div class="process-steps">
+            <div class="process-step"><b>01 · Understand</b><small>Pick up your mood, budget and needs.</small></div>
+            <div class="process-step"><b>02 · Discover</b><small>Find matching places and dishes.</small></div>
+            <div class="process-step"><b>03 · Validate</b><small>Check options, details and availability.</small></div>
+            <div class="process-step"><b>04 · Build</b><small>Shape your cart with a little help.</small></div>
+            <div class="process-step"><b>05 · Confirm</b><small>Review checkout and follow the order.</small></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="cart-panel" id="cartPanel">
+        <div class="cart-title"><h2>Your bag <span style="color:var(--orange)">✳</span></h2><small id="cartCountText">0 items</small></div>
+        <div class="delivery-switch"><button class="active" data-fulfillment="delivery">⌖ Delivery</button><button data-fulfillment="pickup">↗ Pickup</button></div>
+        <div id="cartContent"></div>
+        <div class="assist-promo"><span class="spark">✳</span><div><strong>Need a little inspiration?</strong><p>Ask your food assistant to find your next favourite.</p></div><button id="openAssistantFromCart">↗</button></div>
+      </aside>
+    </div>
+    <footer><div><span class="footer-brand">craveflow ✳</span> &nbsp; Food, figured out.</div><div>Interactive product demo · Sample restaurants, prices and delivery data</div></footer>
+  </div>
+
+  <button class="assistant-fab" id="assistantFab"><span class="spark">✳</span> Ask your food assistant</button>
+  <section class="assistant-panel" id="assistantPanel" aria-label="Food assistant">
+    <div class="assistant-head"><div class="bot-avatar">✳</div><div><strong>Your CraveFlow assistant</strong><small><span class="online-dot"></span>Here to help you decide</small></div><button id="closeAssistant" aria-label="Close assistant">×</button></div>
+    <div class="assistant-content" id="chatContent">
+      <div class="chat-message bot">Hey there! 👋 I'm your food sidekick. Tell me what sounds good, what your budget is, or what you'd like to avoid — I'll help you make a plan.</div>
+      <div class="suggestions">
+        <button data-prompt="Find me a vegetarian dinner under €15">🌱 Veg under €15</button>
+        <button data-prompt="I want something high in protein">💪 High protein</button>
+        <button data-prompt="Something spicy, but not too spicy">🌶 A little spicy</button>
+        <button data-prompt="Surprise me">🎲 Surprise me</button>
+      </div>
+    </div>
+    <form class="assistant-input" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask for a dish, change your cart…"><button type="submit" aria-label="Send message">➤</button></form>
+    <div class="assistant-disclaimer">Demo assistant · Actions are simulated locally · Always confirm allergen details with the restaurant.</div>
+  </section>
+
+  <div class="overlay" id="checkoutOverlay">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">Almost time to eat</div><h2>Checkout</h2></div><button class="close-btn" data-close="checkoutOverlay" aria-label="Close">×</button></div>
+      <div class="checkout-body">
+        <div>
+          <label class="field-label" for="customerName">Your name</label><input class="field" id="customerName" value="Alex Morgan" placeholder="Name">
+          <label class="field-label" for="addressField">Delivery address</label><input class="field" id="addressField" value="18 Rue Paradis, 13001 Marseille" placeholder="Street and city">
+          <label class="field-label">How would you like it?</label>
+          <div class="fulfillment-options"><button class="option-card active" data-checkout-fulfillment="delivery"><strong>⌖ Delivery</strong><small>To your door · 25–35 min</small></button><button class="option-card" data-checkout-fulfillment="pickup"><strong>↗ Pickup</strong><small>Collect from the restaurant</small></button></div>
+          <label class="field-label" for="scheduleField">Timing</label><select class="field" id="scheduleField"><option value="asap">As soon as possible</option><option value="18:45">Schedule · 18:45</option><option value="19:00">Schedule · 19:00</option><option value="19:30">Schedule · 19:30</option><option value="20:00">Schedule · 20:00</option></select>
+          <label class="field-label">Payment method</label>
+          <div class="payment-options">
+            <button class="payment-card active" data-payment="card">▣ Card <span>Demo card · •••• 4242</span></button>
+            <button class="payment-card" data-payment="apple"> Pay Apple Pay <span>Simulated wallet</span></button>
+            <button class="payment-card" data-payment="paypal">P PayPal <span>Simulated wallet</span></button>
+            <button class="payment-card" data-payment="cash">€ Cash <span>Pay on delivery</span></button>
+          </div>
+          <label class="field-label" for="tipField">Add a little thank-you for your courier</label><select class="field" id="tipField"><option value="0">No tip</option><option value="1">€1.00</option><option value="2">€2.00</option><option value="3">€3.00</option></select>
+        </div>
+        <div class="summary-box"><h3>Order summary</h3><div class="summary-items" id="checkoutItems"></div><div class="total-row"><span>Subtotal</span><b id="checkoutSubtotal">€0.00</b></div><div class="total-row"><span>Delivery fee</span><b id="checkoutDelivery">€0.00</b></div><div class="total-row"><span>Service fee</span><b id="checkoutService">€0.00</b></div><div class="total-row"><span>Tip</span><b id="checkoutTip">€0.00</b></div><div class="total-row grand"><span>Total</span><b id="checkoutTotal">€0.00</b></div><div class="demo-banner">Demo checkout: no real payment is collected. Card and wallet selections only simulate a successful payment flow.</div><button class="primary-btn pay-now" id="payNow">Confirm demo order · €0.00</button><p class="secure-note">Your order is confirmed only after you press the button. No payment credentials are requested or stored in this demo.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="trackingOverlay">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">You're all set</div><h2>Order tracking</h2></div><button class="close-btn" data-close="trackingOverlay" aria-label="Close">×</button></div>
+      <div class="tracking-body">
+        <div class="order-success"><div class="success-icon">✓</div><div><h3 id="trackingTitle">Your order is confirmed!</h3><p id="trackingSub">Order CF-2048 · Payment simulated successfully</p></div></div>
+        <div class="map-card">
+          <svg viewBox="0 0 700 300" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M-20 70 C110 40 130 150 240 120 S380 40 470 110 S590 190 730 130" fill="none" stroke="#fff" stroke-width="27"/>
+            <path d="M-20 70 C110 40 130 150 240 120 S380 40 470 110 S590 190 730 130" fill="none" stroke="#d5ddcc" stroke-width="2" stroke-dasharray="8 8"/>
+            <path d="M80 320 C130 230 220 230 300 270 S440 250 500 190 S600 50 680 -20" fill="none" stroke="#fff" stroke-width="24"/>
+            <path d="M80 320 C130 230 220 230 300 270 S440 250 500 190 S600 50 680 -20" fill="none" stroke="#d5ddcc" stroke-width="2" stroke-dasharray="8 8"/>
+            <path d="M0 210 L700 210 M350 0 L350 300" stroke="#dbe3d3" stroke-width="1"/>
+            <path d="M170 0 L170 300 M550 0 L550 300" stroke="#dbe3d3" stroke-width="1"/>
+            <path d="M100 260 C170 210 200 170 290 150 S430 100 590 130" fill="none" stroke="#f26b45" stroke-width="4" stroke-linecap="round" stroke-dasharray="7 8"/>
+            <g fill="#d6e0ce"><rect x="24" y="20" width="90" height="30" rx="7"/><rect x="410" y="225" width="110" height="34" rx="7"/><rect x="570" y="20" width="80" height="35" rx="7"/><rect x="245" y="220" width="70" height="25" rx="6"/></g>
+          </svg>
+          <div class="map-label restaurant">🍽 Restaurant</div><div class="map-label home">⌂ Your place</div><div class="courier">✦</div>
+        </div>
+        <div class="tracking-meta"><div><small>Estimated arrival</small><strong id="etaText">28 min</strong></div><div><small>Order status</small><strong id="statusText">Confirmed</strong></div><div><small>Fulfilment</small><strong id="fulfillmentText">Delivery</strong></div></div>
+        <div class="timeline" id="trackingTimeline"><div class="timeline-step done"><b>Confirmed</b><small>Just now</small></div><div class="timeline-step"><b>Preparing</b><small>Kitchen</small></div><div class="timeline-step"><b>On the way</b><small>Courier</small></div><div class="timeline-step"><b>Delivered</b><small>Enjoy!</small></div></div>
+        <div class="demo-banner">Live map, courier movement, ETA and status changes are animated demo data. No courier has been dispatched.</div>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  const restaurants = [
+    {id:"miso",name:"Miso & More",cuisine:"Japanese · Ramen",rating:"4.9",time:"25–30 min",fee:1.49,category:["comfort","quick"],tags:["Popular","Comfort food"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80"},
+    {id:"green",name:"The Green Fork",cuisine:"Healthy · Bowls",rating:"4.8",time:"20–25 min",fee:0.99,category:["healthy","vegetarian","quick"],tags:["Fresh picks","Plant-forward"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"},
+    {id:"fire",name:"Firebird Kitchen",cuisine:"Grill · Street food",rating:"4.7",time:"30–35 min",fee:1.79,category:["comfort","protein"],tags:["Big flavours","High protein"],image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80"},
+    {id:"pasta",name:"Pasta Social",cuisine:"Italian · Handmade",rating:"4.8",time:"25–35 min",fee:1.29,category:["comfort","vegetarian"],tags:["Made fresh","Neighbourhood fave"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80"}
+  ];
+  const foods = [
+    {id:"ramen",restaurant:"miso",name:"Chicken ramen",desc:"Slow-braised chicken, spring onion, rich miso broth.",price:14.5,cal:610,tags:["High protein","Comfort"],protein:true,vegetarian:false,vegan:false,spice:1,allergens:["soy","gluten","sesame"],image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"miso-soup",restaurant:"miso",name:"Miso soup",desc:"Silky tofu, wakame, spring onion and warm dashi.",price:4.5,cal:95,tags:["Light","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["soy"],image:"https://images.unsplash.com/photo-1607301406259-dfb186e15de8?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"tofu-bowl",restaurant:"green",name:"Crispy tofu bowl",desc:"Golden tofu, brown rice, crunchy greens, sesame dressing.",price:13.5,cal:480,tags:["Plant protein","Fresh"],protein:true,vegetarian:true,vegan:true,spice:1,allergens:["soy","sesame"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"salad",restaurant:"green",name:"Garden glow salad",desc:"Avocado, cucumber, quinoa, greens and lemon tahini.",price:11.5,cal:360,tags:["Vegan","Gluten free"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["sesame"],image:"https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"salmon",restaurant:"green",name:"Salmon power bowl",desc:"Roasted salmon, edamame, rice, cucumber and herbs.",price:16.5,cal:560,tags:["High protein","Fresh"],protein:true,vegetarian:false,vegan:false,spice:0,allergens:["fish","soy","sesame"],image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",popular:3},
+    {id:"burrito",restaurant:"fire",name:"Chicken burrito bowl",desc:"Chargrilled chicken, rice, black beans, salsa and lime.",price:13.9,cal:590,tags:["High protein","Gluten free"],protein:true,vegetarian:false,vegan:false,spice:2,allergens:["dairy"],image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"wings",restaurant:"fire",name:"Firecracker wings",desc:"Sticky chilli glaze, sesame crunch, cool yoghurt dip.",price:12.5,cal:520,tags:["Spicy","Popular"],protein:true,vegetarian:false,vegan:false,spice:3,allergens:["dairy","soy","sesame"],image:"https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=600&q=80",popular:2},
+    {id:"fries",restaurant:"fire",name:"Rosemary fries",desc:"Crispy potatoes, rosemary salt and garlic dip.",price:4.5,cal:310,tags:["Side","Vegetarian"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["dairy"],image:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80",popular:4},
+    {id:"pasta",restaurant:"pasta",name:"Basil pesto pasta",desc:"Fresh basil pesto, parmesan, toasted pine nuts.",price:13.5,cal:570,tags:["Vegetarian","Comfort"],protein:false,vegetarian:true,vegan:false,spice:0,allergens:["gluten","dairy","nuts"],image:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",popular:1},
+    {id:"tomato-pasta",restaurant:"pasta",name:"Slow tomato rigatoni",desc:"Rigatoni, slow-cooked tomato, basil and olive oil.",price:12.5,cal:490,tags:["Vegan","Comfort"],protein:false,vegetarian:true,vegan:true,spice:0,allergens:["gluten"],image:"https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",popular:2}
+  ];
+  let selectedRestaurant="miso",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0;
+  const $=id=>document.getElementById(id);
+  const euro=n=>"€"+Number(n).toFixed(2);
+  const restaurant=id=>restaurants.find(r=>r.id===id);
+  const food=id=>foods.find(f=>f.id===id);
+  const cartItems=()=>Object.keys(cart).map(id=>({item:food(id),qty:cart[id]})).filter(x=>x.item&&x.qty>0);
+  const subtotal=()=>cartItems().reduce((s,x)=>s+x.item.price*x.qty,0);
+  const count=()=>cartItems().reduce((s,x)=>s+x.qty,0);
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2400)}
+  function add(id,qty){if(!food(id))return;cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
+  function setQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart()}
+  function renderRestaurants(){
+    const list=restaurants.filter(r=>{
+      if(category!=="all"&&!r.category.includes(category))return false;
+      if(searchText&&!((r.name+" "+r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes(searchText)))return false;
+      if(vegetarianOnly&&!r.category.includes("vegetarian")&& !foods.some(f=>f.restaurant===r.id&&f.vegetarian))return false;
+      if(proteinOnly&&!r.category.includes("protein")&&!foods.some(f=>f.restaurant===r.id&&f.protein))return false;
+      return true;
+    });
+    $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+'</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
+  }
+  function renderMenu(){
+    const r=restaurant(selectedRestaurant);$("menuTitle").textContent=r?r.name+" menu":"Explore the menu";$("menuSub").textContent=r?r.cuisine+" · Tap + to add a little happiness to your bag.":"Tap + to add a little happiness to your bag.";
+    let list=foods.filter(f=>f.restaurant===selectedRestaurant);
+    if(searchText)list=list.filter(f=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(searchText)||!restaurant(selectedRestaurant));
+    if(vegetarianOnly)list=list.filter(f=>f.vegetarian);
+    if(proteinOnly)list=list.filter(f=>f.protein);
+    if(maxPrice!==null)list=list.filter(f=>f.price<=maxPrice);
+    list=list.filter(f=>f.spice<=spiceMax);
+    const sort=$("sortMenu").value;if(sort==="price-low")list.sort((a,b)=>a.price-b.price);if(sort==="price-high")list.sort((a,b)=>b.price-a.price);if(sort==="popular")list.sort((a,b)=>a.popular-b.popular);
+    $("menuGrid").innerHTML=list.length?list.map(f=>'<article class="menu-card"><img loading="lazy" src="'+f.image+'" alt="'+esc(f.name)+'"><div class="menu-info"><h3>'+esc(f.name)+'</h3><p>'+esc(f.desc)+'</p><div class="food-tags">'+f.tags.slice(0,2).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div><div class="menu-bottom"><span class="price">'+euro(f.price)+'</span><button class="add-btn" data-add="'+f.id+'" aria-label="Add '+esc(f.name)+'">+</button></div></div></article>').join(""):'<div class="no-results">No dishes match those preferences in this menu. Try another restaurant or loosen a filter.</div>';
+  }
+  function renderCart(){
+    const items=cartItems();$("headerCount").textContent=count();$("cartCountText").textContent=count()+" item"+(count()===1?"":"s");
+    if(!items.length){$("cartContent").innerHTML='<div class="cart-empty"><div class="empty-icon">🥡</div><strong>Your next favourite goes here</strong><p>Your bag is looking a little quiet. Add a dish or ask your assistant for ideas.</p></div>';return}
+    const fee=fulfillment==="delivery"?(restaurant(items[0].item.restaurant)?.fee||1.49):0,service=0.79;
+    $("cartContent").innerHTML='<div class="cart-lines">'+items.map(x=>'<div class="cart-line"><div><strong>'+esc(x.item.name)+'</strong><small>'+esc(restaurant(x.item.restaurant).name)+' · '+euro(x.item.price)+'</small></div><div class="qty"><button data-qty="'+x.item.id+'" data-delta="-1" aria-label="Remove one">−</button><span>'+x.qty+'</span><button data-qty="'+x.item.id+'" data-delta="1" aria-label="Add one">+</button></div></div>').join("")+'</div><div class="cart-totals"><div class="total-row"><span>Subtotal</span><b>'+euro(subtotal())+'</b></div><div class="total-row"><span>'+(fulfillment==="delivery"?"Delivery fee":"Pickup fee")+'</span><b>'+euro(fee)+'</b></div><div class="total-row"><span>Service fee</span><b>'+euro(service)+'</b></div><div class="total-row grand"><span>Total</span><b>'+euro(subtotal()+fee+service)+'</b></div></div><button class="primary-btn checkout-btn" id="checkoutBtn">Continue to checkout · '+euro(subtotal()+fee+service)+' →</button><p class="cart-footnote">Taxes and fees included in this demo estimate.</p>';
+  }
+  function updateFulfillment(value){fulfillment=value;document.querySelectorAll("[data-fulfillment]").forEach(b=>b.classList.toggle("active",b.dataset.fulfillment===value));renderCart()}
+  function assistantOpen(){ $("assistantPanel").classList.add("open");$("chatInput").focus()}
+  function addMessage(message,who){const el=document.createElement("div");el.className="chat-message "+who;el.textContent=message;$("chatContent").appendChild(el);$("chatContent").scrollTop=$("chatContent").scrollHeight}
+  function botReply(message){addMessage(message,"bot")}
+  function assistantAction(raw){
+    const t=raw.toLowerCase();let reply="";
+    if(t.includes("peanut")||t.includes("allerg")){
+      vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
+      reply="Thanks for telling me. I can show menu information, but this demo cannot guarantee allergen safety or prevent cross-contact. I don't have a verified peanut-free certification for these kitchens. Please contact the restaurant directly and get confirmation before ordering. I can help you review the listed allergen notes, but never treat them as a safety guarantee.";
+    }else if(t.includes("vegetarian")||t.includes("vegan")){
+      vegetarianOnly=true;proteinOnly=false;maxPrice=null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
+      if(t.includes("make")&&count()){let removed=[];cartItems().forEach(x=>{if(!x.item.vegetarian){removed.push(x.item.name);delete cart[x.item.id]}});if(!count())cart["tofu-bowl"]=1;renderCart();reply="I've adjusted the demo bag toward vegetarian choices"+(removed.length?". Removed: "+removed.join(", ")+".":"")+". I added a crispy tofu bowl as a replacement. Please review the bag before checkout."}
+      else reply="On it 🌱 I've filtered the restaurants and menu toward vegetarian options. The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good places to start.";
+    }else if(t.includes("protein")){
+      proteinOnly=true;vegetarianOnly=false;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
+    }else if(t.includes("spicy")||t.includes("spice")){
+      spiceMax=2;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();reply="I've kept the spice level gentle — up to 2 out of 3. The chicken burrito bowl has a little warmth, while the chicken ramen is milder. I've filtered out the extra-hot wings.";
+    }else if(t.includes("under")||t.includes("budget")||t.includes("€")){
+      const m=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:\.\d+)?)/)||t.match(/€\s*(\d+(?:\.\d+)?)/);
+      if(m){maxPrice=Number(m[1]);}else{maxPrice=15}
+      vegetarianOnly=t.includes("vegetarian")||t.includes("veggie");proteinOnly=t.includes("protein");category=vegetarianOnly?"vegetarian":proteinOnly?"protein":"all";searchText="";renderRestaurants();renderMenu();
+      reply="I've set the dish budget to "+euro(maxPrice)+" and refreshed the menu. Prices shown are sample demo prices; delivery and service fees are separate. Want me to add a main and a side?";
+    }else if(t.includes("two")&&t.includes("40")){
+      maxPrice=20;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();
+      if(!count()){cart["ramen"]=1;cart["tofu-bowl"]=1;renderCart()}
+      reply="For two under €40 in food, a chicken ramen (€14.50) plus a crispy tofu bowl (€13.50) comes to €28.00 before fees. I've added those two sample mains to your bag — swap either one if you'd prefer.";
+    }else if(t.includes("add")&&(t.includes("ramen")||t.includes("miso"))){
+      if(t.includes("ramen"))cart["ramen"]=(cart["ramen"]||0)+1;
+      if(t.includes("miso"))cart["miso-soup"]=(cart["miso-soup"]||0)+1;
+      renderCart();reply="Done — I've added "+(t.includes("ramen")?"chicken ramen":"")+(t.includes("ramen")&&t.includes("miso")?" and ":"")+(t.includes("miso")?"miso soup":"")+" to your bag. Your updated total is "+euro(subtotal())+" before fees.";
+    }else if(t.includes("remove")&&t.includes("fries")&&t.includes("salad")){
+      delete cart["fries"];cart["salad"]=(cart["salad"]||0)+1;renderCart();reply="Done. I removed the rosemary fries and added a garden glow salad (€11.50). Check your bag to review the change.";
+    }else if(t.includes("pickup")){
+      updateFulfillment("pickup");reply="Pickup selected. I'll keep the bag in pickup mode; the checkout summary will remove the delivery fee. Choose a collection time at checkout.";
+    }else if(t.includes("19:30")||t.includes("schedule")||t.includes("before 19")){
+      scheduled=t.includes("19:30")?"19:30":t.includes("before")?"18:45":"19:30";reply="Got it — I've noted "+(scheduled==="18:45"?"18:45":"19:30")+" as your requested time. I'll carry that into checkout. The schedule is a demo selection, not a live kitchen confirmation.";
+    }else if(t.includes("taking so long")||t.includes("where is")||t.includes("track")){
+      reply=orderTimer?"Your demo order is currently marked as "+["Confirmed","Preparing","On the way","Delivered"][orderStep]+". Estimated arrival: "+(orderStep>=3?"Arrived":Math.max(0,28-orderStep*8)+" min")+". Open the order tracking window to see the animated map.":"You don't have an active demo order yet. Once you confirm checkout, I'll show an animated tracking journey with status updates.";
+    }else if(t.includes("surprise")){
+      vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";selectedRestaurant="green";cart["tofu-bowl"]=(cart["tofu-bowl"]||0)+1;renderRestaurants();renderMenu();renderCart();reply="Surprise pick: crispy tofu bowl from The Green Fork 🌿 It has crunchy greens, rice and sesame dressing, and costs €13.50. I've added one to your bag — feel free to swap it.";
+    }else{
+      const words=t.replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(w=>w.length>3);
+      const match=foods.find(f=>words.some(w=>(f.name+" "+f.desc+" "+f.tags.join(" ")).toLowerCase().includes(w)));
+      if(match){selectedRestaurant=match.restaurant;searchText="";category="all";renderRestaurants();renderMenu();reply="I found "+match.name+" at "+restaurant(match.restaurant).name+" for "+euro(match.price)+". "+match.desc+" Tap the + button to add it, or tell me to add it for you.");}
+      else{reply="I can help with menu discovery, dietary preferences, budget, spice level, cart edits, pickup or delivery timing. Try “Find me a vegetarian dinner under €15”, “Add chicken ramen and miso soup”, or “Change this to pickup”.";}
+    }
+    botReply(reply);
+  }
+  function checkoutOpen(){
+    if(!count()){toast("Add a dish before checkout");return}
+    $("checkoutOverlay").classList.add("open");
+    document.querySelectorAll("[data-checkout-fulfillment]").forEach(b=>b.classList.toggle("active",b.dataset.checkoutFulfillment===fulfillment));
+    $("scheduleField").value=scheduled;
+    updateCheckoutSummary();
+  }
+  function updateCheckoutSummary(){
+    const items=cartItems(),fee=fulfillment==="delivery"?(restaurant(items[0]?.item.restaurant)?.fee||1.49):0,service=.79,tip=Number($("tipField").value||0),total=subtotal()+fee+service+tip;
+    $("checkoutItems").innerHTML=items.map(x=>'<div class="summary-item"><span>'+x.qty+' × '+esc(x.item.name)+'</span><b>'+euro(x.qty*x.item.price)+'</b></div>').join("");
+    $("checkoutSubtotal").textContent=euro(subtotal());$("checkoutDelivery").textContent=euro(fee);$("checkoutService").textContent=euro(service);$("checkoutTip").textContent=euro(tip);$("checkoutTotal").textContent=euro(total);$("payNow").textContent="Confirm demo order · "+euro(total);
+  }
+  function placeOrder(){
+    const btn=$("payNow");btn.disabled=true;btn.textContent="Confirming demo order…";
+    setTimeout(()=>{
+      btn.disabled=false;btn.textContent="Confirm demo order";
+      $("checkoutOverlay").classList.remove("open");
+      orderStep=0;orderTimer=true;
+      $("trackingTitle").textContent="Your order is confirmed!";$("trackingSub").textContent="Order CF-"+Math.floor(2000+Math.random()*7000)+" · "+(payment==="cash"?"Cash on delivery selected":"Payment simulated successfully");
+      $("etaText").textContent=fulfillment==="pickup"?"15 min":"28 min";$("statusText").textContent="Confirmed";$("fulfillmentText").textContent=fulfillment==="pickup"?"Pickup":"Delivery";
+      $("trackingOverlay").classList.add("open");cart={};renderCart();updateTimeline();
+      if(window._orderInterval)clearInterval(window._orderInterval);
+      window._orderInterval=setInterval(()=>{if(orderStep<3){orderStep++;updateTimeline()}else{clearInterval(window._orderInterval)}},6500);
+      toast("Demo order confirmed");
+    },900);
+  }
+  function updateTimeline(){
+    const labels=["Confirmed","Preparing","On the way","Delivered"];
+    $("statusText").textContent=labels[orderStep];$("etaText").textContent=orderStep===0?"28 min":orderStep===1?"20 min":orderStep===2?"8 min":"Arrived";
+    $("trackingTimeline").innerHTML=labels.map((l,i)=>'<div class="timeline-step '+(i<=orderStep?'done':'')+'"><b>'+l+'</b><small>'+(i<orderStep?"Complete":i===orderStep?"In progress":"Pending")+'</small></div>').join("");
+    $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
+  }
+  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";maxPrice=null;renderRestaurants();renderMenu()});
+  $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
+  $("menuGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)add(b.dataset.add,1)});
+  $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
+  document.querySelectorAll("[data-fulfillment]").forEach(b=>b.addEventListener("click",()=>updateFulfillment(b.dataset.fulfillment)));
+  $("headerCart").addEventListener("click",()=>$("cartPanel").scrollIntoView({behavior:"smooth",block:"center"}));
+  $("openAssistantFromCart").addEventListener("click",assistantOpen);$("assistantFab").addEventListener("click",assistantOpen);$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
+  $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
+  $("chatContent").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v)});
+  $("searchBtn").addEventListener("click",()=>{searchText=$("mainSearch").value.trim().toLowerCase();vegetarianOnly=false;proteinOnly=false;maxPrice=null;renderRestaurants();renderMenu();$("discover").scrollIntoView({behavior:"smooth"})});
+  $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
+  $("clearFilters").addEventListener("click",()=>{category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
+  $("sortMenu").addEventListener("change",renderMenu);
+  document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$ (b.dataset.close).classList.remove("open")));
+  document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
+  document.querySelectorAll("[data-checkout-fulfillment]").forEach(b=>b.addEventListener("click",()=>{updateFulfillment(b.dataset.checkoutFulfillment);document.querySelectorAll("[data-checkout-fulfillment]").forEach(x=>x.classList.toggle("active",x===b));updateCheckoutSummary()}));
+  document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>{payment=b.dataset.payment;document.querySelectorAll("[data-payment]").forEach(x=>x.classList.toggle("active",x===b))}));
+  $("tipField").addEventListener("change",updateCheckoutSummary);$("scheduleField").addEventListener("change",()=>{scheduled=$("scheduleField").value});
+  $("payNow").addEventListener("click",placeOrder);
+  renderRestaurants();renderMenu();renderCart();
+})();
+</script>
+</body>
+</html>
