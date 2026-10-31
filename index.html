@@ -141,6 +141,9 @@
     .restaurant-card:hover,.restaurant-card.selected{transform:translateY(-5px);box-shadow:0 18px 35px #233a2b16;border-color:#d8e8bf}
     .restaurant-card.selected:after{background:#203f2e;color:#e4f5b4;border-radius:999px}
     .restaurant-img{height:155px;background:#e9eee5}
+    .restaurant-live-pill{position:absolute;left:10px;bottom:10px;display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#ffffffed;color:#365943;font-size:8px;font-weight:900;letter-spacing:.5px;box-shadow:0 4px 12px #142d1e18}
+    .restaurant-live-pill i{width:6px;height:6px;border-radius:50%;background:#5eaa69;box-shadow:0 0 0 3px #5eaa6920}
+
     .restaurant-img img{transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}
     .restaurant-card:hover .restaurant-img img{transform:scale(1.08);filter:saturate(1.08)}
     .restaurant-info{padding:14px 15px 15px}.restaurant-info h3{font-size:15px;color:#243229}
@@ -1020,10 +1023,6 @@
       botRestaurantRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". This restaurant is rated "+restaurant(f.restaurant).rating+"/5. Open its menu to add the dish.",[restaurant(f.restaurant)]);
       return;
     }
-    if(namedRestaurant&&!toAdd.length&&/\b(menu|browse|show|from|at|restaurant|order from)\b/.test(t)){
-      showChatRestaurant(namedRestaurant.id);
-      return;
-    }
     if(!toAdd.length&&/\b(indian|biryani|dosa|idli|paneer|butter chicken|tikka masala|curry|naan|samosa|chaat|pani puri|masala dosa)\b/.test(t)){
       const indianMatches=restaurants.filter(r=>r.category.includes("indian")||(r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes("indian"));
       category="indian";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
@@ -1217,8 +1216,6 @@
   $("groupCheckout").addEventListener("click",groupCheckoutOpen);
   $("copyGroupLink").addEventListener("click",copyGroupInvite);
   document.querySelectorAll("[data-group-payment]").forEach(b=>b.addEventListener("click",()=>{groupPayment=b.dataset.groupPayment;document.querySelectorAll("[data-group-payment]").forEach(x=>x.classList.toggle("active",x===b));}));
-  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
-  $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
   $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
