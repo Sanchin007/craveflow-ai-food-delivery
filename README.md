@@ -4,13 +4,13 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 
 ## What you can try
 
-- Browse 11 sample restaurants across Indian North and South Indian, Hyderabadi biryani, Indian street food, Japanese, Thai, Mediterranean, Italian, burgers, grill and healthy bowls.
+- Browse 18 sample restaurants across Indian North and South Indian, Hyderabadi biryani, Indian street food, Japanese, Thai, Korean, Chinese, Mexican, French, Greek, Middle Eastern, Mediterranean, Italian, American BBQ, burgers, grill and healthy bowls.
 - Search by restaurant name, cuisine or dish; sort the marketplace by recommended, top-rated, fastest delivery or lowest delivery fee.
 - Compare restaurant cards with sample star ratings, review counts, delivery estimates, delivery fees, distance, offer labels and an open-status visual.
 - Browse sample restaurant menus, including burgers, sides, drinks, sauces and dips, desserts, ramen, bowls, salads, and pasta.
 - Keep a live order-context strip in the assistant showing the active restaurant, item count and estimated total, with one-tap shortcuts to drinks, sauces, desserts and the bag.
 - Filter by cuisine including Indian, Asian and Mediterranean, plus vegetarian meals, high-protein dishes, spice level and per-dish budget.
-- See a brighter, more welcoming visual system with animated food inspiration, slow-moving hero imagery, responsive cards and reduced-motion support.
+- See a brighter visual system with a branded animated CraveFlow launch sequence, orbiting map-pin motif, animated logo reveal, short progress sweep, staggered restaurant/menu cards, scroll reveals, floating hero imagery, button shimmer and reduced-motion support. The intro is skippable and lasts about 1.75 seconds.
 - See matching food recommendations directly inside the assistant conversation, with an **Add** button on each dish — no need to scroll down to a separate menu section to choose it.
 - Ask for restaurants, drinks, sauces or desserts; when an order is active, category requests show items from that same restaurant directly in chat.
 - Start with a named dish and restaurant, for example a cheeseburger from Burger Atelier, then continue with “show me the drinks menu”, “what sauces do they have?” or “anything for dessert?” without losing the active restaurant context.
@@ -71,6 +71,13 @@ CraveFlow is a standalone, responsive food-delivery experience built as an inter
 - “Add a vanilla milkshake.”
 - “Can I see the desserts at Pasta Social?”
 - “Find me Indian food.”
+- “Find me Mexican food.”
+- “Find me Korean food.”
+- “Find me Chinese food.”
+- “Find me French food.”
+- “Find me Greek food.”
+- “Find me Middle Eastern food.”
+- “Find me Italian food.”
 - “Show me the menu at Spice Route Kitchen.”
 - “Order butter chicken and garlic naan from Spice Route Kitchen.”
 - “Find me a dosa place.”
@@ -97,7 +104,7 @@ No build step or package installation is required. Open `index.html` in a browse
 This is a front-end product demo with sample restaurants, menu items, prices, fees, and delivery estimates.
 
 - No real restaurant search, inventory, booking, courier dispatch, or map-routing API is connected.
-- The 11 restaurant profiles, cuisine listings, menu items, ratings, review counts, offers, fees, distances and ETAs are sample data. The OPEN marker is a visual demo state, not a live opening-hours check.
+- The 18 restaurant profiles, cuisine listings, menu items, ratings, review counts, offers, fees, distances and ETAs are sample data. The OPEN marker is a visual demo state, not a live opening-hours check.
 - Group guests, participant totals, budgets, deadlines, locking and payment choices are simulated in the current browser session. The copied invite URL is a preview only; a backend, persistent group session and real-time event channel are needed for cross-device collaboration.
 - Checkout is simulated. No real payment is processed and no card credentials are requested or stored.
 - Restaurant ratings, review counts, offers, distances, menu prices, fees and delivery estimates are illustrative sample data, not live marketplace data.
@@ -114,6 +121,6 @@ A production implementation could replace the local demo logic with a backend-fo
 ## Tech
 
 - Semantic HTML, CSS, and vanilla JavaScript
-- Responsive layouts, CSS motion, animated food ticker and reduced-motion support
+- Responsive layouts, CSS motion, branded launch animation, scroll reveals, staggered cards, animated food ticker and reduced-motion support
 - Sample imagery from Unsplash
 - No runtime framework or build dependency
