@@ -457,14 +457,14 @@
       const budget=t.match(/(?:under|below|less than|budget(?: of)?)\s*€?\s*(\d+(?:[.,]\d+)?)/);
       maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botReply("I've filtered the menu to vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". The Garden veggie burger, crispy tofu bowl and garden glow salad are good starting points. Say “add the tofu bowl” or name any dish to put it in your bag.");
+      botReply("I've filtered the menu to vegetarian options"+(maxPrice!==null?" under "+euro(maxPrice):"")+". The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good starting points. Say “add the tofu bowl” or name any dish to put it in your bag.");
       return;
     }
     if(/\b(high protein|protein-rich|more protein)\b/.test(t)){
-      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="fire";category="protein";searchText="";
+      proteinOnly=true;vegetarianOnly=false;selectedRestaurant="burger";category="protein";searchText="";spiceMax=4;
       const budget=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:[.,]\d+)?)/);maxPrice=budget?Number(budget[1].replace(",",".")):null;
       renderRestaurants();renderMenu();
-      botReply("I've highlighted protein-forward dishes. Try the chicken burrito bowl (€13.90), crispy chicken burger (€12.90) or chicken ramen (€14.50). Tell me which one to add.");
+      botReply("I've highlighted protein-forward dishes. The crispy chicken burger (€12.90) and classic smash burger (€13.50) are shown in the current menu. Tell me which one to add.");
       return;
     }
     if(/\b(spicy|spice)\b/.test(t)){
