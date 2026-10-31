@@ -527,7 +527,7 @@
     "falafel-mezze":["falafel mezze plate","falafel mezze","mezze plate"],
     "classic-burger":["classic smash burger","classic burger","beef burger","cheeseburger","cheese burger"] 
   };
-  let selectedRestaurant="burger",category="all",searchText="",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null,feedbackSubmission=null;
+  let selectedRestaurant="burger",category="all",searchText="",restaurantQuery="",restaurantSort="recommended",proteinOnly=false,vegetarianOnly=false,maxPrice=null,spiceMax=4,chatFoodMode=null,upsellPromptedForOrder=false,fulfillment="delivery",payment="card",scheduled="asap",cart={},orderTimer=null,orderStep=0,feedbackFoodRating=0,feedbackDeliveryRating=0,feedbackTags=[],lastOrderRestaurant=null,feedbackSubmission=null,groupOrder=null,groupPayment="host",lastOrderWasGroup=false;
   const $=id=>document.getElementById(id);
   const euro=n=>"€"+Number(n).toFixed(2);
   const restaurant=id=>restaurants.find(r=>r.id===id);
@@ -543,12 +543,17 @@
     const list=restaurants.filter(r=>{
       if(category!=="all"&&!r.category.includes(category))return false;
       if(searchText&&!((r.name+" "+r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes(searchText)))return false;
+      if(restaurantQuery&&!((r.name+" "+r.cuisine+" "+r.tags.join(" ")+" "+foods.filter(f=>f.restaurant===r.id).map(f=>f.name).join(" ")).toLowerCase().includes(restaurantQuery)))return false;
       if(vegetarianOnly&&!r.category.includes("vegetarian")&& !foods.some(f=>f.restaurant===r.id&&f.vegetarian))return false;
       if(proteinOnly&&!r.category.includes("protein")&&!foods.some(f=>f.restaurant===r.id&&f.protein))return false;
       if(chatFoodMode==="drink"&&!foods.some(f=>f.restaurant===r.id&&f.tags.some(t=>t.toLowerCase()==="drink")))return false;
       if(chatFoodMode==="dessert"&&!foods.some(f=>f.restaurant===r.id&&f.tags.some(t=>t.toLowerCase()==="dessert")))return false;
       return true;
     });
+    if(restaurantSort==="rating")list.sort((a,b)=>Number(b.rating)-Number(a.rating));
+    else if(restaurantSort==="fastest")list.sort((a,b)=>parseInt(a.time)-parseInt(b.time));
+    else if(restaurantSort==="fee")list.sort((a,b)=>a.fee-b.fee);
+    $("restaurantResultHint").textContent=list.length+" sample restaurant"+(list.length===1?"":"s")+" · Ratings and ETAs are illustrative";
     $("restaurantGrid").innerHTML=list.length?list.map(r=>'<article class="restaurant-card '+(selectedRestaurant===r.id?'selected':'')+'" data-restaurant="'+r.id+'"><div class="restaurant-img"><img loading="lazy" src="'+r.image+'" alt="'+esc(r.name)+' food"></div><div class="restaurant-info"><h3>'+esc(r.name)+'</h3><div class="restaurant-detail"><span>'+esc(r.cuisine)+'</span><span class="rating">★ '+r.rating+' ('+esc(r.reviews)+')</span></div><div class="restaurant-detail" style="margin-top:6px"><span>⌖ '+r.time+' · '+esc(r.distance)+'</span><span>Fee '+euro(r.fee)+'</span></div><div class="restaurant-tags">'+r.tags.map(t=>'<span class="mini-tag">'+esc(t)+'</span>').join("")+'</div></div></article>').join(""):'<div class="no-results">No restaurants match those filters. Try clearing a filter or asking the assistant.</div>';
   }
   function visibleFoods(){
@@ -901,6 +906,18 @@
       botRestaurantRecommendations("I found "+f.name+" at "+restaurant(f.restaurant).name+" for "+euro(f.price)+". This restaurant is rated "+restaurant(f.restaurant).rating+"/5. Open its menu to add the dish.",[restaurant(f.restaurant)]);
       return;
     }
+    if(namedRestaurant&&!toAdd.length&&/\b(menu|browse|show|from|at|restaurant|order from)\b/.test(t)){
+      showChatRestaurant(namedRestaurant.id);
+      return;
+    }
+    if(!toAdd.length&&/\b(indian|biryani|dosa|idli|paneer|butter chicken|tikka masala|curry|naan|samosa|chaat|pani puri|masala dosa)\b/.test(t)){
+      const indianMatches=restaurants.filter(r=>r.category.includes("indian")||(r.cuisine+" "+r.tags.join(" ")).toLowerCase().includes("indian"));
+      category="indian";chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;searchText="";restaurantQuery="";$("restaurantSearch").value="";
+      document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="indian"));
+      renderRestaurants();renderMenu();
+      botRestaurantRecommendations("Absolutely — let's find something Indian. Here are North Indian, South Indian, biryani and street-food spots to compare. You can also type a restaurant name if you already have one in mind.",indianMatches);
+      return;
+    }
     if(/\b(restaurants?|places|options|nearby|where can i order)\b/.test(t)){
       chatFoodMode=null;vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;category="all";searchText="";
       renderRestaurants();renderMenu();
@@ -953,7 +970,7 @@
     $("trackingTitle").textContent=orderStep===3?"Your food has arrived!":"Your order is "+labels[orderStep].toLowerCase()+".";
     if(orderStep===3){$("feedbackSection").style.display="block";$("feedbackSection").scrollIntoView({behavior:"smooth",block:"nearest"});}
   }
-  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";maxPrice=null;renderRestaurants();renderMenu()});
+  $("categoryRow").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;chatFoodMode=null;category=b.dataset.category;document.querySelectorAll("[data-category]").forEach(x=>x.classList.toggle("active",x===b));vegetarianOnly=category==="vegetarian";proteinOnly=category==="protein";if(category==="vegetarian"||category==="healthy")selectedRestaurant="green";if(category==="protein")selectedRestaurant="fire";if(category==="comfort")selectedRestaurant="miso";if(category==="indian"){selectedRestaurant="spice";restaurantQuery="";$("restaurantSearch").value="";}maxPrice=null;renderRestaurants();renderMenu()});
   $("restaurantGrid").addEventListener("click",e=>{const card=e.target.closest("[data-restaurant]");if(!card)return;chatFoodMode=null;selectedRestaurant=card.dataset.restaurant;renderRestaurants();renderMenu();$("menu").scrollIntoView({behavior:"smooth",block:"start"})});
   $("menuGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)add(b.dataset.add,1)});
   $("cartContent").addEventListener("click",e=>{const b=e.target.closest("[data-qty]");if(b)setQty(b.dataset.qty,Number(b.dataset.delta));if(e.target.id==="checkoutBtn")checkoutOpen()});
@@ -984,8 +1001,10 @@
   });
   $("searchBtn").addEventListener("click",()=>{const q=$("mainSearch").value.trim();if(!q)return;assistantOpen();addMessage(q,"user");assistantAction(q)});
   $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
-  $("clearFilters").addEventListener("click",()=>{chatFoodMode=null;category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
+  $("clearFilters").addEventListener("click",()=>{chatFoodMode=null;category="all";searchText="";restaurantQuery="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";$("restaurantSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
   $("sortMenu").addEventListener("change",renderMenu);
+  $("restaurantSearch").addEventListener("input",e=>{restaurantQuery=e.target.value.trim().toLowerCase();renderRestaurants()});
+  $("restaurantSort").addEventListener("change",e=>{restaurantSort=e.target.value;renderRestaurants()});
   document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
   document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
   document.querySelectorAll("[data-checkout-fulfillment]").forEach(b=>b.addEventListener("click",()=>{updateFulfillment(b.dataset.checkoutFulfillment);document.querySelectorAll("[data-checkout-fulfillment]").forEach(x=>x.classList.toggle("active",x===b));updateCheckoutSummary()}));
