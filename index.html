@@ -525,13 +525,22 @@
     const r=restaurant(id),picks=chatFoodsForRestaurant(id).slice(0,4);
     botRecommendations(r.name+" is rated "+r.rating+"/5 from "+r.reviews+" sample ratings, with "+r.time+" delivery and a "+euro(r.fee)+" fee. Here are some matching picks:",picks);
   }
+  function showChatCategory(mode,label){
+    const activeRestaurant=cartItems()[0]?.item.restaurant||selectedRestaurant;
+    const r=restaurant(activeRestaurant);
+    selectedRestaurant=activeRestaurant;category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;chatFoodMode=mode;
+    renderRestaurants();renderMenu();
+    const picks=chatFoodsForRestaurant(activeRestaurant).slice(0,5);
+    if(!picks.length){botReply("I checked "+r.name+"’s sample menu, but I don’t have any "+label.toLowerCase()+" listed there yet. Your current bag is unchanged.");return;}
+    botRecommendations("Absolutely — keeping your order with "+r.name+", here are the "+label.toLowerCase()+" on their menu. Add anything you fancy and I’ll update your bag.",picks);
+  }
   function botAddOnRecommendations(){
     const first=cartItems()[0]?.item;
     if(!first||upsellPromptedForOrder)return;
     upsellPromptedForOrder=true;
     const already=new Set(cartItems().map(x=>x.item.id));
-    const extras=foods.filter(f=>f.restaurant===first.restaurant&&!already.has(f.id)&&f.tags.some(t=>["drink","dessert"].includes(t.toLowerCase()))).sort((a,b)=>a.popular-b.popular).slice(0,3);
-    if(extras.length)botRecommendations("Want to make it a little more complete? Add a drink or dessert from "+restaurant(first.restaurant).name+" before checkout.",extras);
+    const extras=foods.filter(f=>f.restaurant===first.restaurant&&!already.has(f.id)&&f.tags.some(t=>["drink","dessert","sauce"].includes(t.toLowerCase()))).sort((a,b)=>a.popular-b.popular).slice(0,4);
+    if(extras.length)botRecommendations("Nice choice. Want to round it out? Here are a few drinks, sauces and sweet finishes from "+restaurant(first.restaurant).name+" — your order stays with this restaurant.",extras);
   }
   let lastAddedItems=[];
   const numberWords={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6};
