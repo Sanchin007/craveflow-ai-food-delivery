@@ -465,11 +465,23 @@
     const list=visibleFoods();
     $("menuGrid").innerHTML=list.length?list.map(f=>'<article class="menu-card"><img loading="lazy" src="'+f.image+'" alt="'+esc(f.name)+'"><div class="menu-info"><h3>'+esc(f.name)+'</h3><p>'+esc(f.desc)+'</p><div class="food-tags">'+f.tags.slice(0,2).map(t=>'<span>'+esc(t)+'</span>').join("")+'</div><div class="menu-bottom"><span class="price">'+euro(f.price)+'</span><button class="add-btn" data-add="'+f.id+'" aria-label="Add '+esc(f.name)+'">+</button></div></div></article>').join(""):'<div class="no-results">No dishes match those preferences in this menu. Try another restaurant or loosen a filter.</div>';
   }
+  function renderChatContext(){
+    const mount=$("chatContext");
+    if(!mount)return;
+    const items=cartItems(),first=items[0]?.item;
+    if(!first){
+      mount.innerHTML="<div class=\"chat-context-empty\"><span>YOUR ORDER</span><b>No restaurant selected yet</b><small>Start with a dish — I’ll keep the restaurant context as we go.</small></div>";
+      return;
+    }
+    const r=restaurant(first.restaurant);
+    mount.innerHTML="<div class=\"chat-context-head\"><span>YOUR ORDER · "+esc(r.name)+"</span><b>"+count()+" item"+(count()===1?"":"s")+" · "+euro(estimatedBagTotal())+" est.</b></div><div class=\"chat-context-actions\"><button type=\"button\" data-context-prompt=\"Show me the drinks menu\">🥤 Drinks</button><button type=\"button\" data-context-prompt=\"Show me the sauces\">🥫 Sauces</button><button type=\"button\" data-context-prompt=\"Show me the desserts\">🍰 Desserts</button><button type=\"button\" data-context-prompt=\"Show me my bag\">Bag ↗</button></div>";
+  }
   function renderCart(){
     const items=cartItems();$("headerCount").textContent=count();$("cartCountText").textContent=count()+" item"+(count()===1?"":"s");
-    if(!items.length){$("cartContent").innerHTML='<div class="cart-empty"><div class="empty-icon">🥡</div><strong>Your next favourite goes here</strong><p>Your bag is looking a little quiet. Add a dish or ask your assistant for ideas.</p></div>';return}
+    if(!items.length){$("cartContent").innerHTML='<div class="cart-empty"><div class="empty-icon">🥡</div><strong>Your next favourite goes here</strong><p>Your bag is looking a little quiet. Add a dish or ask your assistant for ideas.</p></div>';renderChatContext();return}
     const fee=fulfillment==="delivery"?(restaurant(items[0].item.restaurant)?.fee||1.49):0,service=0.79;
     $("cartContent").innerHTML='<div class="cart-lines">'+items.map(x=>'<div class="cart-line"><div><strong>'+esc(x.item.name)+'</strong><small>'+esc(restaurant(x.item.restaurant).name)+' · '+euro(x.item.price)+'</small></div><div class="qty"><button data-qty="'+x.item.id+'" data-delta="-1" aria-label="Remove one">−</button><span>'+x.qty+'</span><button data-qty="'+x.item.id+'" data-delta="1" aria-label="Add one">+</button></div></div>').join("")+'</div><div class="cart-totals"><div class="total-row"><span>Subtotal</span><b>'+euro(subtotal())+'</b></div><div class="total-row"><span>'+(fulfillment==="delivery"?"Delivery fee":"Pickup fee")+'</span><b>'+euro(fee)+'</b></div><div class="total-row"><span>Service fee</span><b>'+euro(service)+'</b></div><div class="total-row grand"><span>Total</span><b>'+euro(subtotal()+fee+service)+'</b></div></div><button class="primary-btn checkout-btn" id="checkoutBtn">Continue to checkout · '+euro(subtotal()+fee+service)+' →</button><p class="cart-footnote">Taxes and fees included in this demo estimate.</p>';
+    renderChatContext();
   }
   function updateFulfillment(value){fulfillment=value;document.querySelectorAll("[data-fulfillment]").forEach(b=>b.classList.toggle("active",b.dataset.fulfillment===value));renderCart()}
   function assistantOpen(){ $("assistantPanel").classList.add("open");$("chatInput").focus()}
