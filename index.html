@@ -188,7 +188,7 @@
   const count=()=>cartItems().reduce((s,x)=>s+x.qty,0);
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2400)}
-  function add(id,qty){if(!food(id))return;cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
+  function add(id,qty){if(!food(id))return;const current=cartItems();if(current.some(x=>x.item.restaurant!==food(id).restaurant)){cart={};toast("Switched restaurant — this demo keeps one restaurant per order.");}cart[id]=(cart[id]||0)+(qty||1);renderCart();toast(food(id).name+" added to your bag")}
   function setQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart()}
   function renderRestaurants(){
     const list=restaurants.filter(r=>{
@@ -223,15 +223,15 @@
   function botReply(message){addMessage(message,"bot")}
   function assistantAction(raw){
     const t=raw.toLowerCase();let reply="";
-    if(t.includes("peanut")||t.includes("allerg")){
+    if(t.includes("two")&&(t.includes("40")||t.includes("€40"))){maxPrice=20;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";selectedRestaurant="fire";cart={"burrito":2};renderRestaurants();renderMenu();renderCart();reply="For two under €40 in food, two chicken burrito bowls from Firebird Kitchen come to €27.80 before fees. I have added two sample mains to your bag. Want a vegetarian alternative?";}else if(t.includes("peanut")||t.includes("allerg")){
       vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;searchText="";category="all";renderRestaurants();renderMenu();
       reply="Thanks for telling me. I can show menu information, but this demo cannot guarantee allergen safety or prevent cross-contact. I don't have a verified peanut-free certification for these kitchens. Please contact the restaurant directly and get confirmation before ordering. I can help you review the listed allergen notes, but never treat them as a safety guarantee.";
     }else if(t.includes("vegetarian")||t.includes("vegan")){
-      vegetarianOnly=true;proteinOnly=false;maxPrice=null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
+      vegetarianOnly=true;proteinOnly=false;const vm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=vm?Number(vm[1]):null;category="vegetarian";searchText="";renderRestaurants();renderMenu();
       if(t.includes("make")&&count()){let removed=[];cartItems().forEach(x=>{if(!x.item.vegetarian){removed.push(x.item.name);delete cart[x.item.id]}});if(!count())cart["tofu-bowl"]=1;renderCart();reply="I've adjusted the demo bag toward vegetarian choices"+(removed.length?". Removed: "+removed.join(", ")+".":"")+". I added a crispy tofu bowl as a replacement. Please review the bag before checkout."}
       else reply="On it 🌱 I've filtered the restaurants and menu toward vegetarian options. The crispy tofu bowl (€13.50) and garden glow salad (€11.50) are good places to start.";
     }else if(t.includes("protein")){
-      proteinOnly=true;vegetarianOnly=false;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
+      proteinOnly=true;vegetarianOnly=false;const pm=t.match(/(?:under|below|less than)\s*€?\s*(\d+(?:\.\d+)?)/);maxPrice=pm?Number(pm[1]):null;category="protein";searchText="";renderRestaurants();renderMenu();reply="For a protein-forward meal, try the chicken ramen (€14.50), salmon power bowl (€16.50), or chicken burrito bowl (€13.90). I've highlighted high-protein options in the current view.";
     }else if(t.includes("spicy")||t.includes("spice")){
       spiceMax=2;vegetarianOnly=false;proteinOnly=false;category="all";searchText="";renderRestaurants();renderMenu();reply="I've kept the spice level gentle — up to 2 out of 3. The chicken burrito bowl has a little warmth, while the chicken ramen is milder. I've filtered out the extra-hot wings.";
     }else if(t.includes("under")||t.includes("budget")||t.includes("€")){
@@ -306,11 +306,11 @@
   $("openAssistantFromCart").addEventListener("click",assistantOpen);$("assistantFab").addEventListener("click",assistantOpen);$("closeAssistant").addEventListener("click",()=>$("assistantPanel").classList.remove("open"));
   $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatInput").value.trim();if(!v)return;addMessage(v,"user");$("chatInput").value="";assistantAction(v)});
   $("chatContent").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(!b)return;const v=b.dataset.prompt;addMessage(v,"user");assistantAction(v)});
-  $("searchBtn").addEventListener("click",()=>{searchText=$("mainSearch").value.trim().toLowerCase();vegetarianOnly=false;proteinOnly=false;maxPrice=null;renderRestaurants();renderMenu();$("discover").scrollIntoView({behavior:"smooth"})});
+  $("searchBtn").addEventListener("click",()=>{const q=$("mainSearch").value.trim();if(!q)return;assistantOpen();addMessage(q,"user");assistantAction(q)});
   $("mainSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("searchBtn").click()});
   $("clearFilters").addEventListener("click",()=>{category="all";searchText="";vegetarianOnly=false;proteinOnly=false;maxPrice=null;spiceMax=4;$("mainSearch").value="";document.querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b.dataset.category==="all"));renderRestaurants();renderMenu()});
   $("sortMenu").addEventListener("change",renderMenu);
-  document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$ (b.dataset.close).classList.remove("open")));
+  document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).classList.remove("open")));
   document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)o.classList.remove("open")}));
   document.querySelectorAll("[data-checkout-fulfillment]").forEach(b=>b.addEventListener("click",()=>{updateFulfillment(b.dataset.checkoutFulfillment);document.querySelectorAll("[data-checkout-fulfillment]").forEach(x=>x.classList.toggle("active",x===b));updateCheckoutSummary()}));
   document.querySelectorAll("[data-payment]").forEach(b=>b.addEventListener("click",()=>{payment=b.dataset.payment;document.querySelectorAll("[data-payment]").forEach(x=>x.classList.toggle("active",x===b))}));
