@@ -61,6 +61,11 @@ export default { async fetch(request,env){
  const messages=Array.isArray(body.messages)?body.messages.slice(-12):[];
  const safe=messages.filter(m=>["user","assistant"].includes(m.role)&&typeof m.content==="string").map(m=>({role:m.role,content:m.content.slice(0,1800)}));
  if(!safe.length||safe[safe.length-1].role!=="user")return json({error:"A latest user message is required."},400,origin,env);
+  const latest=safe[safe.length-1].content.trim().toLowerCase().replace(/[.!?]+$/,"");
+  const previousAssistant=[...safe.slice(0,-1)].reverse().find(m=>m.role==="assistant")?.content?.toLowerCase()||"";
+  const declined=/^(?:no|no thanks|no thank you|not now|that's all|thats all|i'm good|im good|nothing else|all good|nope)$/.test(latest);
+  const wasOfferingExtras=/anything else|round it out|drinks, sauces|sweet finishes|add one and|would you like.*(?:drink|dessert|sauce)|want to add/.test(previousAssistant);
+  if(declined&&wasOfferingExtras)return json({reply:"No problem — I’ll leave your bag as it is. You can say “Checkout” whenever you’re ready.",actions:[],recommendations:[]},200,origin,env);
  const state={restaurants,foods,cart,actions:[],recommendations:[]};
  const system="You are CraveFlow, a warm, concise food-ordering concierge. Search only the supplied sample restaurant/menu catalogue using tools. Never invent dishes, prices, stock, opening hours, ratings, delivery availability or allergen safety. All catalogue data is sample data. Ask a brief question when needed. Suggest freely but never add/remove items, clear a bag, change payment/fulfilment or open checkout unless the user explicitly requested it. Never claim a real order or payment has been placed. Checkout is a local demo. Respect one-restaurant-per-bag and ask before switching. For allergies, say sample labels cannot verify ingredients or cross-contact and advise contacting the restaurant directly. Keep replies concise.";
  const history=[{role:"system",content:system},...safe];let reply="";
